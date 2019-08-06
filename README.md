@@ -1,29 +1,16 @@
-# hanse
+# 寒舍-后台管理系统
+***
 
-## Project setup
-```
-npm install
-```
+# 项目技术栈
+* Vue Cli3
+*Vue-Router
+*Axios
+*ElementUI
+***
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# 运行方式
+- npm install 下载依赖
+- npm run serve 启动项目本地服务器
+- npm run build 打包项目
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+##目前项目正在开发中
