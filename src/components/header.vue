@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-    name:"header",
+    name:"top",
     data(){
         return{
             show:true,

@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <!-- <div>
-      <router-link to="/">首页</router-link>
-      <router-link to="/login">登录</router-link>
-    </div> -->
     <router-view></router-view>
   </div>
 </template>
@@ -11,11 +7,12 @@
 <script>
 export default {
   name: "app",
+  components:{}
 };
 </script>
 <style>
 /* 默认样式 */
-  html{overflow-y:scroll; overflow-x: hidden;height: 100%;}
+  html{overflow-y:hidden; overflow-x: hidden;height: 100%;}
   body,div,ul,li,span,img,input,form{ margin:0; padding:0;}
   body,p,h1,h2,h3,h4,h5,h6,ul,ol,dl,li,dd{ margin:0;}
   ul,ol{padding:0;}

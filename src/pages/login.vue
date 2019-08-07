@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import header from '../components/header'
+import top from '../components/header'
 export default {
   name: "login",
   components:{
-      "v-header":header,
+      "v-header":top,
   },
   data() {
     return {
