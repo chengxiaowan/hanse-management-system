@@ -4,36 +4,7 @@
       <div class="aside-title">
         <img src="../assets/image/HOME.png" alt />
       </div>
-      <el-menu
-        default-active="2"
-        class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
-        background-color="#2C3D4C"
-        text-color="#fff"
-        active-text-color="#ffd04b"
-      >
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>酒店管理</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="1-1">酒店品牌</el-menu-item>
-            <el-menu-item index="1-2">酒店民宿</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <el-submenu index="2">
-          <template slot="title">
-            <i class="el-icon-picture"></i>
-            <span>服务管理</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="2-1">旅拍管理</el-menu-item>
-            <el-menu-item index="2-2">定制管理</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-      </el-menu>
+      <router-link to="/index">首页</router-link>
     </el-aside>
     <el-container>
       <el-header>
@@ -56,12 +27,12 @@
               |
               <a href="#">安全设置</a>
             </div>
-            <div class="logout">退出管理系统</div>
+            <div class="logout" @click="logout">退出管理系统</div>
           </div>
         </div>
       </el-header>
       <el-main>
-        <router-view></router-view>
+        <router-view/>
       </el-main>
     </el-container>
   </el-container>
@@ -86,12 +57,23 @@ export default {
     noShow() {
       this.showUser = false;
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    //检测是否登录
+    isLogin(){
+      let user = sessionStorage.getItem("username")
+      let role = sessionStorage.getItem("roleId")
+      if(user == null || role == null){
+        this.$router.push({path:'/login'})
+      }
+      this.username = user;
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    //注销登录
+    logout(){
+      sessionStorage.clear()
+      this.$router.push({path:'/login'})
     }
+  },
+  mounted(){
+    this.isLogin()
   }
 };
 </script>
@@ -206,7 +188,6 @@ export default {
 .el-main {
   background-color: #e9eef3;
   color: #333;
-  text-align: center;
 }
 
 body > .el-container {
@@ -215,11 +196,19 @@ body > .el-container {
 
 .soso{
   float: left;
+  width: 300px;
 }
 
 .keywords{
   width:240px;
   height:40px;
   margin-top:10px; 
+}
+
+.soso-btn{
+  margin-top: 10px;
+  margin-left: 5px;
+  width:40px ;
+  height: 40px;
 }
 </style>

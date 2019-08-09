@@ -1,12 +1,15 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App.vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import { fetchGet, fetchPost} from './plugins/axios'
 import router from './plugins/router';
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 
 
-Vue.config.productionTip = false
-Vue.use(ElementUI)
+Vue.config.productionTip = false;
+Vue.use(ElementUI);
+Vue.prototype.$get = fetchGet;
+Vue.prototype.$post = fetchPost;
 
 new Vue({
   router,

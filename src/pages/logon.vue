@@ -27,15 +27,17 @@
         <el-input v-model="password2" type="password" placeholder="请再次输入您的登录密码" autocomplete="off"></el-input>
       </div>
       <div class="code">
-        <div class="code-input"><el-input v-model="code" placeholder="请输入短信验证码" autocomplete="off"></el-input></div>
-        <el-button class="code-btn">获取验证码</el-button>
+        <div class="code-input">
+          <el-input v-model="code" placeholder="请输入短信验证码" autocomplete="off"></el-input>
+        </div>
+        <el-button class="code-btn" @click="phoneTest">获取验证码</el-button>
       </div>
       <el-button type="primary" class="logon-submit" @click="drool">同意条款并注册</el-button>
       <div class="rule">
-          <el-checkbox v-model="rule"></el-checkbox>
-           <a href="#">《寒舍网站服务条款》</a>
-              |
-            <a href="#">《法律声明和隐私政策》</a>
+        <el-checkbox v-model="rule"></el-checkbox>
+        <a href="#">《寒舍网站服务条款》</a>
+        |
+        <a href="#">《法律声明和隐私政策》</a>
       </div>
     </div>
   </div>
@@ -54,24 +56,20 @@ export default {
       info: "欢迎注册Home+",
       options: [
         {
-          value: "酒店",
+          value: "7",
           label: "酒店"
         },
         {
-          value: "民宿",
+          value: "8",
           label: "民宿"
         },
         {
-          value: "摄影",
+          value: "10",
           label: "摄影"
         },
         {
-          value: "企业",
-          label: "企业"
-        },
-        {
-          value: "测试",
-          label: "测试"
+          value: "9",
+          label: "公寓"
         }
       ],
       value: "",
@@ -79,15 +77,59 @@ export default {
       password: "",
       password2: "",
       code: "",
-      rule:"",
+      rule: ""
     };
   },
   //实例上的方法
-   methods:{
-       drool(){
-           alert("暂不开放注册，敬请期待！")
-       }
-   }
+  methods: {
+    drool() {
+      if (!/^1[3456789]\d{9}$/.test(this.phone)) {
+        this.$message.error("请检查手机号是否正确");
+      } else if (this.password != this.password2) {
+        this.$message.error("请保持两次输入的密码一致");
+      } else if (this.code == "") {
+        this.$message.error("请输入您的手机验证码");
+      } else if (this.rule != true) {
+        this.$message.error("请点击下方框以同意用户协议");
+      } else if (this.value == "") {
+        this.$message.error("请选择您的角色");
+      } else {
+        let parmars = {
+          roleId: this.value,
+          mobilePhone: this.phone,
+          verificationCode: this.code,
+          password: this.password2
+        };
+        this.$post("/service/registerMerchantsUser", parmars).then(res => {
+          this.$alert("注册成功，即将跳转到登录页面", "注册成功", {
+            confirmButtonText: "确定",
+            callback: action => {
+              this.$router.push({
+                name: "login"
+              });
+            }
+          });
+        }).catch(()=>{
+          console.log("失败")
+        });
+      }
+    },
+    //手机验证码
+    phoneTest() {
+      let parmars = {
+        mobilePhone: this.phone,
+        flag: 0
+      };
+      this.$post("/service/getVerificationCode", parmars)
+        .then(res => {
+          //在这里处理按钮1分钟不可用
+          console.log(res);
+        })
+        .catch(() => {
+          console.log("失败");
+        });
+    }
+  }
 };
 </script>
 <style>
@@ -141,40 +183,39 @@ export default {
   margin-top: 20px;
 }
 
-.code{
-    margin: 0 auto;
-    margin-top: 20px;
-    width: 460px;
-    position: relative;
-    margin-bottom: 20px;
+.code {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 460px;
+  position: relative;
+  margin-bottom: 20px;
 }
 
-.code-input{
-    width: 351px;
-    height: 44px;
+.code-input {
+  width: 351px;
+  height: 44px;
 }
 
-.code-btn{
-    position: absolute;
-    height: 40px;
-    width: 105px;
-    right: 0;
-    top: 0;
+.code-btn {
+  position: absolute;
+  height: 40px;
+  width: 105px;
+  right: 0;
+  top: 0;
 }
 
-.logon-submit{
-    width: 460px;
-    height: 40px;
+.logon-submit {
+  width: 460px;
+  height: 40px;
 }
 
-.rule{
-    margin-top: 29px;
+.rule {
+  margin-top: 29px;
 }
 
-.rule > a{
-    color: #4a90e2;
-    font: 14px;
-    font-weight: 500;
+.rule > a {
+  color: #4a90e2;
+  font: 14px;
+  font-weight: 500;
 }
-
 </style>

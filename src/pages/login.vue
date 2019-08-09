@@ -9,9 +9,9 @@
           <el-input v-model="username" placeholder="会员名/手机号/邮箱"></el-input>
       </div>
       <div class="username">
-          <el-input v-model="password" type="password" placeholder="请输入登录密码"></el-input>
+          <el-input v-model="password" type="password" placeholder="请输入登录密码" @keyup.enter.native = "login"></el-input>
       </div>
-      <el-button type="primary" class="login-btn">登录</el-button>
+      <el-button type="primary" class="login-btn" @click="login">登录</el-button>
       <div class="menu">
           <div>忘记密码</div>
           <div>
@@ -34,30 +34,50 @@ export default {
       info: "登录",
       options: [
         {
-          value: "酒店",
+          value: "7",
           label: "酒店"
         },
         {
-          value: "民宿",
+          value: "8",
           label: "民宿"
         },
         {
-          value: "摄影",
+          value: "10",
           label: "摄影"
         },
         {
-          value: "企业",
-          label: "企业"
+          value: "9",
+          label: "公寓"
         },
-        {
-          value: "测试",
-          label: "测试"
-        }
       ],
       value: "",
       username:'',
       password:'',
     };
+  },
+  //实例上的方法
+  methods:{
+    login(){
+      let parmars = {
+        roleId:this.value,
+        mobilePhone:this.username,
+        password:this.password,
+      }
+      //调用axios
+      this.$post('/service/merchants_login',parmars).then(res=>{
+        if(res.error == "00"){
+          sessionStorage.setItem("username",this.username)
+          sessionStorage.setItem("roleId",this.value)
+          this.$router.push({path:'/'})
+        }else{
+          this.$message.error('请检查您的登录角色，用户名密码等相关信息');
+        }
+      }).catch(()=>{
+          this.$message.error('网络错误')
+          console.log("请求失败")
+      })
+
+    }
   }
 };
 </script>
@@ -101,7 +121,7 @@ export default {
 .login-btn{
     width: 460px;
     height: 44px;
-    margin-top: 38px;
+    margin-top: 20px;
 }
 
 .menu{
