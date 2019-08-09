@@ -4,6 +4,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import { fetchGet, fetchPost} from './plugins/axios'
 import router from './plugins/router';
+import './assets/css/icon.css'
 
 
 Vue.config.productionTip = false;

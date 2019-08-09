@@ -4,35 +4,44 @@
       <div class="aside-title">
         <img src="../assets/image/HOME.png" alt />
       </div>
-      <router-link to="/index">首页</router-link>
+      <ul class="nav">
+        <li>
+          <router-link to="/index">
+            <i class="iconfont icon-zhuye"></i> 主页
+            <em class="iconfont icon-xiazai6"></em>
+          </router-link>
+        </li>
+      </ul>
     </el-aside>
     <el-container>
       <el-header>
         <div class="soso">
-          <div class="keywords">
-            <el-input v-model="keywords" placeholder="..."></el-input>
-          </div>
+          <el-input placeholder="请输入内容" class="input-with-select" v-model="keywords">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
         </div>
         <div class="user" @mouseenter="show" @mouseleave="noShow">
           <img src="../assets/image/head.png" />
-          <div class="userinfo" v-if="showUser">
-            <div class="user-title">
-              <img src="../assets/image/head.png" alt />
-              <a href="#">{{username}}</a>
+          <el-collapse-transition>
+            <div class="userinfo" v-if="showUser">
+              <div class="user-title">
+                <img src="../assets/image/head.png" />
+                <a href="#">{{username}}</a>
+              </div>
+              <div class="user-menu">
+                <a href="#">基本资料</a>
+                |
+                <a href="#">实名认证</a>
+                |
+                <a href="#">安全设置</a>
+              </div>
+              <div class="logout" @click="logout">退出管理系统</div>
             </div>
-            <div class="user-menu">
-              <a href="#">基本资料</a>
-              |
-              <a href="#">实名认证</a>
-              |
-              <a href="#">安全设置</a>
-            </div>
-            <div class="logout" @click="logout">退出管理系统</div>
-          </div>
+          </el-collapse-transition>
         </div>
       </el-header>
       <el-main>
-        <router-view/>
+        <router-view />
       </el-main>
     </el-container>
   </el-container>
@@ -43,10 +52,11 @@ export default {
   data() {
     return {
       info: "首页",
-      keywords:'',
+      keywords: "",
       head: "", //存放头像
       username: "常州寒舍信息科技有限公司", //用户名
-      showUser: false
+      showUser: false,
+      activeName: '1',
     };
   },
   methods: {
@@ -58,22 +68,22 @@ export default {
       this.showUser = false;
     },
     //检测是否登录
-    isLogin(){
-      let user = sessionStorage.getItem("username")
-      let role = sessionStorage.getItem("roleId")
-      if(user == null || role == null){
-        this.$router.push({path:'/login'})
+    isLogin() {
+      let user = sessionStorage.getItem("username");
+      let role = sessionStorage.getItem("roleId");
+      if (user == null || role == null) {
+        this.$router.push({ path: "/login" });
       }
       this.username = user;
     },
     //注销登录
-    logout(){
-      sessionStorage.clear()
-      this.$router.push({path:'/login'})
+    logout() {
+      sessionStorage.clear();
+      this.$router.push({ path: "/login" });
     }
   },
-  mounted(){
-    this.isLogin()
+  mounted() {
+    this.isLogin();
   }
 };
 </script>
@@ -97,6 +107,7 @@ export default {
 .el-header {
   background-color: #444a63;
   height: 60px;
+  padding: 0;
 }
 
 .user {
@@ -179,7 +190,6 @@ export default {
 }
 
 .el-aside {
-  text-align: center;
   height: 100vh;
   background: #2c3d4c;
   width: 200px;
@@ -194,21 +204,46 @@ body > .el-container {
   margin-bottom: 40px;
 }
 
-.soso{
+.soso {
   float: left;
+  margin-top: 10px;
   width: 300px;
+  margin-left: 10px;
 }
 
-.keywords{
-  width:240px;
-  height:40px;
-  margin-top:10px; 
-}
-
-.soso-btn{
+.soso-btn {
   margin-top: 10px;
   margin-left: 5px;
-  width:40px ;
+  width: 40px;
   height: 40px;
+}
+
+.nav {
+  margin-top: 13px;
+}
+
+.nav > li {
+  height: 40px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 40px;
+}
+
+.nav > li:hover {
+  background: #233646;
+}
+
+.nav > li > a {
+  color: #a7b1c2;
+  margin-left: 20px;
+}
+
+.nav > li > a > i {
+  margin-right: 8px;
+}
+
+.nav > li > a > em {
+  float: right;
+  margin-right: 20px;
 }
 </style>
