@@ -4,14 +4,54 @@
       <div class="aside-title">
         <img src="../assets/image/HOME.png" alt />
       </div>
-      <ul class="nav">
-        <li>
-          <router-link to="/index">
-            <i class="iconfont icon-zhuye"></i> 主页
-            <em class="iconfont icon-xiazai6"></em>
-          </router-link>
-        </li>
-      </ul>
+      <el-menu
+        :default-active="this.$route.path"
+        class="el-menu-vertical-demo"
+        @open="handleOpen"
+        @close="handleClose"
+        background-color="#2C3D4C"
+        text-color="#A7B1C2"
+        active-text-color="#ffd04b"
+        router
+      >
+        <el-menu-item index="/index">
+          <i class="iconfont icon-zhuye" style="margin-right:10px;"></i>
+          <span slot="title">主页</span>
+        </el-menu-item>
+        <el-submenu index="1">
+          <template slot="title">
+            <i class="iconfont icon-shenhe" style="margin-right:10px;"></i>
+            <span>审核</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/goods">产品审核</el-menu-item>
+            <el-menu-item index="/service">服务审核</el-menu-item>
+            <el-menu-item index="/shops">门店审核</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+        <el-menu-item index="/brand">
+          <i class="iconfont icon-pinpaiguanli" style="margin-right:10px;"></i>
+          <span slot="title">品牌管理</span>
+        </el-menu-item>
+        <el-menu-item index="/offlineshop">
+          <i class="iconfont icon-jiudian" style="margin-right:10px;"></i>
+          <span slot="title">门店管理</span>
+        </el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">
+            <i class="iconfont icon-shenhe" style="margin-right:10px;"></i>
+            <span>摄影师</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/studio">旅拍工作室</el-menu-item>
+            <el-menu-item index="/shot">旅拍服务</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+        <el-menu-item index="/index/CollectList">
+          <i class="el-icon-star-on"></i>
+          <span slot="title">收藏列表</span>
+        </el-menu-item>
+      </el-menu>
     </el-aside>
     <el-container>
       <el-header>
@@ -56,7 +96,7 @@ export default {
       head: "", //存放头像
       username: "常州寒舍信息科技有限公司", //用户名
       showUser: false,
-      activeName: '1',
+      activeName: "1"
     };
   },
   methods: {
@@ -66,6 +106,14 @@ export default {
     },
     noShow() {
       this.showUser = false;
+    },
+
+    //导航栏的 我也不知道干啥的
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
     },
     //检测是否登录
     isLogin() {
@@ -216,34 +264,5 @@ body > .el-container {
   margin-left: 5px;
   width: 40px;
   height: 40px;
-}
-
-.nav {
-  margin-top: 13px;
-}
-
-.nav > li {
-  height: 40px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 40px;
-}
-
-.nav > li:hover {
-  background: #233646;
-}
-
-.nav > li > a {
-  color: #a7b1c2;
-  margin-left: 20px;
-}
-
-.nav > li > a > i {
-  margin-right: 8px;
-}
-
-.nav > li > a > em {
-  float: right;
-  margin-right: 20px;
 }
 </style>
