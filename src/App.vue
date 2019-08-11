@@ -36,7 +36,7 @@ export default {
 
 
   #app{
-    width: 1920px;
+    /* width: 1920px; */
     height: 100%;
   }
 </style>

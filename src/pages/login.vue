@@ -6,10 +6,10 @@
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <div class="username">
-          <el-input v-model="username" placeholder="会员名/手机号/邮箱"></el-input>
+          <el-input v-model="username" placeholder="会员名/手机号/邮箱" autocomplete="off"></el-input>
       </div>
       <div class="username">
-          <el-input v-model="password" type="password" placeholder="请输入登录密码" @keyup.enter.native = "login"></el-input>
+          <el-input v-model="password" type="password" placeholder="请输入登录密码" @keyup.enter.native = "login" autocomplete="off"></el-input>
       </div>
       <el-button type="primary" class="login-btn" @click="login">登录</el-button>
       <div class="menu">
@@ -70,7 +70,7 @@ export default {
           sessionStorage.setItem("roleId",this.value)
           this.$router.push({path:'/'})
         }else{
-          this.$message.error('请检查您的登录角色，用户名密码等相关信息');
+          this.$message.error(res.result);
         }
       }).catch(()=>{
           this.$message.error('网络错误')
@@ -121,7 +121,6 @@ export default {
 .login-btn{
     width: 460px;
     height: 44px;
-    margin-top: 20px;
 }
 
 .menu{

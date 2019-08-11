@@ -3,7 +3,7 @@
     <v-header></v-header>
     <div class="logon-box">
       <div class="title">
-        <p>{{info}}</p>
+        <p style="font: 400 36px/50px ''">{{info}}</p>
         <div class="logon-login">
           已有Home+账号？
           <router-link to="/login">快捷登录 ></router-link>

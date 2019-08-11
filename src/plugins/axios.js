@@ -6,7 +6,7 @@ import {
   Loading
 } from 'element-ui'
 // 响应时间
-axios.defaults.timeout = 5 * 1000
+axios.defaults.timeout = 5* 1000
 // 配置cookie
 // axios.defaults.withCredentials = true
 // 配置请求头
@@ -15,7 +15,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 Vue.prototype.$static = ''
 
 // 配置接口地址
-axios.defaults.baseURL = 'http://192.168.0.108:8080'
+axios.defaults.baseURL = '/api'
 var loadingInstance
 // POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use(

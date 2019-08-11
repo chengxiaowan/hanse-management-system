@@ -9,10 +9,16 @@ import index from '../pages/home/index.vue';
 import goods from '../pages/home/goods.vue';
 import shops from '../pages/home/shop.vue';
 import service from '../pages/home/service.vue';
-import offlineshop from '../pages/home/offlineshop.vue'
-import brand from '../pages/home/brand.vue'
-import studio from '../pages/home/studio.vue'
-import shot from '../pages/home/shot.vue'
+import offlineshop from '../pages/home/offlineshop.vue';
+import brand from '../pages/home/brand.vue';
+import studio from '../pages/home/studio.vue';
+import shot from '../pages/home/shot.vue';
+
+//用户相关
+import userinfo from '../pages/user/userinfo.vue'
+import certification from '../pages/user/certification.vue'
+import safe from '../pages/user/safe.vue'
+
 
 
 
@@ -65,6 +71,21 @@ let routes = [{
                 path:'shot',
                 name:'shot',
                 component:shot
+            },
+            {
+                path:'userinfo',
+                name:'userinfo',
+                component:userinfo
+            },
+            {
+                path:"certification",
+                namr:'certification',
+                component:certification
+            },
+            {
+                path:"safe",
+                namr:'safe',
+                component:safe
             }
         ]
     },

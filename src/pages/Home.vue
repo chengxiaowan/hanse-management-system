@@ -39,7 +39,7 @@
         </el-menu-item>
         <el-submenu index="2">
           <template slot="title">
-            <i class="iconfont icon-shenhe" style="margin-right:10px;"></i>
+            <i class="iconfont icon-sheyinglvxing" style="margin-right:10px;"></i>
             <span>摄影师</span>
           </template>
           <el-menu-item-group>
@@ -47,10 +47,6 @@
             <el-menu-item index="/shot">旅拍服务</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item index="/index/CollectList">
-          <i class="el-icon-star-on"></i>
-          <span slot="title">收藏列表</span>
-        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
@@ -62,22 +58,21 @@
         </div>
         <div class="user" @mouseenter="show" @mouseleave="noShow">
           <img src="../assets/image/head.png" />
-          <el-collapse-transition>
-            <div class="userinfo" v-if="showUser">
-              <div class="user-title">
-                <img src="../assets/image/head.png" />
-                <a href="#">{{username}}</a>
-              </div>
-              <div class="user-menu">
-                <a href="#">基本资料</a>
-                |
-                <a href="#">实名认证</a>
-                |
-                <a href="#">安全设置</a>
-              </div>
-              <div class="logout" @click="logout">退出管理系统</div>
+
+          <div class="userinfo" v-if="showUser">
+            <div class="user-title">
+              <img src="../assets/image/head.png" />
+              <a href="#">{{username}}</a>
             </div>
-          </el-collapse-transition>
+            <div class="user-menu">
+              <router-link to="/userinfo">基本信息</router-link>
+              |
+              <router-link to="/certification">实名认证</router-link>              
+              |
+              <router-link to="/safe">安全设置</router-link>                            
+            </div>
+            <div class="logout" @click="logout">退出管理系统</div>
+          </div>
         </div>
       </el-header>
       <el-main>
@@ -100,7 +95,7 @@ export default {
     };
   },
   methods: {
-    //点击头像打开资料和关闭资料
+    //鼠标滑过头像打开资料和关闭资料
     show() {
       this.showUser = true;
     },
@@ -122,16 +117,31 @@ export default {
       if (user == null || role == null) {
         this.$router.push({ path: "/login" });
       }
-      this.username = user;
     },
     //注销登录
     logout() {
       sessionStorage.clear();
       this.$router.push({ path: "/login" });
+    },
+    //获取用户信息
+    getUser() {
+      this.$get("/service/getMerchantsUser")
+        .then(res => {
+          if (res.error == "00") {
+            console.log(res);
+            this.username = res.result.name;
+          } else {
+            this.$message("获取个人信息成功");
+          }
+        })
+        .catch(() => {
+          console.log("请求超时超时");
+        });
     }
   },
   mounted() {
     this.isLogin();
+    this.getUser();
   }
 };
 </script>
@@ -246,6 +256,7 @@ export default {
 .el-main {
   background-color: #e9eef3;
   color: #333;
+  padding: 0;
 }
 
 body > .el-container {
