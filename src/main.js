@@ -6,6 +6,10 @@ import { fetchGet, fetchPost} from './plugins/axios'
 import router from './plugins/router';
 import './assets/css/icon.css'
 
+//使用bootstarp，请不要使用bootstarp进行除了表格外的开发
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
+
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);

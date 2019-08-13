@@ -20,6 +20,9 @@ import certification from '../pages/user/certification.vue'
 import safe from '../pages/user/safe.vue'
 import password from '../pages/user/password.vue'
 
+//品牌相关
+import brandsadd from '../pages/brands/brandsAdd'
+
 
 
 
@@ -37,7 +40,7 @@ let routes = [{
                 name: 'index',
                 component: index
             },
-            //产品审核
+            //主页
             {
                 path: 'goods',
                 name: 'goods',
@@ -54,44 +57,51 @@ let routes = [{
                 component: service
             },
             {
-                path:'offlineshop',
-                name:'offlineshop',
-                component:offlineshop,
+                path: 'offlineshop',
+                name: 'offlineshop',
+                component: offlineshop,
             },
             {
-                path:'brand',
-                name:'brand',
-                component:brand,
+                path: 'brand',
+                name: 'brand',
+                component: brand,
             },
             {
-                path:'studio',
-                name:'studio',
-                component:studio,
+                path: 'studio',
+                name: 'studio',
+                component: studio,
             },
             {
-                path:'shot',
-                name:'shot',
-                component:shot
+                path: 'shot',
+                name: 'shot',
+                component: shot
+            },
+            //用户部分
+            {
+                path: 'userinfo',
+                name: 'userinfo',
+                component: userinfo
             },
             {
-                path:'userinfo',
-                name:'userinfo',
-                component:userinfo
+                path: "certification",
+                namr: 'certification',
+                component: certification
             },
             {
-                path:"certification",
-                namr:'certification',
-                component:certification
+                path: "safe",
+                name: 'safe',
+                component: safe
             },
             {
-                path:"safe",
-                namr:'safe',
-                component:safe
+                path: "password",
+                name: 'password',
+                component: password
             },
+            //品牌部分
             {
-                path:"password",
-                namr:'password',
-                component:password
+                path: 'brand/brandsadd',
+                name: 'brandsadd',
+                component: brandsadd
             }
         ]
     },

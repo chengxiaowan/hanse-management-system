@@ -190,7 +190,7 @@ export default {
   box-shadow: 0px 1px 2px 0px rgba(184, 182, 182, 0.5);
   position: absolute;
   right: -34px;
-  top: 35px;
+  top: 30px;
 }
 
 .userinfo .user-title {
