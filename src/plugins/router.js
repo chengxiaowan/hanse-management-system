@@ -18,6 +18,7 @@ import shot from '../pages/home/shot.vue';
 import userinfo from '../pages/user/userinfo.vue'
 import certification from '../pages/user/certification.vue'
 import safe from '../pages/user/safe.vue'
+import password from '../pages/user/password.vue'
 
 
 
@@ -86,6 +87,11 @@ let routes = [{
                 path:"safe",
                 namr:'safe',
                 component:safe
+            },
+            {
+                path:"password",
+                namr:'password',
+                component:password
             }
         ]
     },

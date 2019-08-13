@@ -116,6 +116,8 @@ export default {
       let role = sessionStorage.getItem("roleId");
       if (user == null || role == null) {
         this.$router.push({ path: "/login" });
+      }else{
+        this.getUser();
       }
     },
     //注销登录
@@ -141,7 +143,6 @@ export default {
   },
   mounted() {
     this.isLogin();
-    this.getUser();
   }
 };
 </script>
