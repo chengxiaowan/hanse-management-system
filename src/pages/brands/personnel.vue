@@ -7,13 +7,15 @@
       <p>3、一个门店只有一名门店负责人，品牌负责人在给门店负责人创建好账号后，只需要通知对应的人员登录我方后台创建其名下的门店及其他信息即可。</p>
     </div>
     <div class="soso-box">
-        <div class="soso-inputs">
-            <el-input v-model="keywords" placeholder="请输入负责人姓名"></el-input>
-        </div>
-        <div class="soso-btns">
-            <el-button type="primary"><i class="el-icon-search"></i>搜索</el-button>
-            <el-button type="success">添加</el-button>
-        </div>
+      <div class="soso-inputs">
+        <el-input v-model="keywords" placeholder="请输入负责人姓名"></el-input>
+      </div>
+      <div class="soso-btns">
+        <el-button type="primary">
+          <i class="el-icon-search"></i>搜索
+        </el-button>
+        <el-button type="success" @click="showAdd()">添加</el-button>
+      </div>
     </div>
     <div class="user-list">
       <table class="table table-hover table-bordered">
@@ -27,21 +29,62 @@
           </tr>
         </thead>
         <tbody>
-            <tr>
-              <td>张三</td>
-              <td>138000000</td>
-              <td>text@163.com</td>
-              <td>这是一个备注信息</td>
-              <td>
-                <span>查看</span>
-                <span style="color:red;">删除</span>
-              </td>
-            </tr>
+          <tr>
+            <td>张三</td>
+            <td>138000000</td>
+            <td>text@163.com</td>
+            <td>这是一个备注信息</td>
+            <td>
+              <span>查看</span>
+              <span style="color:red;">删除</span>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-    <div class="adduser">
-      
+
+    <!-- 新增的的模态框 -->
+    <div class="adduser" v-if="add">
+      <div class="zzc"></div>
+      <div class="adduser-box">
+        <div class="adduser-title">
+          <div>新建联系人</div>
+          <span @click="showAdd()">X</span>
+        </div>
+        <div class="adduser-content">
+          <div class="adduser-input">
+            <div>姓名:</div>
+            <el-input></el-input>
+          </div>
+          <div class="adduser-input">
+            <div>手机号码:</div>
+            <el-input></el-input>
+          </div>
+        </div>
+        <div class="adduser-content">
+          <div class="adduser-input">
+            <div>姓名:</div>
+            <el-input></el-input>
+          </div>
+          <div class="adduser-input">
+            <div>手机号码:</div>
+            <el-input></el-input>
+          </div>
+        </div>
+        <div class="adduser-content">
+          <div class="adduser-input">
+            <div>姓名:</div>
+            <el-input></el-input>
+          </div>
+          <div class="adduser-input">
+            <div>手机号码:</div>
+            <el-input></el-input>
+          </div>
+        </div>
+         <div class="save-btn">
+            <el-button type="primary">保存</el-button>
+         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -51,52 +94,129 @@ export default {
   data() {
     return {
       info: "负责人",
-      keywords:""
+      keywords: "",
+      add:false,
     };
   },
-  methods: {},
+  methods: {
+    showAdd(){
+      if(this.add == false){
+        this.add = true;
+      }else{
+        this.add = false;
+      }
+    }
+  },
   mounted() {}
 };
 </script>
 
 <style scoped>
-.personnel-title{
-    padding: 10px 0;
-    background: #E4E9EF;
-    border-radius: 4px;
+.personnel {
+  height: 100vh;
 }
 
-.personnel-title > div{
-    font-size: 20px;
-    line-height: 28px;
-    color: #4a4a4a;
-    text-indent: 15px;
-    padding-bottom: 5px;
+.personnel-title {
+  padding: 10px 0;
+  background: #e4e9ef;
+  border-radius: 4px;
 }
 
-.personnel-title > p{
-    font-size: 14px;
-    line-height:10px;
-    color: #4a4a4a;
-    font-weight: 400;
-    text-indent: 25px;
+.personnel-title > div {
+  font-size: 20px;
+  line-height: 28px;
+  color: #4a4a4a;
+  text-indent: 15px;
+  padding-bottom: 5px;
 }
 
-.soso-box{
-    margin-top: 24px;
-    overflow: hidden;
-    margin-bottom: 25px;
-}
-.soso-inputs{
-    width: 350px;
-    float: left;
-}
-.soso-btns{
-    float: left;
-    margin-left:20px;
+.personnel-title > p {
+  font-size: 14px;
+  line-height: 10px;
+  color: #4a4a4a;
+  font-weight: 400;
+  text-indent: 25px;
 }
 
+.soso-box {
+  margin-top: 24px;
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+.soso-inputs {
+  width: 350px;
+  float: left;
+}
+.soso-btns {
+  float: left;
+  margin-left: 20px;
+}
 
+/*模态框*/
+.adduser {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+}
+
+.adduser > .zzc {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.adduser-box {
+  width: 1450px;
+  height: 700px;
+  background: #fff;
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 4px;
+}
+
+.adduser-title {
+  height: 50px;
+  font-size: 18px;
+  font-weight: 400;
+  background: #233646;
+  color: #fff;
+  line-height: 50px;
+  margin-bottom: 70px;
+}
+
+.adduser-title > div {
+  float: left;
+  margin-left: 36px;
+}
+
+.adduser-title > span {
+  float: right;
+  margin-right: 36px;
+  cursor: pointer;
+}
+
+.adduser-content {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
+
+.adduser-input {
+  width: 527px;
+}
+
+.save-btn{
+  width: 60px;
+  margin: 0 auto;
+  margin-top: 110px;
+}
 
 /*表格样式*/
 
@@ -127,5 +247,4 @@ td > span {
 tr:hover > td > span {
   display: inline;
 }
-
 </style>
