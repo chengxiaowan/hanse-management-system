@@ -167,8 +167,8 @@ export default {
   width: 690px;
 }
 
-.brand-info {
-}
+/* .brand-info {
+} */
 
 .brand-name {
   position: relative;
@@ -210,8 +210,8 @@ export default {
   margin-left: 80px;
 }
 
-.image-title {
-}
+/* .image-title {
+} */
 
 .image-title > h3 {
   color: #000;
