@@ -49,6 +49,10 @@ export default {
           value: "9",
           label: "公寓"
         },
+        {
+          value: "11",
+          label: "门店"
+        },
       ],
       value: "",
       username:'',

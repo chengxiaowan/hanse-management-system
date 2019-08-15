@@ -25,10 +25,10 @@
           <template v-if="list.length !=0">
             <tr v-for="item in list" :key="item.createTime">
               <td>{{item.brandName}}</td>
-              <td>???</td>
+              <td>通过</td>
               <td>{{item.createTime}}</td>
               <td>
-                <span>查看</span>
+                <span @click="view(item)">查看</span>
                 <span>二维码</span>
                 <span style="color:red;">删除</span>
               </td>
@@ -65,6 +65,14 @@ export default {
       this.$router.push({
         name: "brandsadd"
       });
+    },
+    view(item){
+      sessionStorage.setItem("shopsBrandId",item.shopsBrandId)
+      sessionStorage.setItem("labels",item.labels)
+      console.log(item)
+      this.$router.push({
+        name: "brandsadd"
+      })
     }
   },
   //挂载生命周期

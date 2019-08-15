@@ -123,6 +123,11 @@ export default {
     //注销登录
     logout() {
       sessionStorage.clear();
+      this.$get("/logout").then(res=>{
+        if(res.error == "00"){
+          this.$message(res.msg)
+        }
+      })
       this.$router.push({ path: "/login" });
     },
     //获取用户信息

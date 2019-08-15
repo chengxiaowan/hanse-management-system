@@ -2,19 +2,25 @@
   <div class="brand-info">
     <div class="flex-row">
       <div class="brand-name">
-        <div class="brand-title">名称：</div>
-        <el-input placeholder="请输入品牌名称，1~30字" v-model="brandName" maxlength="30" ></el-input>
+        <div class="brand-title">品牌名称：</div>
+        <el-input placeholder="请输入品牌名称，1~30字" v-model="brandName" maxlength="30"></el-input>
         <i class="tips"></i>
       </div>
       <div class="brand-user">
-        <div class="brand-title">负责人：</div>
-        <el-input placeholder="请选择品牌负责人"></el-input>
+        <div class="brand-title">品牌负责人</div>
+        <el-input placeholder="请选择品牌负责人" disabled></el-input>
       </div>
     </div>
     <div class="flex-row">
       <div class="flex-col">
         <div class="brand-title">简介：</div>
-        <el-input type="textarea" class="textarea" placeholder="请输入简介" v-model="brandShow" maxlength="1000"></el-input>
+        <el-input
+          type="textarea"
+          class="textarea"
+          placeholder="请输入简介"
+          v-model="remark"
+          maxlength="1000"
+        ></el-input>
       </div>
       <div class="flex-col">
         <div class="brand-title">标签：</div>
@@ -78,6 +84,9 @@
         </el-upload>
       </div>
     </div>
+    <div class="save">
+      <el-button type="primary" @click="save()">保存</el-button>
+    </div>
   </div>
 </template>
 
@@ -94,11 +103,12 @@ export default {
       //七牛云 + element upload
       actionPath: "https://upload.qiniup.com",
       logo: "",
-      pic:'',
+      pic: "",
       postdata: { token: "" },
       baseurl: "https://images.homeplus.fun/", //七牛云储存域名，用于拼接key得到图片url
-      brandName:"",
-      brandShow:'',
+      brandName: "",
+      remark: "",
+      shopsBrandId: ""
     };
   },
   methods: {
@@ -154,10 +164,53 @@ export default {
         console.log(res);
         this.postdata.token = res;
       });
+    },
+
+    //保存信息
+    save() {
+      let parmars = {
+        brandName: this.brandName,
+        summary: this.remark,
+        description: "",
+        logoPath: this.logo,
+        imagePath: this.pic,
+        shopsBrandPicList: "",
+        labels: this.dynamicTags.join(",")
+      };
+      this.$post("/shopsBrand/add", parmars).then(res => {
+        if (res.error == "00") {
+          this.$message("保存成功，请继续添加其他信息");
+          this.shopsBrandId = res.shopsBrandId;
+          sessionStorage.setItem("shopsBrandId", res.shopsBrandId);
+        } else {
+          this.$message(res.msg);
+        }
+      });
+    },
+    getbrands() {
+      let parmars = { shopsBrandId: this.shopsBrandId };
+      this.$post("/shopsBrand/editInfo", parmars).then(res => {
+        console.log(res);
+        this.brandName = res.result.brandName;
+        this.remark = res.result.summary;
+        this.logo = res.result.logoPath;
+        this.pic = res.result.imagePath;
+      });
     }
   },
   mounted() {
     this.getToken();
+    this.shopsBrandId = sessionStorage.getItem("shopsBrandId");
+    this.dynamicTags = sessionStorage.getItem("labels").split(",");
+    console.log(sessionStorage.getItem("labels"))
+    if (this.shopsBrandId) {
+      this.getbrands();
+      console.log("底跳");
+    }
+  },
+  beforeDestroy() {
+    sessionStorage.removeItem("shopsBrandId");
+    sessionStorage.removeItem("labels");
   }
 };
 </script>
@@ -213,6 +266,10 @@ export default {
 /* .image-title {
 } */
 
+.image-up {
+  overflow: hidden;
+}
+
 .image-title > h3 {
   color: #000;
   font-size: 16px;
@@ -248,6 +305,11 @@ export default {
   left: 0;
   font: 12px/20px "";
   text-align: center;
+}
+
+.save {
+  text-align: center;
+  margin-top: 80px;
 }
 
 /*标签支持*/

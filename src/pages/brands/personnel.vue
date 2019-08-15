@@ -29,21 +29,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>张三</td>
-            <td>138000000</td>
-            <td>text@163.com</td>
-            <td>这是一个备注信息</td>
-            <td>
-              <span>查看</span>
-              <span style="color:red;">删除</span>
-            </td>
-          </tr>
+          <template v-if="list.length != 0">
+            <tr v-for="item in list" :key="item.userId">
+              <td>{{item.realName}}</td>
+              <td>{{item.mobilePhone}}</td>
+              <td>{{item.email}}</td>
+              <td>{{item.remark}}</td>
+              <td>
+                <span>查看</span>
+                <span style="color:red;">删除</span>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
 
-    <!-- 新增的的模态框 -->
+    <!-- 新增的模态框 -->
     <div class="adduser" v-if="add">
       <div class="zzc"></div>
       <div class="adduser-box">
@@ -54,36 +56,37 @@
         <div class="adduser-content">
           <div class="adduser-input">
             <div>姓名:</div>
-            <el-input></el-input>
+            <el-input v-model="name"></el-input>
           </div>
           <div class="adduser-input">
             <div>手机号码:</div>
-            <el-input></el-input>
+            <el-input v-model="phone" @blur="phonetest()" maxlength="11"></el-input>
+          </div>
+        </div>
+
+        <div class="adduser-content">
+          <div class="adduser-input">
+            <div>QQ:</div>
+            <el-input v-model="qq"></el-input>
+          </div>
+          <div class="adduser-input">
+            <div>邮箱:</div>
+            <el-input v-model="email"></el-input>
           </div>
         </div>
         <div class="adduser-content">
           <div class="adduser-input">
-            <div>姓名:</div>
-            <el-input></el-input>
+            <div>备注:</div>
+            <el-input v-model="remark"></el-input>
           </div>
           <div class="adduser-input">
-            <div>手机号码:</div>
-            <el-input></el-input>
+            <div></div>
+            <!-- <el-input></el-input> -->
           </div>
         </div>
-        <div class="adduser-content">
-          <div class="adduser-input">
-            <div>姓名:</div>
-            <el-input></el-input>
-          </div>
-          <div class="adduser-input">
-            <div>手机号码:</div>
-            <el-input></el-input>
-          </div>
+        <div class="save-btn">
+          <el-button type="primary" @click="save()">保存</el-button>
         </div>
-         <div class="save-btn">
-            <el-button type="primary">保存</el-button>
-         </div>
       </div>
     </div>
   </div>
@@ -95,19 +98,86 @@ export default {
     return {
       info: "负责人",
       keywords: "",
-      add:false,
+      add: false,
+      list: [],
+      name: "",
+      phone: "",
+      qq: "",
+      email: "",
+      remark: ""
     };
   },
   methods: {
-    showAdd(){
-      if(this.add == false){
+    showAdd() {
+      if (this.add == false) {
         this.add = true;
-      }else{
+      } else {
         this.add = false;
       }
+    },
+
+    //手机号校验
+    phonetest() {
+      if (!/^1[3456789]\d{9}$/.test(this.phone)) {
+        this.$message.error("输入手机号码格式有误");
+      } else {
+        var parmars = { username: this.phone };
+        this.$get("/shops/findByUserName", parmars).then(res => {
+          if (res.error == "01") {
+            this.$message.error("该手机号已被使用，请更换手机号后重试");
+          }
+        });
+      }
+    },
+    //保存用户信息
+    save() {
+      if (this.name == "") {
+        this.$message.error("请输入负责人姓名");
+      } else if (this.phone == "") {
+        this.$message.error("请输入负责人手机号码");
+      } else {
+        var parmars = {
+          shopsBrandId: sessionStorage.getItem("shopsBrandId"),
+          name: this.name,
+          userName: this.phone,
+          mobilePhone: this.phone,
+          password: "123456",
+          email: this.email,
+          QQ: this.qq,
+          remark: this.remark
+        };
+        this.$post("/shopsBrand/addShopsBrandShopsOwner", parmars).then(res => {
+          if (res.error == "00") {
+            this.$message("添加负责人成功");
+            setTimeout(function() {
+              this.add = false;
+            }, 1000);
+          } else {
+            this.$message.error(res.msg);
+          }
+        });
+      }
+    },
+    //读取列表
+    getuser() {
+      let parmars = {
+        keywords: this.keywords,
+        shopsBrandId: sessionStorage.getItem("shopsBrandId")
+      };
+      this.$post("/shopsBrand/shopsBrandShopsOwnerList", parmars).then(res => {
+        console.log(res)
+        if(res.error == "00"){
+          this.list = res.result.list;
+          console.log(this.list)
+        }
+      });
     }
   },
-  mounted() {}
+  mounted() {
+    if (sessionStorage.getItem("shopsBrandId")) {
+      this.getuser();
+    }
+  }
 };
 </script>
 
@@ -212,7 +282,7 @@ export default {
   width: 527px;
 }
 
-.save-btn{
+.save-btn {
   width: 60px;
   margin: 0 auto;
   margin-top: 110px;
