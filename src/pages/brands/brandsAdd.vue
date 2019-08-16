@@ -12,7 +12,9 @@
         <el-tab-pane label="商品信息" name="third">
           <v-goods></v-goods>
         </el-tab-pane>
-        <el-tab-pane label="服务信息" name="fourth">服务信息</el-tab-pane>
+        <el-tab-pane label="服务信息" name="fourth">
+          <v-service></v-service>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -22,12 +24,14 @@
 import brandinfo from "./info";
 import personnel from './personnel'
 import goods from './goods'
+import service from './service'
 export default {
   name: "brandsadd",
   components: {
     "v-info": brandinfo,
     "v-personnel":personnel,
-    "v-goods":goods
+    "v-goods":goods,
+    "v-service":service
   },
   data() {
     return {
@@ -38,7 +42,9 @@ export default {
   methods: {
     goBack() {
       console.log("go back");
-      history.go(-1);
+      this.$router.push({
+        name:"brand"
+      })
     },
     handleClick(tab, event) {
       console.log(tab, event);

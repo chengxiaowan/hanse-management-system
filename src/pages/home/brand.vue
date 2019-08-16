@@ -30,7 +30,7 @@
               <td>
                 <span @click="view(item)">查看</span>
                 <span>二维码</span>
-                <span style="color:red;">删除</span>
+                <span style="color:red;" @click="delbrand(item)">删除</span>
               </td>
             </tr>
           </template>
@@ -62,17 +62,54 @@ export default {
     },
     //新增
     add() {
+      sessionStorage.removeItem("shopsBrandId")
+      sessionStorage.removeItem("labels")
       this.$router.push({
         name: "brandsadd"
       });
     },
-    view(item){
-      sessionStorage.setItem("shopsBrandId",item.shopsBrandId)
-      sessionStorage.setItem("labels",item.labels)
-      console.log(item)
+    //查看
+    view(item) {
+      sessionStorage.setItem("shopsBrandId", item.shopsBrandId);
+      sessionStorage.setItem("labels", item.labels);
+      console.log(item);
       this.$router.push({
         name: "brandsadd"
+      });
+    },
+
+    //删除
+    delbrand(item) {
+      this.$confirm("您确认删除此品牌？?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
+        .then(() => {
+          let parmars = {
+            shopsBrandId: item.shopsBrandId,
+          };
+          this.$post("/shopsBrand/del", parmars).then(
+            res => {
+              console.log(res);
+              if (res.error == "00") {
+                this.$message({
+                  type: "success",
+                  message: "删除品牌成功!"
+                });
+              } else {
+                this.$message.error(res.msg);
+              }
+              this.getlist();
+            }
+          );
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消删除"
+          });
+        });
     }
   },
   //挂载生命周期

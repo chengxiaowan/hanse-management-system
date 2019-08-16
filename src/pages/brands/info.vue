@@ -108,7 +108,8 @@ export default {
       baseurl: "https://images.homeplus.fun/", //七牛云储存域名，用于拼接key得到图片url
       brandName: "",
       remark: "",
-      shopsBrandId: ""
+      shopsBrandId: "",
+      flage: ""
     };
   },
   methods: {
@@ -168,25 +169,48 @@ export default {
 
     //保存信息
     save() {
-      let parmars = {
-        brandName: this.brandName,
-        summary: this.remark,
-        description: "",
-        logoPath: this.logo,
-        imagePath: this.pic,
-        shopsBrandPicList: "",
-        labels: this.dynamicTags.join(",")
-      };
-      this.$post("/shopsBrand/add", parmars).then(res => {
-        if (res.error == "00") {
-          this.$message("保存成功，请继续添加其他信息");
-          this.shopsBrandId = res.shopsBrandId;
-          sessionStorage.setItem("shopsBrandId", res.shopsBrandId);
-        } else {
-          this.$message(res.msg);
-        }
-      });
+      if (this.flage == 1) {
+        let parmars = {
+          shopsBrandId: this.shopsBrandId,
+          brandName: this.brandName,
+          summary: this.remark,
+          description: "",
+          logoPath: this.logo,
+          imagePath: this.pic,
+          shopsBrandPicList: "",
+          labels: this.dynamicTags.join(",")
+        };
+        this.$post("/shopsBrand/edit", parmars).then(res => {
+          if (res.error == "00") {
+            this.$message("修改成功，请继续添加其他信息");
+            this.shopsBrandId = res.shopsBrandId;
+            sessionStorage.setItem("shopsBrandId", res.shopsBrandId);
+          } else {
+            this.$message(res.msg);
+          }
+        });
+      } else {
+        let parmars = {
+          brandName: this.brandName,
+          summary: this.remark,
+          description: "",
+          logoPath: this.logo,
+          imagePath: this.pic,
+          shopsBrandPicList: "",
+          labels: this.dynamicTags.join(",")
+        };
+        this.$post("/shopsBrand/add", parmars).then(res => {
+          if (res.error == "00") {
+            this.$message("保存成功，请继续添加其他信息");
+            this.shopsBrandId = res.shopsBrandId;
+            sessionStorage.setItem("shopsBrandId", res.shopsBrandId);
+          } else {
+            this.$message(res.msg);
+          }
+        });
+      }
     },
+    //获取信息
     getbrands() {
       let parmars = { shopsBrandId: this.shopsBrandId };
       this.$post("/shopsBrand/editInfo", parmars).then(res => {
@@ -195,6 +219,7 @@ export default {
         this.remark = res.result.summary;
         this.logo = res.result.logoPath;
         this.pic = res.result.imagePath;
+        this.flage = 1;
       });
     }
   },
@@ -202,15 +227,15 @@ export default {
     this.getToken();
     this.shopsBrandId = sessionStorage.getItem("shopsBrandId");
     this.dynamicTags = sessionStorage.getItem("labels").split(",");
-    console.log(sessionStorage.getItem("labels"))
+    console.log(sessionStorage.getItem("labels"));
     if (this.shopsBrandId) {
       this.getbrands();
       console.log("底跳");
     }
   },
   beforeDestroy() {
-    sessionStorage.removeItem("shopsBrandId");
-    sessionStorage.removeItem("labels");
+    // sessionStorage.removeItem("shopsBrandId");
+    // sessionStorage.removeItem("labels");
   }
 };
 </script>

@@ -14,20 +14,25 @@
       </div>
       <div class="lei">
         分类
-        <el-select placeholder="请选择">
-          <el-option></el-option>
+        <el-select placeholder="请选择" v-model="solt">
+          <el-option
+            v-for="item in type"
+            :key="item.typeId"
+            :label="item.name"
+            :value="item.typeId"
+          ></el-option>
         </el-select>
       </div>
       <div class="goods-btn">
-        <el-button type="primary">搜索</el-button>
-        <el-button type="success" @click="addgoods()">添加</el-button>
+        <el-button type="primary" @click="getgoods()">搜索</el-button>
+        <el-button type="success" @click="open()">添加</el-button>
       </div>
     </div>
     <div class="goods-tab">
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
-            <th width="15%">商品名称</th>
+            <th width="10%">商品名称</th>
             <th width="10%">分类</th>
             <th width="10%">品牌</th>
             <th width="12%">图片</th>
@@ -35,95 +40,45 @@
             <th width="10%">佣金比例（%）</th>
             <th width="10%">预估收益（元）</th>
             <th width="8%">审核状态</th>
-            <th width="20%">操作</th>
+            <th width="10%">上下架状态</th>
+            <th width="15%">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>沙发垫子</td>
-            <td>沙发</td>
-            <td>施华洛世奇</td>
-            <td>图片</td>
-            <td>999</td>
-            <td>888</td>
-            <td>50%</td>
-            <td>444</td>
-            <td>
-              <span>查看</span>
-              <span>二维码</span>
-            </td>
-          </tr>
+          <template v-if="list.length != 0">
+            <tr v-for="item in list" :key="item.shopsBrandGoodsId">
+              <td>{{item.name}}</td>
+              <td>{{item.typeName}}</td>
+              <td>{{item.brandName}}</td>
+              <td>
+                <img :src="item.image" class="img-box" />
+              </td>
+              <td>{{item.price}}</td>
+              <td v-if="item.auditStatus !='1'">-</td>
+              <td v-else>{{item.commissionPercent}}</td>
+              <td v-if="item.auditStatus !='1'">-</td>
+              <td v-else>{{(item.price * (item.commissionPercent/100)).toFixed(2)}}</td>
+              <td v-if="item.auditStatus == 0">待审核</td>
+              <td v-if="item.auditStatus == 1">审核通过</td>
+              <td v-if="item.auditStatus == 2">
+                <p style="color: red">审核失败</p>
+              </td>
+              <td v-if="item.isOnsell == 1 && item.auditStatus == 1">已上架</td>
+              <td v-else>--</td>
+              <td>
+                <span>查看</span>
+                <span>二维码</span>
+                <span
+                  v-if="item.isOnsell == 1 && item.auditStatus == 1"
+                  style="color:red"
+                  @click="onsell(item,0)"
+                >下架</span>
+                <span v-if="item.isOnsell == 0 && item.auditStatus == 1" @click="onsell(item,1)">上架</span>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
-    </div>
-    <!-- 模态框 -->
-    <!-- 新增的模态框 -->
-    <div class="addgoods" v-if="add">
-      <div class="zhezhao"></div>
-      <div class="addgoods-box">
-        <div class="addgoods-title">
-          <div class="titlefont">添加商品</div>
-          <span @click="addgoods()">X</span>
-        </div>
-        <div class="tips">
-          <div class="goods-title">
-            <div>说明</div>
-            <p>
-              1、销售价取自商品的最低销售价。
-              <br />2、点击加入可将商品加入销售，列表里多选商品点击批量加入可以将多个商品加入销售。
-            </p>
-          </div>
-        </div>
-        <div class="soso-goods">
-          <div class="goods-keywords" style="margin-left:15px;">
-            <el-input type="text" v-model="keywords" placeholder="请输入关键字"></el-input>
-          </div>
-          <div class="lei">
-            分类
-            <el-select placeholder="请选择">
-              <el-option></el-option>
-            </el-select>
-          </div>
-          <div class="goods-btn">
-            <el-button type="primary">搜索</el-button>
-            <el-button type="success">添加</el-button>
-          </div>
-        </div>
-        <div class="addgoods-tab">
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr>
-                <th width="20%">商品名称</th>
-                <th width="10%">分类</th>
-                <th width="10%">品牌</th>
-                <th width="15%">图片</th>
-                <th width="10%">销售价（元）</th>
-                <th width="10%">佣金比例（%）</th>
-                <th width="10%">预估收益（元）</th>
-                <th width="20%">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>item.name</td>
-                <td>item.typeName</td>
-                <td>item.brandName</td>
-                <td>
-                  <!-- <img src="item.image"/> -->
-                  ???
-                </td>
-                <td>item.price</td>
-                <td>5</td>
-                <td>(item.price * 0.05).toFixed(2)</td>
-                <td class="btn-hide">
-                  <span>加入</span>
-                  <span>删除</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -134,50 +89,138 @@ export default {
     return {
       info: "商品管理",
       keywords: "",
+      type: [],
+      solt: "",
       shopsBrandId: "",
       list: [],
-      addlist:[],
-      add:false,
+      addlist: [],
+      addgoods: 0,
+      //简单分页处理
+      minpage: "",
+      maxpage: ""
     };
   },
   methods: {
     //获取商品列表
     getgoods() {
       let parmars = {
-        shopsBrandId: this.shopsBrandId
+        shopsBrandId: this.shopsBrandId,
+        keywords: this.keywords,
+        typeId: this.solt,
+        pageSize: ""
       };
       this.$post("/shopsBrand/shopsBrandGoodsList", parmars).then(res => {
-        console.log(res);
+        if (res.error == "00") {
+          this.list = res.result.list;
+        }
       });
     },
-
-    //模态框打开关闭
-    addgoods(){
-      if(this.add == false){
-        this.add = true;
-      }else{
-        this.add = false;
-      }
+    //获取商品分类
+    getType() {
+      let parmars = {
+        level: "1",
+        pageSize: "100"
+      };
+      this.$get("/type/dataList", parmars).then(res => {
+        if (res.error == "00") {
+          this.type = res.result.list;
+          console.log(this.type);
+        }
+      });
     },
-    //获取未添加的商品列表
-    getAllgoods(){
-      this.$post('/goods/dataList3').then(res=>{
-        console.log(res)
-      })
+    open() {
+      this.$router.push({
+        name: "goodsAdd",
+        query: {
+          shopsBrandGoodsId: this.shopsBrandId
+        }
+      });
+    },
+    //商品上下架
+    onsell(item, type) {
+      let parmars = {
+        shopsBrandGoodsId: item.shopsBrandGoodsId,
+        isOnsell: type
+      };
+      if (type == 1) {
+        //上架
+        this.$confirm("您确认上架此商品？?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$post(
+              "/shopsBrand/changeShopsBrandGoodsIsOnsell",
+              parmars
+            ).then(res => {
+              console.log(res);
+              if (res.error == "00") {
+                this.$message({
+                  type: "success",
+                  message: "上架成功!"
+                });
+                this.getgoods();
+              } else {
+                this.$message.error(res.msg);
+              }
+              this.getlist();
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "取消上架"
+            });
+          });
+      } else {
+        this.$confirm("您确认下架此商品？?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$post(
+              "/shopsBrand/changeShopsBrandGoodsIsOnsell",
+              parmars
+            ).then(res => {
+              console.log(res);
+              if (res.error == "00") {
+                this.$message({
+                  type: "success",
+                  message: "下架成功!"
+                });
+                this.getgoods();
+              } else {
+                this.$message.error(res.msg);
+              }
+              this.getlist();
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "取消下架"
+            });
+          });
+      }
     }
   },
   mounted() {
     if (sessionStorage.getItem("shopsBrandId")) {
       this.shopsBrandId = sessionStorage.getItem("shopsBrandId");
       this.getgoods();
+      this.getType();
     }
-    this.getAllgoods()
   }
 };
 </script>
 <style scoped>
 .goods {
-  height: 100vh;
+  /* height: 1500px; */
+  overflow: auto;
+  background: #fff;
+  padding-bottom: 150px;
 }
 
 .goods-title {
@@ -224,15 +267,16 @@ export default {
 }
 
 .addgoods {
-  height: 100%;
+  height: 1000px;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
+  overflow: auto;
 }
 
 .zhezhao {
-  height: 100%;
+  /* height: 100%; */
   width: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
@@ -240,7 +284,7 @@ export default {
 
 .addgoods-box {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   position: absolute;
   top: 0;
   left: 0;
@@ -262,6 +306,13 @@ export default {
   float: left;
 }
 
+.img-box {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin: auto;
+}
+
 .addgoods-title > span {
   float: right;
   cursor: pointer;
@@ -271,9 +322,11 @@ export default {
   padding: 15px;
 }
 
-.addgoods-tab{
+.addgoods-tab {
+  height: 1000px;
   margin-top: 10px;
   padding: 0 15px;
+  overflow: auto;
 }
 
 /*表格样式*/
@@ -293,6 +346,7 @@ td {
   font-size: 14px;
   font-weight: 400;
   color: #5b5b5b;
+  vertical-align: middle;
 }
 
 td > span {

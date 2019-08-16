@@ -22,6 +22,8 @@ import password from '../pages/user/password.vue'
 
 //品牌相关
 import brandsadd from '../pages/brands/brandsAdd'
+import goodsAdd from '../pages/brands/addgoods'     //添加商品
+import addService from "../pages/brands/addService"   //添加服务
 
 
 
@@ -102,6 +104,16 @@ let routes = [{
                 path: 'brand/brandsadd',
                 name: 'brandsadd',
                 component: brandsadd
+            },
+            {
+                path:"brand/goodsAdd",
+                name:"goodsAdd",
+                component:goodsAdd
+            },
+            {
+                path:"brand/addService",
+                name:"addService",
+                component:addService
             }
         ]
     },
