@@ -25,6 +25,9 @@ import brandsadd from '../pages/brands/brandsAdd'
 import goodsAdd from '../pages/brands/addgoods'     //添加商品
 import addService from "../pages/brands/addService"   //添加服务
 
+//影楼相关
+import Studio from "../pages/studio/studio"     //影楼详情入口？
+
 
 
 
@@ -114,6 +117,12 @@ let routes = [{
                 path:"brand/addService",
                 name:"addService",
                 component:addService
+            },
+            //影楼部分
+            {
+                path:"studio/studioAdd",
+                name:"Studio",
+                component:Studio
             }
         ]
     },

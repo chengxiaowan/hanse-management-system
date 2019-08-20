@@ -132,6 +132,7 @@ export default {
         this.commissionPercent = "";
         this.reason = "";
         this.id = item.id;
+        this.radio = "1";
       } else {
         this.dialogVisible = false;
       }
