@@ -1,15 +1,208 @@
 <template>
-    <div>
-        这里是============={{info}}
+  <div class="offlineshop">
+    <div class="shops-title">
+      <div>说明</div>
+      <p>1、二维码可生成带有酒店/民宿信息的小程序码。</p>
     </div>
+    <div class="soso">
+      <div class="keywords">
+        <el-input type="text" placeholder="请输入店铺名称、地址、联系方式" v-model="keywords"></el-input>
+      </div>
+      <div class="sele">
+        类型
+        <el-select v-model="type" placeholder="请选择">
+          <el-option label="全部" value></el-option>
+          <el-option label="酒店" value="1"></el-option>
+          <el-option label="民宿" value="2"></el-option>
+        </el-select>
+      </div>
+      <div class="sele">
+        审核
+        <el-select v-model="audit" placeholder="请选择">
+          <el-option label="全部" value></el-option>
+          <el-option label="待审核" value="0"></el-option>
+          <el-option label="审核通过" value="1"></el-option>
+          <el-option label="审核失败" value="2"></el-option>
+        </el-select>
+      </div>
+      <div class="soso-btn">
+        <el-button type="primary">搜索</el-button>
+        <el-button type="success" plain @click="add()">新增</el-button>
+      </div>
+    </div>
+    <div class="tab">
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th width="20%">店铺名称</th>
+            <th width="10%">联系电话</th>
+            <th width="10%">店铺类型</th>
+            <!--<th width="20%">店铺标签</th>-->
+            <!--<th width="10%">营业时间</th>-->
+            <th width="30%">店铺地址</th>
+            <th width="10%">审核状态</th>
+            <!--<th width="10%">创建时间</th>-->
+            <th width="20%">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="list.length != 0">
+            <tr v-for="item in list" :key="item.shopsId">
+              <td>
+                <a @click="view(item);">{{item.shopsName}}</a>
+              </td>
+              <td>{{item.phone}}</td>
+              <td>{{item.shopsType=='1'?'酒店':'民宿'}}</td>
+              <!--<td>{{item.labels}}</td>-->
+              <!--<td>{{item.businessHours}}</td>-->
+              <td>{{item.address}}</td>
+              <td
+                :class="{'htz-red':item.status=='2'}"
+              >{{item.status=='0'?'待审核':(item.status=='1'?'审核通过':'审核失败')}}</td>
+              <!--<td>{{item.createTime}}</td>-->
+              <td class="btn-hide">
+                <span>查看</span>
+                <span>二维码</span>
+                <span style="color:red">删除</span>
+              </td>
+            </tr>
+          </template>
+          <tr class="main_info" v-else>
+            <td colspan="9">没有相关数据</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 <script>
 export default {
-    name:"offlineshop",
-    data(){
-        return{
-            info:"门店管理"
+  name: "offlineshop",
+  data() {
+    return {
+      info: "门店管理",
+      keywords: "",
+      type: "",
+      audit: "",
+      list: []
+    };
+  },
+  methods: {
+    //获取列表
+    getList() {
+      let parmars = {
+        keywords: this.keywords,
+        shopsType: this.type,
+        status: this.audit,
+        pageSize: "100"
+      };
+      this.$post("/shops/dataList", parmars).then(res => {
+        if (res.error == "00") {
+          this.list = res.result.list;
+        } else {
+          this.$message.error(res.msg);
         }
+        console.log(res);
+      });
+    },
+    //跳转添加界面
+    add() {
+      this.$router.push({
+        name: "addOffineShops"
+      });
     }
-}
+  },
+  mounted() {
+    this.getList();
+  }
+};
 </script>
+<style scoped>
+.offlineshop {
+  padding: 15px;
+  height: 1000px;
+  padding-bottom: 150px;
+  overflow: auto;
+  background: #fff;
+}
+
+.shops-title {
+  width: 100%;
+  background: #e4e9ef;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.shops-title > div {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  color: #4a4a4a;
+}
+
+.shops-title > p {
+  font-size: 14px;
+  font-weight: 400;
+  color: #4a4a4a;
+  padding-top: 18px;
+}
+
+.soso {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.soso > .keywords {
+  float: left;
+  margin-right: 10px;
+  width: 300px;
+}
+
+.sele {
+  float: left;
+  margin-right: 10px;
+}
+
+.soso-btn {
+  float: left;
+  width: 200px;
+  margin-top: 0;
+}
+
+.tab {
+  width: 100%;
+  overflow: auto;
+}
+
+/*表格样式*/
+
+/*去掉表头边框+背景*/
+th {
+  border: 1px solid transparent !important;
+  background: #e4e9ef;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #5b5b5b;
+}
+
+td {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #5b5b5b;
+}
+
+td > span {
+  margin-left: 14px;
+  color: #4a90e2;
+  display: none;
+  cursor: pointer;
+}
+
+tr:hover > td > span {
+  display: inline;
+}
+</style>

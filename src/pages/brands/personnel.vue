@@ -111,6 +111,11 @@ export default {
     showAdd() {
       if (this.add == false) {
         this.add = true;
+        this.name = "";
+        this.phone = "";
+        this.email = "";
+        this.qq = "";
+        this.remark = "";
       } else {
         this.add = false;
       }
@@ -149,9 +154,8 @@ export default {
         this.$post("/shopsBrand/addShopsBrandShopsOwner", parmars).then(res => {
           if (res.error == "00") {
             this.$message("添加负责人成功");
-            setTimeout(function() {
-              this.add = false;
-            }, 1000);
+            this.showAdd();
+            this.getuser();
           } else {
             this.$message.error(res.msg);
           }
@@ -165,10 +169,10 @@ export default {
         shopsBrandId: sessionStorage.getItem("shopsBrandId")
       };
       this.$post("/shopsBrand/shopsBrandShopsOwnerList", parmars).then(res => {
-        console.log(res)
-        if(res.error == "00"){
+        console.log(res);
+        if (res.error == "00") {
           this.list = res.result.list;
-          console.log(this.list)
+          console.log(this.list);
         }
       });
     }

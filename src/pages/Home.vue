@@ -137,6 +137,7 @@ export default {
           if (res.error == "00") {
             console.log(res);
             this.username = res.result.name;
+            sessionStorage.setItem("nickName",this.username)
           } else {
             this.$message("获取个人信息成功");
           }

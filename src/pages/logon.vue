@@ -100,18 +100,24 @@ export default {
           verificationCode: this.code,
           password: this.password2
         };
-        this.$post("/service/registerMerchantsUser", parmars).then(res => {
-          this.$alert("注册成功，即将跳转到登录页面", "注册成功", {
-            confirmButtonText: "确定",
-            callback: action => {
-              this.$router.push({
-                name: "login"
+        this.$post("/service/registerMerchantsUser", parmars)
+          .then(res => {
+            if (res.error == "00") {
+              this.$alert("注册成功，即将跳转到登录页面", "注册成功", {
+                confirmButtonText: "确定",
+                callback: action => {
+                  this.$router.push({
+                    name: "login"
+                  });
+                }
               });
+            } else {
+              this.$message.error(res.msg);
             }
+          })
+          .catch(() => {
+            console.log("失败");
           });
-        }).catch(()=>{
-          console.log("失败")
-        });
       }
     },
     //手机验证码
