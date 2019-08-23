@@ -61,7 +61,7 @@
               >{{item.status=='0'?'待审核':(item.status=='1'?'审核通过':'审核失败')}}</td>
               <!--<td>{{item.createTime}}</td>-->
               <td class="btn-hide">
-                <span>查看</span>
+                <span @click="open(item)">查看</span>
                 <span>二维码</span>
                 <span style="color:red">删除</span>
               </td>
@@ -110,6 +110,16 @@ export default {
       this.$router.push({
         name: "addOffineShops"
       });
+    },
+    //底跳
+    open(item){
+      console.log(item)
+      sessionStorage.setItem("shopsId",item.shopsId)
+      sessionStorage.setItem("shopslabel",item.labels)
+      sessionStorage.setItem("shopsBrandId",item.shopsBrandId)
+      this.$router.push({
+        name:"shopsinfo"
+      })
     }
   },
   mounted() {

@@ -1,6 +1,6 @@
 <template>
   <div class="add">
-    <v-title :page="page"></v-title>
+    <!-- <v-title :page="page"></v-title> -->
     <div class="info-box">
       <div class="input-box">
         <div class="min-box">
@@ -291,7 +291,8 @@ export default {
       actionPath: "https://upload.qiniup.com",
       baseurl: "https://images.homeplus.fun/", //七牛云储存域名，用于拼接key得到图片url
       postdata: { token: "" },
-      drool: ""
+      drool: "",
+      flage: ""
     };
   },
   methods: {
@@ -355,51 +356,58 @@ export default {
     handleAvatarSuccess2(res, file) {
       let picurl = this.baseurl + res.url;
       let picname = res.url;
+      let time = Date.parse(new Date());
       this.pic1.url = picurl;
       this.pic1.originalFilename = picname;
-      this.pic1.uploadTime = Date.parse(new Date());
+      this.pic1.uploadTime = this.timestampToTime(time);
     },
     handleAvatarSuccess3(res, file) {
       let picurl = this.baseurl + res.url;
       let picname = res.url;
+      let time = Date.parse(new Date());
       this.pic2.url = picurl;
       this.pic2.originalFilename = picname;
-      this.pic2.uploadTime = Date.parse(new Date());
+      this.pic2.uploadTime = this.timestampToTime(time);
     },
     handleAvatarSuccess4(res, file) {
       let picurl = this.baseurl + res.url;
       let picname = res.url;
+      let time = Date.parse(new Date());
       this.pic3.url = picurl;
       this.pic3.originalFilename = picname;
-      this.pic3.uploadTime = Date.parse(new Date());
+      this.pic3.uploadTime = this.timestampToTime(time);
     },
     handleAvatarSuccess5(res, file) {
       let picurl = this.baseurl + res.url;
       let picname = res.url;
+      let time = Date.parse(new Date());
       this.pic4.url = picurl;
       this.pic4.originalFilename = picname;
-      this.pic4.uploadTime = Date.parse(new Date());
+      this.pic4.uploadTime = this.timestampToTime(time);
     },
     handleAvatarSuccess6(res, file) {
       let picurl = this.baseurl + res.url;
       let picname = res.url;
+      let time = Date.parse(new Date());
       this.pic5.url = picurl;
       this.pic5.originalFilename = picname;
-      this.pic5.uploadTime = Date.parse(new Date());
+      this.pic5.uploadTime = this.timestampToTime(time);
     },
     handleAvatarSuccess7(res, file) {
       let picurl = this.baseurl + res.url;
       let picname = res.url;
+      let time = Date.parse(new Date());
       this.pic6.url = picurl;
       this.pic6.originalFilename = picname;
-      this.pic6.uploadTime = Date.parse(new Date());
+      this.pic6.uploadTime = this.timestampToTime(time);
     },
     handleAvatarSuccess8(res, file) {
       let picurl = this.baseurl + res.url;
       let picname = res.url;
+      let time = Date.parse(new Date());
       this.pic7.url = picurl;
       this.pic7.originalFilename = picname;
-      this.pic7.uploadTime = Date.parse(new Date());
+      this.pic7.uploadTime = this.timestampToTime(time);
     },
 
     //获取品牌
@@ -451,6 +459,7 @@ export default {
       } else {
         let parmars = {
           shopsName: this.name,
+          shopsBrandId: this.brand,
           phone: "",
           businessHours: "",
           summary: this.remark,
@@ -461,17 +470,98 @@ export default {
           province: this.province,
           city: this.city,
           area: this.area,
-          userId:"",        //疑似缺少的参数
+          userId: "", //疑似缺少的参数
+          address: this.address
         };
-        this.$post("/shops/add", parmars).then(res => {
-          console.log(res);
-        });
+        if (this.flage == "1") {
+          let shopsId = sessionStorage.getItem("shopsId");
+          parmars.shopsId = shopsId;
+          this.$post("/shops/edit", parmars).then(res => {
+            if (res.error == "00") {
+              this.$message("修改店铺信息成功");
+            } else {
+              this.$message.error(res.msg);
+            }
+          });
+        } else {
+          this.$post("/shops/add", parmars).then(res => {
+            if (res.error == "00") {
+              this.$message("保存成功，请完善其他信息");
+            } else {
+              this.$message.error(res.msg);
+            }
+          });
+        }
       }
+    },
+
+    // 时间整理
+    timestampToTime(timestamp) {
+      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000 var date = new Date(timestamp*1000);
+      var Y = date.getFullYear() + "-";
+      var M =
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1) + "-";
+      var D = date.getDate() + " ";
+      var h = date.getHours() + ":";
+      var m = date.getMinutes() + ":";
+      var s = date.getSeconds();
+      return Y + M + D + h + m + s;
+    },
+    //获取信息
+    getinfo() {
+      let parmars = {
+        shopsId: sessionStorage.getItem("shopsId")
+      };
+      this.$post("/shops/editInfo", parmars).then(res => {
+        if (res.error == "00") {
+          this.name = res.result.shopsName;
+          this.shopsType = res.result.shopsType;
+          this.select.province = res.result.province;
+          this.select.city = res.result.city;
+          this.select.area = res.result.area;
+          this.brand = res.result.shopsBrandId + "";
+          this.remark = res.result.summary;
+          this.address = res.result.address;
+          this.dynamicTags = sessionStorage.getItem("shopslabel").split(",");
+          this.pic = res.result.logoPath;
+          this.province = res.result.province;
+          this.city = res.result.city;
+          this.area = res.result.area;
+          if (res.result.shopsPicList[0]) {
+            this.pic1 = res.result.shopsPicList[0];
+          }
+          if (res.result.shopsPicList[1]) {
+            this.pic2 = res.result.shopsPicList[1];
+          }
+          if (res.result.shopsPicList[2]) {
+            this.pic3 = res.result.shopsPicList[2];
+          }
+          if (res.result.shopsPicList[3]) {
+            this.pic4 = res.result.shopsPicList[3];
+          }
+          if (res.result.shopsPicList[4]) {
+            this.pic5 = res.result.shopsPicList[4];
+          }
+          if (res.result.shopsPicList[5]) {
+            this.pic6 = res.result.shopsPicList[5];
+          }
+          if (res.result.shopsPicList[6]) {
+            this.pic7 = res.result.shopsPicList[5];
+          }
+        }
+      });
     }
   },
   mounted() {
     this.getToken();
     this.getBrands();
+    if (sessionStorage.getItem("shopsId")) {
+      console.log("获取信息");
+      this.flage = "1";
+      this.getinfo();
+    }
   }
 };
 </script>

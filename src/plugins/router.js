@@ -22,14 +22,17 @@ import password from '../pages/user/password.vue'
 
 //品牌相关
 import brandsadd from '../pages/brands/brandsAdd'
-import goodsAdd from '../pages/brands/addgoods'     //添加商品
-import addService from "../pages/brands/addService"   //添加服务
+import goodsAdd from '../pages/brands/addgoods' //添加商品
+import addService from "../pages/brands/addService" //添加服务
 
 //影楼相关
-import Studio from "../pages/studio/studio"     //影楼详情入口？
+import Studio from "../pages/studio/studio" //影楼详情入口？
 
 //门店相关
-import addShops from "../pages/offlineshops/addShops"       //门店主入口
+import addShops from "../pages/offlineshops/addShops" //门店主添加
+import shopsinfo from "../pages/offlineshops/shopsinfo" //门店详情主入口
+import addgoods from "../pages/offlineshops/addgoods" //门店添加商品
+import addshopsservice from '../pages/offlineshops/addservice' //门店添加服务
 
 
 
@@ -112,26 +115,41 @@ let routes = [{
                 component: brandsadd
             },
             {
-                path:"brand/goodsAdd",
-                name:"goodsAdd",
-                component:goodsAdd
+                path: "brand/goodsAdd",
+                name: "goodsAdd",
+                component: goodsAdd
             },
             {
-                path:"brand/addService",
-                name:"addService",
-                component:addService
+                path: "brand/addService",
+                name: "addService",
+                component: addService
             },
             //影楼部分
             {
-                path:"studio/studioAdd",
-                name:"Studio",
-                component:Studio
+                path: "studio/studioAdd",
+                name: "Studio",
+                component: Studio
             },
             //门店部分
             {
-                path:'offlineshop/add',
-                name:'addOffineShops',
-                component:addShops,
+                path: 'offlineshop/add',
+                name: 'addOffineShops',
+                component: addShops,
+            },
+            {
+                path: 'offlineshop/info',
+                name: 'shopsinfo',
+                component: shopsinfo,
+            },
+            {
+                path: 'offlineshop/addgoods',
+                name: 'addgoods',
+                component: addgoods,
+            },
+            {
+                path: 'offlineshop/addservice',
+                name: 'addshopsservice',
+                component: addshopsservice,
             }
         ]
     },
