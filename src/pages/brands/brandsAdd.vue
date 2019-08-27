@@ -49,6 +49,13 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     }
+  },
+  mounted(){
+    let table = sessionStorage.getItem('table')
+    if(table){
+      this.activeName = table
+    }
+    console.log(table)
   }
 };
 </script>

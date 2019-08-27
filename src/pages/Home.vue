@@ -63,13 +63,14 @@
             <div class="user-title">
               <img src="../assets/image/head.png" />
               <a href="#">{{username}}</a>
+              <span>{{phone}}</span>
             </div>
             <div class="user-menu">
               <router-link to="/userinfo">基本信息</router-link>
+              <!-- | -->
+              <!-- <router-link to="/certification">实名认证</router-link>     暂时去掉          -->
               |
-              <router-link to="/certification">实名认证</router-link>              
-              |
-              <router-link to="/safe">安全设置</router-link>                            
+              <router-link to="/safe">修改密码</router-link>                            
             </div>
             <div class="logout" @click="logout">退出管理系统</div>
           </div>
@@ -91,7 +92,8 @@ export default {
       head: "", //存放头像
       username: "常州寒舍信息科技有限公司", //用户名
       showUser: false,
-      activeName: "1"
+      activeName: "1",
+      phone:"",
     };
   },
   methods: {
@@ -114,6 +116,7 @@ export default {
     isLogin() {
       let user = sessionStorage.getItem("username");
       let role = sessionStorage.getItem("roleId");
+      this.phone = sessionStorage.getItem("username");
       if (user == null || role == null) {
         this.$router.push({ path: "/login" });
       }else{
@@ -220,6 +223,17 @@ export default {
   line-height: 32px;
   margin-left: 12px;
   font-weight: 400;
+}
+
+.userinfo .user-title > span{
+  float: left;
+  height: 32px;
+  color: #4a4a4a;
+  font-size: 12px;
+  line-height: 32px;
+  margin-left: 12px;
+  font-weight: 400;
+  margin-left: 40px;
 }
 
 .user-menu {

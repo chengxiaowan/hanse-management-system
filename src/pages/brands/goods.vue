@@ -64,10 +64,11 @@
                 <p style="color: red">审核失败</p>
               </td>
               <td v-if="item.isOnsell == 1 && item.auditStatus == 1">已上架</td>
-              <td v-else>--</td>
+              <td v-if="item.isOnsell == 0 && item.auditStatus == 1">下架</td>
+              <td v-if="item.auditStatus != 1">--</td>
               <td>
                 <span>查看</span>
-                <span>二维码</span>
+                <span v-if="item.isOnsell == 1 && item.auditStatus == 1">二维码</span>
                 <span
                   v-if="item.isOnsell == 1 && item.auditStatus == 1"
                   style="color:red"
@@ -79,6 +80,7 @@
           </template>
         </tbody>
       </table>
+      <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
     </div>
   </div>
 </template>
@@ -97,7 +99,9 @@ export default {
       addgoods: 0,
       //简单分页处理
       minpage: "",
-      maxpage: ""
+      maxpage: "",
+      pageNo:"",
+      total:"",
     };
   },
   methods: {
@@ -107,11 +111,14 @@ export default {
         shopsBrandId: this.shopsBrandId,
         keywords: this.keywords,
         typeId: this.solt,
-        pageSize: ""
+        pageSize: "10",
+        pageNo:this.pageNo
       };
       this.$post("/shopsBrand/shopsBrandGoodsList", parmars).then(res => {
         if (res.error == "00") {
           this.list = res.result.list;
+          this.total = res.result.total;
+          // console.log(res.result.total)
         }
       });
     },
@@ -164,7 +171,7 @@ export default {
               } else {
                 this.$message.error(res.msg);
               }
-              this.getlist();
+              this.getgoods();
             });
           })
           .catch(() => {
@@ -204,6 +211,10 @@ export default {
             });
           });
       }
+    },
+    page(e){
+      this.pageNo = e
+      this.getgoods()
     }
   },
   mounted() {

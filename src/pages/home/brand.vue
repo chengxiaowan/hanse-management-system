@@ -72,6 +72,7 @@ export default {
     view(item) {
       sessionStorage.setItem("shopsBrandId", item.shopsBrandId);
       sessionStorage.setItem("labels", item.labels);
+      sessionStorage.removeItem('table')
       console.log(item);
       this.$router.push({
         name: "brandsadd"

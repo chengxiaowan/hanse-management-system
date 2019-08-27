@@ -9,7 +9,7 @@
           <router-link to="/login">快捷登录 ></router-link>
         </div>
       </div>
-      <el-select v-model="value" placeholder="请选择登录角色" class="logon-role">
+      <el-select v-model="value" placeholder="请选择角色" class="logon-role">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -18,7 +18,7 @@
         ></el-option>
       </el-select>
       <div class="logon-input">
-        <el-input v-model="phone" placeholder="请输入手机号"></el-input>
+        <el-input v-model="phone" placeholder="请输入手机号" maxlength="11"></el-input>
       </div>
       <div class="logon-input">
         <el-input v-model="password" type="password" placeholder="请输入您的登录密码" autocomplete="off"></el-input>
@@ -30,11 +30,12 @@
         <div class="code-input">
           <el-input v-model="code" placeholder="请输入短信验证码" autocomplete="off"></el-input>
         </div>
-        <el-button class="code-btn" @click="phoneTest">获取验证码</el-button>
+        <el-button class="code-btn" @click="phoneTest" v-if="!isDisabled">获取验证码</el-button>
+        <el-button class="code-btn" @click="phoneTest" v-if="isDisabled" disabled>{{content}}</el-button>
       </div>
       <el-button type="primary" class="logon-submit" @click="drool">同意条款并注册</el-button>
       <div class="rule">
-        <el-checkbox v-model="rule"></el-checkbox>
+        <el-checkbox v-model="rule" checked></el-checkbox>
         <a href="#">《寒舍网站服务条款》</a>
         |
         <a href="#">《法律声明和隐私政策》</a>
@@ -77,22 +78,28 @@ export default {
       password: "",
       password2: "",
       code: "",
-      rule: ""
+      rule: "true",
+      isDisabled: false,
+      content: "",
+      count:'',
+      timer:"",
     };
   },
   //实例上的方法
   methods: {
     drool() {
-      if (!/^1[3456789]\d{9}$/.test(this.phone)) {
-        this.$message.error("请检查手机号是否正确");
-      } else if (this.password != this.password2) {
-        this.$message.error("请保持两次输入的密码一致");
-      } else if (this.code == "") {
-        this.$message.error("请输入您的手机验证码");
-      } else if (this.rule != true) {
-        this.$message.error("请点击下方框以同意用户协议");
-      } else if (this.value == "") {
+      if (this.value == "") {
         this.$message.error("请选择您的角色");
+      } else if (!/^1[3456789]\d{9}$/.test(this.phone)) {
+        this.$message.error("请检查手机号是否正确");
+      } else if (this.password == "" || this.password2 == "") {
+        this.$message.error("请输入您的密码");
+      } else if (this.password != this.password2) {
+        this.$message.error("请保持两次输入密码一致");
+      } else if (this.code == "") {
+        this.$message.error("请输入手机验证码");
+      } else if (this.rule == "") {
+        this.$message.error("请阅读并同意用户协议");
       } else {
         let parmars = {
           roleId: this.value,
@@ -126,14 +133,45 @@ export default {
         mobilePhone: this.phone,
         flag: 0
       };
-      this.$post("/service/getVerificationCode", parmars)
-        .then(res => {
-          //在这里处理按钮1分钟不可用
-          console.log(res);
-        })
-        .catch(() => {
-          console.log("失败");
-        });
+      if (/^1[3456789]\d{9}$/.test(this.phone)) {
+        this.$post("/service/getVerificationCode", parmars)
+          .then(res => {
+            //在这里处理按钮1分钟不可用
+            console.log(res)
+            if(res.error == "00"){
+              this.anniu();
+            }else{
+              this.$message.error(res.msg)
+            }
+            
+          })
+      } else {
+        this.$message.error("请输入正确的的手机号码");
+      }
+    },
+    //按钮？？
+    anniu() {
+      const TIME_COUNT = 60;
+      console.log("1")
+      this.count = TIME_COUNT;
+      this.timer = window.setInterval(() => {
+        if (this.count > 0 && this.count <= TIME_COUNT) {
+          // 倒计时时不可点击
+          this.isDisabled = true;
+          // 计时秒数
+          this.count--;
+          // 更新按钮的文字内容
+          this.content = this.count + "s";
+        } else {
+          // 倒计时完，可点击
+          this.isDisabled = false;
+          // 更新按钮文字内容
+          this.content = "获取短信验证码";
+          // 清空定时器!!!
+          clearInterval(this.timer);
+          this.timer = null;
+        }
+      }, 1000);
     }
   }
 };

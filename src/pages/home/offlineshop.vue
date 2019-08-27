@@ -26,7 +26,7 @@
         </el-select>
       </div>
       <div class="soso-btn">
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" @click="getList()">搜索</el-button>
         <el-button type="success" plain @click="add()">新增</el-button>
       </div>
     </div>
@@ -107,19 +107,21 @@ export default {
     },
     //跳转添加界面
     add() {
+      sessionStorage.removeItem("shopsId");
+      sessionStorage.removeItem("shopslabel");
       this.$router.push({
         name: "addOffineShops"
       });
     },
     //底跳
-    open(item){
-      console.log(item)
-      sessionStorage.setItem("shopsId",item.shopsId)
-      sessionStorage.setItem("shopslabel",item.labels)
-      sessionStorage.setItem("shopsBrandId",item.shopsBrandId)
+    open(item) {
+      console.log(item);
+      sessionStorage.setItem("shopsId", item.shopsId);
+      sessionStorage.setItem("shopslabel", item.labels);
+      sessionStorage.setItem("shopsBrandId", item.shopsBrandId);
       this.$router.push({
-        name:"shopsinfo"
-      })
+        name: "shopsinfo"
+      });
     }
   },
   mounted() {
@@ -173,6 +175,10 @@ export default {
 .sele {
   float: left;
   margin-right: 10px;
+}
+
+.sele > .el-select{
+  width: 100px;
 }
 
 .soso-btn {

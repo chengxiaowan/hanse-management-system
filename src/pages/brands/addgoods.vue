@@ -1,6 +1,6 @@
 <template>
   <div class="addgoods">
-    <el-page-header @back="goBack" content="添加商品"></el-page-header>
+    <el-page-header @back="goBack" content="添加商品" ></el-page-header>
     <div class="addgoods-title">
       <div>说明</div>
       <p>
@@ -60,13 +60,13 @@
           </tbody>
         </table>
       </div>
-      <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+      <el-pagination background layout="prev, pager, next" :total="list.total" @current-change="page"></el-pagination>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: "goodsAdd",
+  name: "addgoods",
   data() {
     return {
       shopsBrandId: "",
@@ -74,13 +74,17 @@ export default {
       list: {},
       keywords: "",
       solt: "",
-      type: []
+      type: [],
+      pageNo:"",
+
+
     };
   },
   methods: {
     //返回商品页面
     goBack() {
       console.log("go back");
+      sessionStorage.setItem('table',"third")
       this.$router.push({
         name: "brandsadd"
       });
@@ -104,7 +108,8 @@ export default {
         shopsBrandId: sessionStorage.getItem("shopsBrandId"),
         keywords: this.keywords,
         typeId: this.solt,
-        skipType: 1
+        skipType: 1,
+        pageNo:this.pageNo
       };
       this.$post("/goods/dataList3", parmars).then(res => {
         if (res.error == "00") {
@@ -146,6 +151,10 @@ export default {
             message: "取消加入"
           });
         });
+    },
+    page(e){
+      this.pageNo = e
+      this.getAllgoods()
     }
   },
   mounted() {
@@ -160,13 +169,14 @@ export default {
 .addgoods {
   height: 1000px;
   overflow: scroll;
+  padding: 15px;
   padding-bottom: 150px;
+  background: #fff;
 }
 
 .el-page-header {
   height: 60px;
   line-height: 60px;
-  margin-left: 15px;
 }
 
 .addgoods-title {
@@ -211,6 +221,13 @@ export default {
 
 .img-box {
   width: 60px;
+}
+
+.el-page-header{
+  background: #f5f5f5;
+  margin-bottom: 15px;
+  border-radius: 2px;
+  box-shadow: 2px 2px 2px #e5e5e5;
 }
 
 /*表格样式*/

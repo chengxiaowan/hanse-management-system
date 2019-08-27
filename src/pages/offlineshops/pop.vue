@@ -12,7 +12,15 @@
           <li @click="setrole()">所有角色</li>
           <li v-for="item in rolelist" :key="item.shopsRoleId" @click="setrole(item)">
             {{item.roleName}}
-            <i class="el-icon-more"></i>
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item >编辑</el-dropdown-item>
+                <el-dropdown-item >删除</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </li>
         </ul>
       </div>

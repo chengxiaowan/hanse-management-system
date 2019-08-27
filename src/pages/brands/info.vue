@@ -169,6 +169,19 @@ export default {
 
     //保存信息
     save() {
+      if (this.brandName == "") {
+        this.$message.error("请输入品牌名称");
+        return;
+      } else if (this.summary == "") {
+        this.$message.error("请输入品牌简介");
+        return;
+      } else if (this.logo == "") {
+        this.$message.error("请上传您的品牌logo");
+        return;
+      }else if(this.pic == ""){
+        this.$message.error("请上传您的品牌封面");
+        return
+      }
       if (this.flage == 1) {
         let parmars = {
           shopsBrandId: this.shopsBrandId,
@@ -305,7 +318,6 @@ export default {
 .image-title > p {
   font-size: 12px;
   color: #6b6b6b;
-  line-height: 10px;
 }
 
 .image-title > p > span {

@@ -20,9 +20,11 @@
         <thead>
           <tr>
             <th width="20%">名称</th>
-            <th width="30%">服务位置</th>
-            <th width="15%">类型</th>
-            <th width="15%">创建日期</th>
+            <th width="20%">服务位置</th>
+            <th width="10%">类型</th>
+            <th width="10%">价格</th>
+            <th width="10%">佣金比例（%）</th>
+            <th width="10%">预估收益</th>
             <th width="20%">操作</th>
           </tr>
         </thead>
@@ -32,14 +34,17 @@
             <td>{{item.province}} {{item.city}}</td>
             <td v-if="item.type == 1">定值</td>
             <td v-else>团购</td>
-            <td>{{item.createTime}}</td>
+            <td>{{item.price}}</td>
+            <td>5</td>
+            <td>{{(item.price*0.05).toFixed(2)}}</td>
             <td>
-              <span>查看</span>
+              <!-- <span>查看</span> -->
               <span @click="addservice(item)">加入</span>
             </td>
           </tr>
         </tbody>
       </table>
+      <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
     </div>
   </div>
 </template>
@@ -51,12 +56,15 @@ export default {
       info: "品牌服务添加",
       shopsBrandId: "",
       list: "",
-      keywords: ""
+      keywords: "",
+      total: "",
+      pageNo: ""
     };
   },
   methods: {
     //返回
     goBack() {
+      sessionStorage.setItem("table", "fourth");
       this.$router.push({
         name: "brandsadd"
       });
@@ -65,10 +73,13 @@ export default {
     getlist() {
       let parmars = {
         keywords: this.keywords,
-        shopsBrandId: this.shopsBrandId
+        shopsBrandId: this.shopsBrandId,
+        pageSize: "10",
+        pageNo: this.pageNo
       };
       this.$post("/shopsBrand/showShopsBrandService", parmars).then(res => {
         this.list = res.result.list;
+        this.total = res.result.total;
       });
     },
     //加入服务
@@ -83,20 +94,18 @@ export default {
             shopsBrandId: this.shopsBrandId,
             serviceId: item.serviceId
           };
-          this.$post("/shopsBrand/addShopsBrandService", parmars).then(
-            res => {
-              console.log(res);
-              if (res.error == "00") {
-                this.$message({
-                  type: "success",
-                  message: "加入服务成功!"
-                });
-              } else {
-                this.$message.error(res.msg);
-              }
-              this.getlist();
+          this.$post("/shopsBrand/addShopsBrandService", parmars).then(res => {
+            console.log(res);
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "加入服务成功!"
+              });
+            } else {
+              this.$message.error(res.msg);
             }
-          );
+            this.getlist();
+          });
         })
         .catch(() => {
           this.$message({
@@ -104,6 +113,24 @@ export default {
             message: "取消加入"
           });
         });
+    },
+    page(e) {
+      this.pageNo = e;
+      this.getlist();
+    },
+    //时间格式化
+    timestampToTime(timestamp) {
+      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000 var date = new Date(timestamp*1000);
+      var Y = date.getFullYear() + "-";
+      var M =
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1) + "-";
+      var D = date.getDate() + " ";
+      var h = date.getHours() + ":";
+      var m = date.getMinutes() + ":";
+      var s = date.getSeconds();
+      return Y + M + D + h + m + s;
     }
   },
   mounted() {

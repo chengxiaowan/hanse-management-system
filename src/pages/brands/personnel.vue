@@ -12,7 +12,7 @@
       </div>
       <div class="soso-btns">
         <el-button type="primary">
-          <i class="el-icon-search"></i>搜索
+          <i class="el-icon-search" @click="getuser()"></i>搜索
         </el-button>
         <el-button type="success" @click="showAdd()">添加</el-button>
       </div>
@@ -36,8 +36,8 @@
               <td>{{item.email}}</td>
               <td>{{item.remark}}</td>
               <td>
-                <span>查看</span>
-                <span style="color:red;">删除</span>
+                <span @click="getinfo(item)">查看</span>
+                <span style="color:red;" @click="deluser(item)" v-if="item.isQuit == '0'">离职</span>
               </td>
             </tr>
           </template>
@@ -104,7 +104,9 @@ export default {
       phone: "",
       qq: "",
       email: "",
-      remark: ""
+      remark: "",
+      flage: "",
+      id: ""
     };
   },
   methods: {
@@ -116,6 +118,7 @@ export default {
         this.email = "";
         this.qq = "";
         this.remark = "";
+        (this.id = ""), (this.flage = "");
       } else {
         this.add = false;
       }
@@ -151,15 +154,29 @@ export default {
           QQ: this.qq,
           remark: this.remark
         };
-        this.$post("/shopsBrand/addShopsBrandShopsOwner", parmars).then(res => {
-          if (res.error == "00") {
-            this.$message("添加负责人成功");
-            this.showAdd();
-            this.getuser();
-          } else {
-            this.$message.error(res.msg);
-          }
-        });
+        if (this.flage == 1) {
+          parmars.shopsBrandShopsOwnerId = this.id;
+          this.$post("/shopsBrand/editShopsBrandShopsOwner", parmars).then(
+            res => {
+              if (error == "00") {
+                this.message("修改成功");
+                this.add();
+              }
+            }
+          );
+        } else {
+          this.$post("/shopsBrand/addShopsBrandShopsOwner", parmars).then(
+            res => {
+              if (res.error == "00") {
+                this.$message("添加负责人成功");
+                this.showAdd();
+                this.getuser();
+              } else {
+                this.$message.error(res.msg);
+              }
+            }
+          );
+        }
       }
     },
     //读取列表
@@ -175,6 +192,60 @@ export default {
           console.log(this.list);
         }
       });
+    },
+    //删除负责人（离职）
+    deluser(item) {
+      this.$confirm("您确认离职此负责人？?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let parmars = {
+            userId: item.userId
+          };
+          this.$post("/user/changeIsQuit", parmars).then(res => {
+            console.log(res);
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "离职负责人成功!"
+              });
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.getlist();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消离职"
+          });
+        });
+    },
+    //读取负责人信息（查看和修改）
+    getinfo(item) {
+      this.showAdd();
+      this.flage = 1;
+      this.id = item.shopsBrandShopsOwnerId;
+      let parmars = {
+        shopsBrandShopsOwnerId: item.shopsBrandShopsOwnerId
+      };
+      this.$post("/shopsBrand/editShopsBrandShopsOwnerInfo", parmars).then(
+        res => {
+          if (res.error == "00") {
+            let drool = res.result;
+            this.name = drool.realName;
+            this.phone = drool.mobilePhone;
+            this.email = drool.email;
+            this.qq = drool.QQ;
+            this.remark = drool.remark;
+          } else {
+            this.$message.error(res.msg);
+          }
+        }
+      );
     }
   },
   mounted() {
@@ -198,15 +269,14 @@ export default {
 
 .personnel-title > div {
   font-size: 20px;
-  line-height: 28px;
+  font-weight: 600;
   color: #4a4a4a;
-  text-indent: 15px;
-  padding-bottom: 5px;
+  margin-bottom: 10px;
+  margin-left: 18px;
 }
 
 .personnel-title > p {
   font-size: 14px;
-  line-height: 10px;
   color: #4a4a4a;
   font-weight: 400;
   text-indent: 25px;

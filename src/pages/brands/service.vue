@@ -19,13 +19,14 @@
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
-            <th width="15%">服务名称</th>
-            <th width="15%">服务提供商</th>
+            <th width="10%">服务名称</th>
+            <th width="10%">服务提供商</th>
             <th width="20%">服务位置</th>
             <th width="7%">价格</th>
             <th width="10%">佣金比例（%）</th>
             <th width="10%">预估收益（元）</th>
             <th width="8%">审核状态</th>
+            <th width="10%">上下架状态</th>
             <th width="15%">操作</th>
           </tr>
         </thead>
@@ -48,14 +49,18 @@
               <td v-if="item.auditStatus == 2">
                 <em class="failure">审核失败</em>
               </td>
+              <td v-if="item.isOnsell == 0 && item.auditStatus == 1" style="color:red">下架</td>
+              <td v-if="item.isOnsell == 1 && item.auditStatus == 1">上架</td>
+              <td v-if="item.auditStatus != 1">--</td>
               <td class="btn-hide">
-                <span>查看</span>
-                <span @click="delservice(item)">删除</span>
+                <span v-if="item.isOnsell == 0 && item.auditStatus == 1" @click="onsell(item)">上架</span>
+                <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="nosell(item)">下架</span>
+                <span @click="delservice(item)" style="color:red">删除</span>
               </td>
             </tr>
           </template>
           <tr v-else>
-            <td colspan="10">没有相关数据</td>
+            <td colspan="11">没有相关数据</td>
           </tr>
         </tbody>
       </table>
@@ -127,6 +132,55 @@ export default {
             message: "取消删除"
           });
         });
+    },
+    //上架
+    onSell(item) {
+      let parmars = {
+        // shopsBrandId: this.shopsBrandId,
+        id: item.id,
+        isOnsell: "1"
+      };
+      this.$post("/shopsBrand/changeShopsBrandServiceIsOnsell", parmars).then(res => {
+        if (res.error == "00") {
+          this.$message("上架成功");
+          this.getlist();
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
+    },
+    //下架
+    nosell(item) {
+      this.$confirm("您确定下架此服务？?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let parmars = {
+            // shopsBrandId: this.shopsBrandId,
+            id: item.id,
+            isOnsell: "0"
+          };
+          this.$post("/shopsBrand/changeShopsBrandServiceIsOnsell", parmars).then(res => {
+            console.log(res);
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "删除品牌成功!"
+              });
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.getlist();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消操作"
+          });
+        });
     }
   },
   mounted() {
@@ -150,9 +204,9 @@ export default {
 }
 .service-title > div {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   color: #4a4a4a;
-  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .service-title > p {

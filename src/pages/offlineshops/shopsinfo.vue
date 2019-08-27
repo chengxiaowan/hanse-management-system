@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       info: "门店详情",
-      activeName: "service"
+      activeName: "info"
     };
   },
   methods: {
@@ -55,8 +55,16 @@ export default {
     }
   },
   mounted(){
-    if(sessionStorage.getItem("shopsId")){
+    let shopsId = sessionStorage.getItem("shopsId")
+    let table = sessionStorage.getItem("table2")
+    sessionStorage.removeItem("table2")
+    if(shopsId){
       console.log("读取信息")
+    }
+    if(table){
+      this.activeName = table
+    }else{
+      this.activeName = "info"
     }
   }
 };

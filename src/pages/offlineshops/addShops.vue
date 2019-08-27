@@ -1,7 +1,7 @@
 <template>
   <div class="add">
-    <!-- <v-title :page="page"></v-title> -->
     <div class="info-box">
+      <el-page-header @back="goBack" content="新增门店" v-if="!flage"></el-page-header>
       <div class="input-box">
         <div class="min-box">
           名称：
@@ -292,7 +292,7 @@ export default {
       baseurl: "https://images.homeplus.fun/", //七牛云储存域名，用于拼接key得到图片url
       postdata: { token: "" },
       drool: "",
-      flage: ""
+      flage: 0
     };
   },
   methods: {
@@ -479,6 +479,7 @@ export default {
           this.$post("/shops/edit", parmars).then(res => {
             if (res.error == "00") {
               this.$message("修改店铺信息成功");
+              this.getinfo()
             } else {
               this.$message.error(res.msg);
             }
@@ -552,6 +553,10 @@ export default {
           }
         }
       });
+    },
+    //back
+    goBack() {
+      history.go(-1);
     }
   },
   mounted() {
@@ -559,7 +564,7 @@ export default {
     this.getBrands();
     if (sessionStorage.getItem("shopsId")) {
       console.log("获取信息");
-      this.flage = "1";
+      this.flage = 1;
       this.getinfo();
     }
   }
@@ -572,13 +577,19 @@ export default {
   overflow: auto;
 } */
 
+.el-page-header{
+  height: 50px;
+  line-height: 50px;
+  margin-bottom: 10px;
+  margin-left: 15px;
+}
+
 .info-box {
   margin: 15px;
   background: #fff;
   /* width: 100%; */
   height: 100%;
   /* overflow: auto; */
-  padding-top: 50px;
   padding-bottom: 150px;
 }
 

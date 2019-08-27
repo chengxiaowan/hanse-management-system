@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="goods-soso">
       <div class="keywords">
-        <el-input type="text" placeholder="请输入商品名称"></el-input>
+        <el-input type="text" placeholder="请输入商品名称" v-model="keywords"></el-input>
       </div>
       <div class="type">
         分类：
@@ -20,7 +20,7 @@
         </el-select>
       </div>
       <div class="type">
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" @click="getlist">搜索</el-button>
         <el-button type="success" plain @click="addgoods">添加</el-button>
       </div>
     </div>
@@ -51,7 +51,8 @@
             <td>{{item.commissionPercent}}</td>
             <td>{{(item.price * (item.commissionPercent/100)).toFixed(2)}}</td>
             <td>--</td>
-            <td>{{item.isSOnell}}</td>
+            <td v-if="item.isOnsell == '1'">上架</td>
+            <td v-else>--</td>
             <td>
               <span style="color:red">更多</span>
               <span style="color:red">下架</span>
@@ -85,12 +86,12 @@ export default {
     getlist() {
       let parmars = {
         shopsId: sessionStorage.getItem("shopsId"),
-        // pageSize: "100",
-        // keywords:this.keywords,
-        // audit:this.audit,
-        // type:"",
+        pageSize: "100",
+        keywords:this.keywords,
+        audit:this.audit,
+        type:"",
       };
-      this.$post("/shops/shopsGoodsList", parmars).then(res => {
+      this.$post("/shops/showShopsGoods", parmars).then(res => {
           if(res.error == "00"){
               console.log(res)
               if(res.error == "00"){

@@ -8,7 +8,7 @@
         <div class="user-role">
           <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>身份：
           <el-radio v-model="role" label="0" style="margin-left:8px">个人</el-radio>
-          <el-radio v-model="role" label="1">企业（含企业、团体、组织）</el-radio>
+          <el-radio v-model="role" label="1" >企业（含企业、团体、组织）</el-radio>
         </div>
         <div class="user-name">
           <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>企业名称：
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       info: "基本信息",
-      role: "",
+      role: "1",
       name: "",
       type: "",
       address: "", //详细地址
@@ -134,7 +134,7 @@ export default {
     //保存用户讯息
     save() {
       if (this.name == "") {
-        this.$message.error("请输入用户名");
+        this.$message.error("请输入企业名称");
       } else if (this.role == "") {
         this.$message.error("请选择您的身份");
       } else if (this.province == "" || this.city == "" || this.area == "") {
@@ -176,6 +176,7 @@ export default {
 .user-info {
   height: 99.5%;
   border: 1px solid #333;
+  background: #fff;
 }
 
 .box-big {

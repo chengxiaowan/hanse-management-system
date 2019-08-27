@@ -1,6 +1,6 @@
 <template>
   <div class="addgoods">
-    <el-page-header @back="goBack" content="详情页面"></el-page-header>
+    <el-page-header @back="goback" content="详情页面"></el-page-header>
     <div class="addgoods-title">
       <div>说明：</div>
       <p>
@@ -25,6 +25,7 @@
       <div class="price">
         <el-input class="price-input" v-model="maxp" placeholder="最高价"></el-input>
       </div>
+      <el-button type="primary">搜索</el-button>
     </div>
     <div class="tab">
       <table class="table table-bordered table-hover">
@@ -50,7 +51,7 @@
               </td>
               <td>{{item.price}}</td>
               <td>
-                <span @click="addgoods()">加入</span>
+                <span @click="open(item)">加入</span>
               </td>
             </tr>
           </template>
@@ -60,6 +61,34 @@
         </tbody>
       </table>
     </div>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" center>
+      <div class="mony">
+        请设置店铺佣金比例
+        <el-input v-model="commissionPercent"></el-input>
+      </div>
+      <table class="com table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>门店角色</th>
+            <th>佣金比例（%）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in rolelist" :key="item.shopsRoleId">
+            <td>{{item.roleName}}</td>
+            <td>
+              <div class="com-input">
+                <el-input v-model="item.commissionPercent" placeholder="请输入佣金比例"></el-input>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addgoods()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -73,13 +102,32 @@ export default {
       maxp: "",
       minp: "",
       list: [],
-      commissionPercent:"10"
+      commissionPercent: "",
+      rolelist: "",
+      dialogVisible: false,
+      commissionPercent: "",
+      goodsId: "",
+      brandcom: ""
     };
   },
   methods: {
     //返回
     goback() {
       console.log("ok");
+      sessionStorage.setItem('table2',"goods")
+      history.go(-1);
+    },
+
+    //获取角色列表以便于创建动态输入框
+    getrole() {
+      let parmars = {
+        shopsId: sessionStorage.getItem("shopsId")
+      };
+      this.$post("/shops/shopsRoleList", parmars).then(res => {
+        if (res.error == "00") {
+          this.rolelist = res.result.list;
+        }
+      });
     },
 
     //获取待添加列表
@@ -100,42 +148,61 @@ export default {
         }
       });
     },
+    //add model
+    open(item) {
+      if (this.dialogVisible == false) {
+        this.dialogVisible = true;
+        this.goodsId = item.goodsId;
+        this.brandcom = item.commissionPercent;
+      } else {
+        this.dialogVisible = false;
+        this.goodsId = "";
+        this.brandcom = "";
+      }
+    },
+
     //加入商品
-    addgoods(item) {
-      this.$confirm("您确加入此商品？?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          let parmars = {
-            goodsId: item.goodsId,
-            shopsId: sessionStorage.getItem('shopsId'),
-            commissionPercent: that.commissionPercent
-          };
-          this.$post("/shopsBrand/del", parmars).then(res => {
-            console.log(res);
-            if (res.error == "00") {
-              this.$message({
-                type: "success",
-                message: "加入商品成功!"
-              });
-            } else {
-              this.$message.error(res.msg);
-            }
-            this.getlist();
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消加入"
-          });
-        });
+    addgoods() {
+      if (this.commissionPercent == "") {
+        this.$message("请输入店铺提成比例");
+        return;
+      } else if (Number(this.commissionPercent) > Number(this.brandcom)) {
+        this.$message.error("店铺提成比例不得大于品牌提成比例");
+        return;
+      }
+      let list = [];
+      for (let i = 0; i < this.rolelist.length; i++) {
+        let obj = {};
+        if (
+          this.rolelist[i].commissionPercent &&
+          Number(this.rolelist[i].commissionPercent) <
+            Number(this.commissionPercent)
+        ) {
+          obj.shopsRoleId = this.rolelist[i].shopsRoleId;
+          obj.commissionPercent = this.rolelist[i].commissionPercent;
+          list.push(obj);
+        } else {
+          this.$message.error("角色提成比例不得大于店铺提成比例");
+          return;
+        }
+      }
+      let parmars = {
+        shopsId: sessionStorage.shopsId,
+        goodsId: this.goodsId,
+        roleList: JSON.stringify(list) || []
+      };
+      this.$post("/shops/addShopsGoods", parmars).then(res => {
+        if (res.error == "00") {
+          this.$message("加入商品成功");
+          this.open();
+          this.getlist();
+        }
+      });
     }
   },
   mounted() {
     this.getlist();
+    this.getrole();
   }
 };
 </script>
@@ -197,6 +264,24 @@ export default {
   float: left;
   margin-right: 10px;
   width: 80px;
+}
+
+.com {
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 15px;
+}
+
+.com-input {
+  width: 120px;
+  display: inline-block;
+}
+.mony {
+  width: 500px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin: 0 auto;
 }
 
 .tab {
