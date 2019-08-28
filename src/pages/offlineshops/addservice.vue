@@ -37,7 +37,7 @@
               <td>{{item.price}}</td>
               <td class="btn-hide">
                 <!--<a class="btn btn-success" title="查看" @click="view(item.serviceId);">查看</a>-->
-                <span @click="open(item)">加入</span>
+                <span @click="addservice(item)">加入</span>
               </td>
             </tr>
           </template>
@@ -47,34 +47,7 @@
         </tbody>
       </table>
     </div>
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" center>
-      <div class="mony">
-        请设置店铺佣金比例
-        <el-input v-model="commissionPercent"></el-input>
-      </div>
-      <table class="com table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>门店角色</th>
-            <th>佣金比例（%）</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in rolelist" :key="item.shopsRoleId">
-            <td>{{item.roleName}}</td>
-            <td>
-              <div class="com-input">
-                <el-input v-model="item.commissionPercent" placeholder="请输入佣金比例"></el-input>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addservice()">确 定</el-button>
-      </span>
-    </el-dialog>
+    <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
   </div>
 </template>
 <script>
@@ -91,12 +64,14 @@ export default {
       commissionPercent: "",
       goodsId: "",
       brandcom: "",
-      serviceId: ""
+      serviceId: "",
+      total: "",
+      pageNo: ""
     };
   },
   methods: {
     goBack() {
-      sessionStorage.setItem("table2","service")
+      sessionStorage.setItem("table2", "service");
       history.go(-1);
     },
     //获取未加入的服务列表
@@ -104,14 +79,22 @@ export default {
       let parmars = {
         shopsId: sessionStorage.getItem("shopsId"),
         shopsBrandId: sessionStorage.getItem("shopsBrandId"),
-        keywords: this.keywords
+        keywords: this.keywords,
+        pageSize: "10",
+        pageNo: this.pageNo
       };
       this.$post("/shopsBrand/showAShopsBrandService", parmars).then(res => {
         if (res.error == "00") {
           this.list = res.result.list;
+          this.total = res.result.total;
           console.log(res);
         }
       });
+    },
+    //fenye
+    page(e) {
+      this.pageNo = e;
+      this.getlist();
     },
     //获取角色列表以便于创建动态输入框
     getrole() {
@@ -126,42 +109,36 @@ export default {
     },
 
     //加入服务{}
-    addservice() {
-      if (this.commissionPercent == "") {
-        this.$message("请输入店铺提成比例");
-        return;
-      } else if (Number(this.commissionPercent) > Number(this.brandcom)) {
-        this.$message.error("店铺提成比例不得大于品牌提成比例");
-        return;
-      }
-      let list = [];
-      for (let i = 0; i < this.rolelist.length; i++) {
-        let obj = {};
-        if (
-          this.rolelist[i].commissionPercent &&
-          Number(this.rolelist[i].commissionPercent) <
-            Number(this.commissionPercent)
-        ) {
-          obj.shopsRoleId = this.rolelist[i].shopsRoleId;
-          obj.commissionPercent = this.rolelist[i].commissionPercent;
-          list.push(obj);
-        } else {
-          this.$message.error("角色提成比例不得大于店铺提成比例");
-          return;
-        }
-      }
-      let parmars = {
-        shopsId: sessionStorage.shopsId,
-        serviceId: this.serviceId,
-        roleList: JSON.stringify(list) || []
-      };
-      this.$post("/shops/addShopsService", parmars).then(res => {
-        if (res.error == "00") {
-          this.$message("加入商品成功");
-          this.open();
-          this.getlist();
-        }
-      });
+    addservice(item) {
+      this.$confirm("您确认加入此服务？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let parmars = {
+            shopsId: sessionStorage.shopsId,
+            serviceId: item.serviceId
+          };
+          this.$post("/shops/addShopsService", parmars).then(res => {
+            console.log(res);
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "加入服务成功!"
+              });
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.getlist();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消加入"
+          });
+        });
     },
     //add model
     open(item) {
@@ -178,7 +155,7 @@ export default {
   },
   mounted() {
     this.getlist();
-    this.getrole()
+    this.getrole();
   }
 };
 </script>

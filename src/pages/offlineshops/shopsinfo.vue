@@ -72,7 +72,9 @@ export default {
 <style scoped>
 .shopsinfo {
   background: #fff;
-  height: 100Vh;
+  height: 1000px;
+  overflow: auto;
+  padding-bottom: 150px;
 }
 
 /*页头*/

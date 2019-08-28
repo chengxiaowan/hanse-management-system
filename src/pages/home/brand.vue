@@ -35,7 +35,7 @@
             </tr>
           </template>
           <tr v-else>
-            <td colspan="4">暂是没有记录哦~</td>
+            <td colspan="4">暂时没有记录哦~</td>
           </tr>
         </tbody>
       </table>

@@ -55,6 +55,7 @@
         </tbody>
       </table>
     </div>
+    <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
   </div>
 </template>
 <script>
@@ -64,7 +65,9 @@ export default {
     return {
       info: "旅拍管理",
       keywords: "",
-      list: ""
+      list: "",
+      total: "",
+      pageNo: ""
     };
   },
   methods: {
@@ -78,14 +81,21 @@ export default {
       let parmars = {
         shopsId: sessionStorage.getItem("shopsId"),
         keywords: this.keywords,
-        pageSize: "100"
+        pageSize: "10"
       };
 
       this.$post("/shops/showAShopsService", parmars).then(res => {
         if (res.error == "00") {
           this.list = res.result.list;
+          this.total = res.result.total;
         }
       });
+    },
+
+    //fenye
+    page(e) {
+      this.pageNo = e;
+      this.getlist();
     },
     //删除服务
     delservice(item) {

@@ -63,7 +63,7 @@
               <td class="btn-hide">
                 <span @click="open(item)">查看</span>
                 <span>二维码</span>
-                <span style="color:red">删除</span>
+                <span style="color:red" @click="delshpos(item)">删除</span>
               </td>
             </tr>
           </template>
@@ -122,6 +122,37 @@ export default {
       this.$router.push({
         name: "shopsinfo"
       });
+    },
+    //删除
+    delshpos(item) {
+      this.$confirm("您确认删除此门店？?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let parmars = {
+            shopsId: item.shopsId
+          };
+          this.$post("/shops/del", parmars).then(res => {
+            console.log(res);
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "删除门店成功!"
+              });
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.getList();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消删除"
+          });
+        });
     }
   },
   mounted() {
@@ -177,7 +208,7 @@ export default {
   margin-right: 10px;
 }
 
-.sele > .el-select{
+.sele > .el-select {
   width: 100px;
 }
 
