@@ -4,8 +4,8 @@
     <div class="addgoods-title">
       <div>说明：</div>
       <p>
-        1、销售价取自商品的最低销售价。
-        <br />2、点击加入可将商品加入销售，列表里多选商品点击批量加入可以将多个商品加入销售。
+        1、该页面显示品牌旗下商品列表，已加入门店的商品不再显示。
+        <br />2、申请加入后的商品将由品牌方确定佣金比例。
       </p>
     </div>
     <div class="addgoods-soso">
@@ -16,16 +16,10 @@
         分类：
         <el-select v-model="type" filterable placeholder="请选择">
           <el-option label="全部" value></el-option>
+          <el-option v-for="item in types" :key="item.typeId" :label="item.name" :value="item.name"></el-option>
         </el-select>
       </div>
-      <div class="price">
-        <el-input class="price-input" v-model="minp" placeholder="最低价"></el-input>
-      </div>
-      <div class="xian">-</div>
-      <div class="price">
-        <el-input class="price-input" v-model="maxp" placeholder="最高价"></el-input>
-      </div>
-      <el-button type="primary">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
     </div>
     <div class="tab">
       <table class="table table-bordered table-hover">
@@ -51,7 +45,7 @@
               </td>
               <td>{{item.price}}</td>
               <td>
-                <span @click="addgoods(item)">加入</span>
+                <span @click="addgoods(item)">申请加入</span>
               </td>
             </tr>
           </template>
@@ -81,8 +75,9 @@ export default {
       commissionPercent: "",
       goodsId: "",
       brandcom: "",
-      total:'',
-      pageNo:""
+      total: "",
+      pageNo: "",
+      types: ""
     };
   },
   methods: {
@@ -112,11 +107,9 @@ export default {
         shopsId: sessionStorage.getItem("shopsId"),
         pageSize: "10",
         auditStatus: 1,
-        pageNo:this.pageNo,
+        pageNo: this.pageNo,
         keywords: this.keywords,
-        typeName: this.type,
-        minPrice: this.minp,
-        maxPrice: this.maxp
+        typeName: this.type
       };
       this.$post("/shopsBrand/showAShopsBrandGoods", parmars).then(res => {
         if (res.error == "00") {
@@ -126,9 +119,9 @@ export default {
       });
     },
     //分页
-    page(e){
+    page(e) {
       this.pageNo = e;
-      this.getlist()
+      this.getlist();
     },
     //add model
     open(item) {
@@ -153,7 +146,7 @@ export default {
         .then(() => {
           let parmars = {
             shopsId: sessionStorage.shopsId,
-            goodsId: item.goodsId,
+            goodsId: item.goodsId
           };
           this.$post("/shops/addShopsGoods", parmars).then(res => {
             console.log(res);
@@ -168,17 +161,26 @@ export default {
             this.getlist();
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消加入"
-          });
-        });
+        .catch(() => {});
+    },
+    //获取商品分类
+    getType() {
+      let parmars = {
+        level: "1",
+        pageSize: "100"
+      };
+      this.$get("/type/dataList", parmars).then(res => {
+        if (res.error == "00") {
+          this.types = res.result.list;
+          console.log(this.types);
+        }
+      });
     }
   },
   mounted() {
     this.getlist();
     this.getrole();
+    this.getType();
   }
 };
 </script>

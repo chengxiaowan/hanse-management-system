@@ -2,6 +2,7 @@
   <div class="add">
     <div class="info-box">
       <el-page-header @back="goBack" content="新增门店" v-if="!flage"></el-page-header>
+      <el-divider></el-divider>
       <div class="input-box">
         <div class="min-box">
           名称：
@@ -456,6 +457,8 @@ export default {
         this.$message.error("请输入详细地址");
       } else if (this.pic == "") {
         this.$message.error("请上传您的封面");
+      } else if (this.shopsType == "") {
+        this.$message.error("请选择门店类型");
       } else {
         let parmars = {
           shopsName: this.name,
@@ -479,7 +482,7 @@ export default {
           this.$post("/shops/edit", parmars).then(res => {
             if (res.error == "00") {
               this.$message("修改店铺信息成功");
-              this.getinfo()
+              this.getinfo();
             } else {
               this.$message.error(res.msg);
             }
@@ -487,7 +490,10 @@ export default {
         } else {
           this.$post("/shops/add", parmars).then(res => {
             if (res.error == "00") {
-              this.$message("保存成功，请完善其他信息");
+              this.$message("保存成功");
+              this.$router.push({
+                name: "offlineshop"
+              });
             } else {
               this.$message.error(res.msg);
             }
@@ -577,11 +583,15 @@ export default {
   overflow: auto;
 } */
 
-.el-page-header{
-  height: 50px;
-  line-height: 50px;
-  margin-bottom: 10px;
+.el-page-header {
+  height: 40px;
+  line-height: 40px;
   margin-left: 15px;
+}
+
+.el-divider{
+  margin: 0px auto;
+  margin-bottom: 24px;
 }
 
 .info-box {

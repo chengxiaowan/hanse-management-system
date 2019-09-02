@@ -11,8 +11,8 @@
         <el-input v-model="keywords" placeholder="请输入负责人姓名"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary">
-          <i class="el-icon-search" @click="getuser()"></i>搜索
+        <el-button type="primary" @click="getlist()">
+          <i class="el-icon-search"></i>搜索
         </el-button>
         <el-button type="success" @click="showAdd()">添加</el-button>
       </div>
@@ -180,7 +180,7 @@ export default {
       }
     },
     //读取列表
-    getuser() {
+    getlist() {
       let parmars = {
         keywords: this.keywords,
         shopsBrandId: sessionStorage.getItem("shopsBrandId")
@@ -195,14 +195,15 @@ export default {
     },
     //删除负责人（离职）
     deluser(item) {
-      this.$confirm("您确认离职此负责人？?", "提示", {
+      this.$confirm("是否确定将该门店负责人设置为离职？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
           let parmars = {
-            userId: item.userId
+            userId: item.userId,
+            isQuit:0
           };
           this.$post("/user/changeIsQuit", parmars).then(res => {
             console.log(res);
@@ -218,10 +219,7 @@ export default {
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消离职"
-          });
+          console.log("取消操作")
         });
     },
     //读取负责人信息（查看和修改）
@@ -246,11 +244,14 @@ export default {
           }
         }
       );
+    },
+    soso(){
+      this.getlist()
     }
   },
   mounted() {
     if (sessionStorage.getItem("shopsBrandId")) {
-      this.getuser();
+      this.getlist();
     }
   }
 };
@@ -280,6 +281,7 @@ export default {
   color: #4a4a4a;
   font-weight: 400;
   text-indent: 25px;
+  margin: 0;
 }
 
 .soso-box {

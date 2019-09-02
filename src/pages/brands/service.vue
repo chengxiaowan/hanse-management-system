@@ -10,10 +10,16 @@
     </div>
     <div class="soso">
       <div class="keywords">
-        <el-input type="text" v-model="keywords" placeholder="请输入服务关键字"></el-input>
+        <el-input type="text" v-model="keywords" placeholder="请输入服务名称"></el-input>
       </div>
-      <el-button type="primary" id="soso" @click="getlist">搜索</el-button>
-      <el-button type="success" plain id="soso" @click="addservice()">添加</el-button>
+      <el-button type="primary" id="soso" @click="getlist" icon="el-icon-search">搜索</el-button>
+      <el-button
+        type="success"
+        plain
+        id="soso"
+        @click="addservice()"
+        icon="el-icon-circle-plus-outline"
+      >添加服务</el-button>
     </div>
     <div class="teb">
       <table class="table table-hover table-bordered">
@@ -53,8 +59,9 @@
               <td v-if="item.isOnsell == 1 && item.auditStatus == 1">上架</td>
               <td v-if="item.auditStatus != 1">--</td>
               <td class="btn-hide">
-                <span v-if="item.isOnsell == 0 && item.auditStatus == 1" @click="onsell(item)">上架</span>
+                <span v-if="item.isOnsell == 0 && item.auditStatus == 1" @click="onSell(item)">上架</span>
                 <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="nosell(item)">下架</span>
+                <span v-if="item.auditStatus == 1" @click="ewm(item)">二维码</span>
                 <span @click="delservice(item)" style="color:red">删除</span>
               </td>
             </tr>
@@ -65,6 +72,12 @@
         </tbody>
       </table>
     </div>
+    <el-dialog title="二维码" :visible.sync="dialogVisible" width="30%" center>
+      <img :src="ewmimg" v-if="ewmimg" class="ewmimg" />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -75,7 +88,9 @@ export default {
       info: "品牌服务管理",
       keywords: "",
       list: [],
-      shopsBrandId: ""
+      shopsBrandId: "",
+      ewmimg: "",
+      dialogVisible: false
     };
   },
   methods: {
@@ -126,28 +141,38 @@ export default {
             }
           );
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消删除"
-          });
-        });
+        .catch(() => {});
     },
     //上架
     onSell(item) {
-      let parmars = {
-        // shopsBrandId: this.shopsBrandId,
-        id: item.id,
-        isOnsell: "1"
-      };
-      this.$post("/shopsBrand/changeShopsBrandServiceIsOnsell", parmars).then(res => {
-        if (res.error == "00") {
-          this.$message("上架成功");
-          this.getlist();
-        } else {
-          this.$message.error(res.msg);
-        }
-      });
+      this.$confirm("您确定上架此服务？?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let parmars = {
+            // shopsBrandId: this.shopsBrandId,
+            id: item.id,
+            isOnsell: "1"
+          };
+          this.$post(
+            "/shopsBrand/changeShopsBrandServiceIsOnsell",
+            parmars
+          ).then(res => {
+            console.log(res);
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "服务上架成功"
+              });
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.getlist();
+          });
+        })
+        .catch(() => {});
     },
     //下架
     nosell(item) {
@@ -162,12 +187,15 @@ export default {
             id: item.id,
             isOnsell: "0"
           };
-          this.$post("/shopsBrand/changeShopsBrandServiceIsOnsell", parmars).then(res => {
+          this.$post(
+            "/shopsBrand/changeShopsBrandServiceIsOnsell",
+            parmars
+          ).then(res => {
             console.log(res);
             if (res.error == "00") {
               this.$message({
                 type: "success",
-                message: "删除品牌成功!"
+                message: "服务下架成功"
               });
             } else {
               this.$message.error(res.msg);
@@ -175,12 +203,26 @@ export default {
             this.getlist();
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消操作"
-          });
-        });
+        .catch(() => {});
+    },
+    ewm(item) {
+      let parmars = {
+        page: "pages/goodsDetail/goodsDetail",
+        id:
+          "serviceId=" +
+          item.serviceId +
+          ",relateId=" +
+          sessionStorage.getItem("shopsBrandId") +
+          ",type=0"
+      };
+      this.$post("/weixin/getwxTwoEconde", parmars).then(res => {
+        if (res.error == "00") {
+          this.dialogVisible = true;
+          this.ewmimg = res.result;
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
     }
   },
   mounted() {
@@ -231,6 +273,13 @@ export default {
 #soso {
   float: left;
   margin-left: 10px;
+}
+
+.ewmimg {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 20px auto;
 }
 
 /*表格样式*/

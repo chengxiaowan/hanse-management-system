@@ -7,6 +7,7 @@
         1、销售价取自商品的最低销售价。
         <br />2、预估佣金比例即商家预计能得到的佣金比例，具体以实际佣金比例为准。
         <br />3、预估收益即通过商家渠道售卖商品后，商家能得到的预计收益，具体以实际为准。
+        <br />4、申请加入商品后，需由我方审核后才能上架。
       </p>
     </div>
     <div class="soso">
@@ -25,7 +26,7 @@
           ></el-option>
         </el-select>
       </div>
-      <el-button type="primary" id="soso" @click="getAllgoods()">搜索</el-button>
+      <el-button type="primary" id="soso" @click="getAllgoods()" icon="el-icon-search">搜索</el-button>
     </div>
     <div class="tab">
       <div class="addgoods-tab">
@@ -54,7 +55,7 @@
               <td>5</td>
               <td>{{(item.price * 0.05).toFixed(2)}}</td>
               <td class="btn-hide">
-                <span @click="addgoodsinbrand(item)">加入</span>
+                <span @click="addgoodsinbrand(item)">申请加入</span>
               </td>
             </tr>
           </tbody>
@@ -120,7 +121,7 @@ export default {
     //添加商品
     addgoodsinbrand(item) {
       console.log(item);
-      this.$confirm("您确认加入此商品？?", "提示", {
+      this.$confirm("是否确定加入该商品？?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -146,10 +147,7 @@ export default {
           );
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消加入"
-          });
+          console.log("1")
         });
     },
     page(e){

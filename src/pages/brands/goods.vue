@@ -10,11 +10,12 @@
     </div>
     <div class="soso-goods">
       <div class="goods-keywords">
-        <el-input type="text" v-model="keywords" placeholder="请输入关键字"></el-input>
+        <el-input type="text" v-model="keywords" placeholder="请输入商品名称"></el-input>
       </div>
       <div class="lei">
         分类
         <el-select placeholder="请选择" v-model="solt">
+          <el-option label="全部" value></el-option>
           <el-option
             v-for="item in type"
             :key="item.typeId"
@@ -24,8 +25,8 @@
         </el-select>
       </div>
       <div class="goods-btn">
-        <el-button type="primary" @click="getgoods()">搜索</el-button>
-        <el-button type="success" @click="open()">添加</el-button>
+        <el-button type="primary" @click="getgoods()" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" @click="open()" icon="el-icon-circle-plus-outline">添加商品</el-button>
       </div>
     </div>
     <div class="goods-tab">
@@ -67,8 +68,8 @@
               <td v-if="item.isOnsell == 0 && item.auditStatus == 1">下架</td>
               <td v-if="item.auditStatus != 1">--</td>
               <td>
-                <span>查看</span>
-                <span v-if="item.isOnsell == 1 && item.auditStatus == 1">二维码</span>
+                <!-- <span>查看</span> -->
+                <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="ewm(item)">二维码</span>
                 <span
                   v-if="item.isOnsell == 1 && item.auditStatus == 1"
                   style="color:red"
@@ -82,6 +83,12 @@
       </table>
       <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
     </div>
+    <el-dialog title="二维码" :visible.sync="dialogVisible" width="30%" center>
+      <img :src="ewmimg" v-if="ewmimg" class="ewmimg" />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -100,8 +107,10 @@ export default {
       //简单分页处理
       minpage: "",
       maxpage: "",
-      pageNo:"",
-      total:"",
+      pageNo: "",
+      total: "",
+      ewmimg: "",
+      dialogVisible: false
     };
   },
   methods: {
@@ -112,13 +121,12 @@ export default {
         keywords: this.keywords,
         typeId: this.solt,
         pageSize: "10",
-        pageNo:this.pageNo
+        pageNo: this.pageNo
       };
       this.$post("/shopsBrand/shopsBrandGoodsList", parmars).then(res => {
         if (res.error == "00") {
           this.list = res.result.list;
           this.total = res.result.total;
-          // console.log(res.result.total)
         }
       });
     },
@@ -174,12 +182,7 @@ export default {
               this.getgoods();
             });
           })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "取消上架"
-            });
-          });
+          .catch(() => {});
       } else {
         this.$confirm("您确认下架此商品？?", "提示", {
           confirmButtonText: "确定",
@@ -204,17 +207,31 @@ export default {
               this.getlist();
             });
           })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "取消下架"
-            });
-          });
+          .catch(() => {});
       }
     },
-    page(e){
-      this.pageNo = e
-      this.getgoods()
+    page(e) {
+      this.pageNo = e;
+      this.getgoods();
+    },
+    ewm(item) {
+      let parmars = {
+        page: "pages/goodsDetail/goodsDetail",
+        id:
+          "goodsId=" +
+          item.goodsId +
+          ",relateId=" +
+          sessionStorage.getItem("shopsBrandId") +
+          ",type=0"
+      };
+      this.$post("/weixin/getwxTwoEconde", parmars).then(res => {
+        if (res.error == "00") {
+          this.dialogVisible = true;
+          this.ewmimg = res.result;
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
     }
   },
   mounted() {
@@ -338,6 +355,13 @@ export default {
   margin-top: 10px;
   padding: 0 15px;
   overflow: auto;
+}
+
+.ewmimg {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 20px auto;
 }
 
 /*表格样式*/

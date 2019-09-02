@@ -5,8 +5,8 @@
         <el-input v-model="keywords" placeholder="请输入房间名称"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary" @click="getlist()">搜索</el-button>
-        <el-button type="success" plain @click="add()">添加</el-button>
+        <el-button type="primary" @click="getlist()" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" plain @click="tiao()" icon="el-icon-circle-plus-outline">新增</el-button>
       </div>
     </div>
     <div class="tab">
@@ -29,8 +29,8 @@
               <td>{{el.isOpen=='1'?'是':'否'}}</td>
               <td>
                 <span @click="getinfo(el)">编辑</span>
-                <span>打标签</span>
-                <span>二维码</span>
+                <!-- <span>打标签</span> -->
+                <span @click="ewm(el)">二维码</span>
                 <span style="color:red;" @click="delroom(el)">删除</span>
               </td>
             </tr>
@@ -41,6 +41,7 @@
         </tbody>
       </table>
     </div>
+    <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
     <el-dialog :title="title" :visible.sync="dialogVisible" width="80%" center>
       <div class="add">
         <div class="input-box">
@@ -196,6 +197,12 @@
         <el-button type="primary" @click="save()">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="二维码" :visible.sync="dialogVisible2" width="30%" center>
+      <img :src="ewmimg" v-if="ewmimg" class="ewmimg" />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible2 = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -270,7 +277,12 @@ export default {
       summary: "",
       flage: 0,
       title: "",
-      roomId: ""
+      roomId: "",
+      pageNo: "1",
+      total: "",
+      //ewm
+      dialogVisible2: false,
+      ewmimg: ""
     };
   },
   methods: {
@@ -278,15 +290,22 @@ export default {
       let parmars = {
         shopsId: sessionStorage.getItem("shopsId"),
         keywords: this.keywords,
-        pageSize: "100"
+        pageSize: "10",
+        pageNo: this.pageNo
       };
       this.$post("/shopsLinkMan/getRoomsList", parmars).then(res => {
         if (res.error == "00") {
           this.list = res.result.list;
+          this.total = res.result.total;
         } else {
           this.$message.error(res.msg);
         }
       });
+    },
+    //分页
+    page(e) {
+      this.pageNo = e;
+      this.getlist();
     },
     //删除房间
     delroom(item) {
@@ -312,12 +331,7 @@ export default {
             this.getlist();
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消删除"
-          });
-        });
+        .catch(() => {});
     },
     add() {
       if (this.dialogVisible) {
@@ -326,6 +340,19 @@ export default {
         this.dialogVisible = true;
         this.flage = 0;
         this.title = "新增房间";
+        this.name = "";
+        this.kai = "1";
+        this.dynamicTags = [];
+        this.roompic = "";
+        this.summary = "";
+        this.roomId = "";
+        this.pic1.url = "";
+        this.pic2.url = "";
+        this.pic3.url = "";
+        this.pic4.url = "";
+        this.pic5.url = "";
+        this.pic6.url = "";
+        this.pic7.url = "";
       }
     },
 
@@ -463,8 +490,6 @@ export default {
         this.$message.error("请输入房间名称");
       } else if (this.roompic == "") {
         this.$message.error("请上传房间封面");
-      } else if (this.summary == "") {
-        this.$message.error("请输入房间描述");
       } else if (this.dynamicTags.length == 0) {
         this.$message.error("请添加房间标签");
       } else if (this.flage == 0) {
@@ -529,28 +554,52 @@ export default {
           this.dynamicTags = drool.roomLabels.split(",");
           this.summary = drool.summary;
           this.roompic = drool.imageUrl;
+          if (drool.pic[0]) {
+            this.pic2 = drool.pic[0];
+          }
           if (drool.pic[1]) {
-            this.pic2 = drool.pic[1];
+            this.pic3 = drool.pic[1];
           }
           if (drool.pic[2]) {
-            this.pic3 = drool.pic[2];
+            this.pic4 = drool.pic[2];
           }
           if (drool.pic[3]) {
-            this.pic4 = drool.pic[3];
+            this.pic5 = drool.pic[3];
           }
           if (drool.pic[4]) {
-            this.pic5 = drool.pic[4];
+            this.pic6 = drool.pic[4];
           }
           if (drool.pic[5]) {
-            this.pic6 = drool.pic[5];
-          }
-          if (drool.pic[6]) {
-            this.pic7 = drool.pic[6];
+            this.pic7 = drool.pic[5];
           }
         } else {
           this.$message.error(res.msg);
         }
       });
+    },
+    ewm(item) {
+      let parmars = {
+        id:
+          "roomId=" +
+          item.shopsRoomId +
+          ",relateId=" +
+          sessionStorage.getItem("shopsId") +
+          ",type=1",
+        page: "pages/room/room"
+      };
+      this.$post("/weixin/getwxTwoEconde", parmars).then(res => {
+        if (res.error == "00") {
+          this.dialogVisible2 == true;
+          this.ewmimg == res.result;
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
+    },
+    tiao(){
+      this.$router.push({
+        name:"addroom"
+      })
     }
   },
   mounted() {
@@ -639,6 +688,13 @@ export default {
 .pic-title > div {
   font-size: 16px;
   font-weight: 600;
+}
+
+.ewmimg {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 20px auto;
 }
 /*表格样式*/
 

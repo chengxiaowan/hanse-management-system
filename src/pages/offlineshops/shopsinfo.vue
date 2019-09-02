@@ -1,12 +1,12 @@
 <template>
   <div class="shopsinfo">
-    <el-page-header @back="goBack()" content="店铺详情"></el-page-header>
+    <el-page-header @back="goBack()" content="门店全景"></el-page-header>
     <div class="add-body">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="店铺全景" name="info">
           <v-info></v-info>
         </el-tab-pane>
-        <el-tab-pane label="人员信息" name="pop">
+        <el-tab-pane label="销售人员" name="pop">
           <v-pop></v-pop>
         </el-tab-pane>
         <el-tab-pane label="商品信息" name="goods">

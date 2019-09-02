@@ -39,7 +39,7 @@
         <tbody>
           <template v-if="list.length != 0">
             <tr v-for="item in list" :key="item.id">
-              <td>shopsName</td>
+              <td>{{item.shopsName}}</td>
               <td>{{item.name}}</td>
               <td>{{item.typeName}}</td>
               <td>{{item.brandName}}</td>
@@ -66,9 +66,9 @@
     <el-dialog title="审核" :visible.sync="dialogVisible" width="30%" center>
       <div class="SH">
         <el-radio v-model="radio" label="1">通过</el-radio>
-        <el-radio v-model="radio" label="0">驳回</el-radio>
+        <el-radio v-model="radio" label="2">驳回</el-radio>
       </div>
-      <div class="no" v-if="radio == 0">
+      <div class="no" v-if="radio == 2">
         驳回原因：
         <el-input type="textarea" rows="3" v-model="reason" placeholder="请输入驳回原因..."></el-input>
       </div>
@@ -101,7 +101,7 @@ export default {
       reason: "", //驳回原因
       goodsid: "",
       pageNo: 1,
-      total: "",
+      total: ""
     };
   },
   methods: {
@@ -129,7 +129,6 @@ export default {
     },
     //模态框
     open(item) {
-      console.log(item);
       if (this.dialogVisible == false) {
         this.dialogVisible = true;
         this.commissionPercent = "";
@@ -143,18 +142,21 @@ export default {
 
     //审核
     shenhe() {
-      
-      let parmars={
-        shopsGoodsId:this.id,
-        auditStatus:this.radio,
-        commissionPercent:this.commissionPercent || 0.00,
-        reason:this.reason,
-        roleList:"",
-      }
+      let parmars = {
+        shopsGoodsId: this.id,
+        auditStatus: this.radio,
+        commissionPercent: this.commissionPercent || 0.0,
+        reason: this.reason,
+        roleList: ""
+      };
 
-      this.$post('/shops/updateAShopsGoodsById',parmars).then(res=>{
-        console.log(res)
-      })
+      this.$post("/shops/updateAShopsGoodsById", parmars).then(res => {
+        if (res.error == "00") {
+          this.$message("操作成功");
+          this.getList();
+          this.open();
+        }
+      });
     },
     //获取门店列表
     getshops() {
@@ -167,7 +169,7 @@ export default {
           this.brandlist = res.result.list;
         }
       });
-    },
+    }
   },
   mounted() {
     this.getshops();

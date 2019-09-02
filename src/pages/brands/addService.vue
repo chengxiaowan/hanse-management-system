@@ -7,11 +7,12 @@
         1、服务位置即服务覆盖的省市。
         <br />2、佣金比例即商家与我方签订的商品的总佣金比例。
         <br />3、预估收益即通过商家渠道售卖商品后，商家能得到的预计总收益，具体以实际为准。
+        <br />4、申请加入服务后，需由我方审核后才能上架。
       </p>
     </div>
     <div class="soso">
       <div class="keywords">
-        <el-input type="text" v-model="keywords" placeholder="请输入服务关键字"></el-input>
+        <el-input type="text" v-model="keywords" placeholder="请输入服务名称"></el-input>
       </div>
       <el-button type="primary" id="soso" @click="getlist()">搜索</el-button>
     </div>
@@ -39,7 +40,7 @@
             <td>{{(item.price*0.05).toFixed(2)}}</td>
             <td>
               <!-- <span>查看</span> -->
-              <span @click="addservice(item)">加入</span>
+              <span @click="addservice(item)">申请加入</span>
             </td>
           </tr>
         </tbody>

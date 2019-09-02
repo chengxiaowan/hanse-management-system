@@ -6,7 +6,7 @@
         <el-tab-pane label="基本信息" name="first">
           <v-info></v-info>
         </el-tab-pane>
-        <el-tab-pane label="负责人信息" name="second">
+        <el-tab-pane label="门店负责人" name="second">
           <v-personnel></v-personnel>
         </el-tab-pane>
         <el-tab-pane label="商品信息" name="third">

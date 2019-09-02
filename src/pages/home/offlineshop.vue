@@ -6,7 +6,7 @@
     </div>
     <div class="soso">
       <div class="keywords">
-        <el-input type="text" placeholder="请输入店铺名称、地址、联系方式" v-model="keywords"></el-input>
+        <el-input type="text" placeholder="请输入门店名称" v-model="keywords"></el-input>
       </div>
       <div class="sele">
         类型
@@ -26,20 +26,26 @@
         </el-select>
       </div>
       <div class="soso-btn">
-        <el-button type="primary" @click="getList()">搜索</el-button>
-        <el-button type="success" plain @click="add()">新增</el-button>
+        <el-button type="primary" @click="getList()">
+          <i class="el-icon-search"></i>
+          搜索
+        </el-button>
+        <el-button type="success" plain @click="add()">
+          <i class="el-icon-circle-plus-outline"></i>
+          新增
+        </el-button>
       </div>
     </div>
     <div class="tab">
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
-            <th width="20%">店铺名称</th>
+            <th width="20%">门店名称</th>
             <th width="10%">联系电话</th>
-            <th width="10%">店铺类型</th>
+            <th width="10%">类型</th>
             <!--<th width="20%">店铺标签</th>-->
             <!--<th width="10%">营业时间</th>-->
-            <th width="30%">店铺地址</th>
+            <th width="30%">地址</th>
             <th width="10%">审核状态</th>
             <!--<th width="10%">创建时间</th>-->
             <th width="20%">操作</th>
@@ -62,7 +68,7 @@
               <!--<td>{{item.createTime}}</td>-->
               <td class="btn-hide">
                 <span @click="open(item)">查看</span>
-                <span>二维码</span>
+                <span v-if="item.status=='1'">二维码</span>
                 <span style="color:red" @click="delshpos(item)">删除</span>
               </td>
             </tr>

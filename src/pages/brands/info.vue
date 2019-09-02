@@ -1,15 +1,14 @@
 <template>
   <div class="brand-info">
+    <el-page-header @back="goBack" content="详情页面" v-if="flages == '1'"></el-page-header>
+
     <div class="flex-row">
       <div class="brand-name">
         <div class="brand-title">品牌名称：</div>
         <el-input placeholder="请输入品牌名称，1~30字" v-model="brandName" maxlength="30"></el-input>
         <i class="tips"></i>
       </div>
-      <div class="brand-user">
-        <div class="brand-title">品牌负责人</div>
-        <el-input placeholder="请选择品牌负责人" disabled></el-input>
-      </div>
+      <div class="flex-col"></div>
     </div>
     <div class="flex-row">
       <div class="flex-col">
@@ -22,6 +21,9 @@
           maxlength="1000"
         ></el-input>
       </div>
+      <div class="flex-col"></div>
+    </div>
+    <div class="flex-row">
       <div class="flex-col">
         <div class="brand-title">标签：</div>
         <el-tag
@@ -40,9 +42,11 @@
           @keyup.enter.native="handleInputConfirm"
           @blur="handleInputConfirm"
         ></el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 点击输入标签</el-button>
       </div>
+      <div class="flex-col"></div>
     </div>
+
     <div class="image-up">
       <div class="image-title">
         <h3>图片</h3>
@@ -109,7 +113,8 @@ export default {
       brandName: "",
       remark: "",
       shopsBrandId: "",
-      flage: ""
+      flage: "",
+      flages: "1"
     };
   },
   methods: {
@@ -132,6 +137,10 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = "";
+    },
+
+    goBack() {
+      history.go(-1);
     },
 
     //七牛云支持
@@ -178,9 +187,9 @@ export default {
       } else if (this.logo == "") {
         this.$message.error("请上传您的品牌logo");
         return;
-      }else if(this.pic == ""){
+      } else if (this.pic == "") {
         this.$message.error("请上传您的品牌封面");
-        return
+        return;
       }
       if (this.flage == 1) {
         let parmars = {
@@ -240,6 +249,7 @@ export default {
     this.getToken();
     this.shopsBrandId = sessionStorage.getItem("shopsBrandId");
     this.dynamicTags = sessionStorage.getItem("labels").split(",");
+    this.flages = sessionStorage.getItem("flages");
     console.log(sessionStorage.getItem("labels"));
     if (this.shopsBrandId) {
       this.getbrands();
@@ -270,6 +280,12 @@ export default {
   font-size: 16px;
   font-weight: 500;
   color: #000;
+}
+
+.el-page-header {
+  height: 50px;
+  line-height: 50px;
+  margin-block: 20px;
 }
 
 .tips {

@@ -1,6 +1,6 @@
 <template>
   <div class="addservice">
-    <el-page-header @back="goBack" content="详情页面"></el-page-header>
+    <el-page-header @back="goBack" content="添加服务"></el-page-header>
     <div class="service-title">
       <div>说明</div>
       <p>
@@ -11,10 +11,20 @@
     </div>
     <div class="service-soso">
       <div class="keywords">
-        <el-input placeholder="请输入服务名称"></el-input>
+        <el-input placeholder="请输入服务名称" v-model="keywords"></el-input>
+      </div>
+      <div class="keywords">
+        上/下架：
+        <div class="sele-box">
+          <el-select v-model="isOnsell" placeholder="请选择">
+            <el-option label="全部" value></el-option>
+            <el-option label="上架" value="1"></el-option>
+            <el-option label="下架" value="0"></el-option>
+          </el-select>
+        </div>
       </div>
       <div class="soso-btns">
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
       </div>
     </div>
     <div class="tab">
@@ -37,7 +47,7 @@
               <td>{{item.price}}</td>
               <td class="btn-hide">
                 <!--<a class="btn btn-success" title="查看" @click="view(item.serviceId);">查看</a>-->
-                <span @click="addservice(item)">加入</span>
+                <span @click="addservice(item)">申请加入</span>
               </td>
             </tr>
           </template>
@@ -66,7 +76,8 @@ export default {
       brandcom: "",
       serviceId: "",
       total: "",
-      pageNo: ""
+      pageNo: "",
+      isOnsell: ""
     };
   },
   methods: {
@@ -81,7 +92,9 @@ export default {
         shopsBrandId: sessionStorage.getItem("shopsBrandId"),
         keywords: this.keywords,
         pageSize: "10",
-        pageNo: this.pageNo
+        pageNo: this.pageNo,
+        auditStatus: 1, //过滤
+        isOnsell: this.isOnsell
       };
       this.$post("/shopsBrand/showAShopsBrandService", parmars).then(res => {
         if (res.error == "00") {
@@ -133,12 +146,7 @@ export default {
             this.getlist();
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消加入"
-          });
-        });
+        .catch(() => {});
     },
     //add model
     open(item) {
@@ -197,7 +205,7 @@ export default {
 .keywords {
   width: 260px;
   float: left;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
 .soso-btns {
@@ -223,6 +231,10 @@ export default {
 
 .tab {
   margin-top: 20px;
+}
+.sele-box {
+  width: 150px;
+  display: inline-block;
 }
 
 /*表格样式*/

@@ -14,11 +14,11 @@
             {{item.roleName}}
             <el-dropdown>
               <span class="el-dropdown-link">
-                <i class="el-icon-arrow-down el-icon--right"></i>
+                <i class="el-icon-more"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item >编辑</el-dropdown-item>
-                <el-dropdown-item >删除</el-dropdown-item>
+                <el-dropdown-item>编辑</el-dropdown-item>
+                <el-dropdown-item @click.native="delrole(item)">删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </li>
@@ -27,11 +27,11 @@
       <div class="pop-box">
         <div class="soso-pop">
           <div class="keywords">
-            <el-input type="text" v-model="keywords"></el-input>
+            <el-input type="text" v-model="keywords" placeholder="请输入姓名、手机号码"></el-input>
           </div>
           <div class="soso-btns">
-            <el-button type="primary">搜索</el-button>
-            <el-button type="success" plain @click="addUser">添加</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
+            <el-button type="success" plain @click="addUser" icon="el-icon-circle-plus-outline">新增销售</el-button>
           </div>
         </div>
         <div class="tab">
@@ -54,7 +54,7 @@
                   <td v-if="item.isQuit == '0'">在职</td>
                   <td v-if="item.isQuit == '1'">离职</td>
                   <td class="btn-hide">
-                    <span>编辑</span>
+                    <span @click="getuserinfo(item)">编辑</span>
                     <span style="color:red;" v-if="item.isQuit == '0'" @click="deluser(item)">离职</span>
                   </td>
                 </tr>
@@ -67,13 +67,14 @@
         </div>
       </div>
     </div>
-    <el-dialog title="新增销售角色" :visible.sync="centerDialogVisible" width="30%">
-      <div>请输入您要新增加的销售角色名称</div>
-      <div class="keywords">
-        <el-input type="text" maxlength="30" v-model="roleName"></el-input>
+    <el-dialog title="新增销售角色" :visible.sync="centerDialogVisible" width="30%" center>
+      <div class="new-box">
+        <div class="new-title">角色名称:</div>
+        <div class="keywords">
+          <el-input type="text" maxlength="30" v-model="roleName" placeholder="请输入销售角色名称，1~30字"></el-input>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="newRole">确 定</el-button>
       </span>
     </el-dialog>
@@ -145,7 +146,10 @@ export default {
       roleId: "",
       QQ: "",
       email: "",
-      remarks: ""
+      remarks: "",
+      shopsDistributorId: "",
+      flage: 0,
+      userId: ""
     };
   },
   methods: {
@@ -167,6 +171,7 @@ export default {
     setrole(item) {
       if (item) {
         this.role = item.shopsRoleId;
+        this.roleId = item.shopsRoleId;
       } else {
         this.role = "";
       }
@@ -214,12 +219,7 @@ export default {
             this.getlist();
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消删除"
-          });
-        });
+        .catch(() => {});
     },
     //打开模态框
     addRole(item) {
@@ -254,6 +254,12 @@ export default {
         this.centerDialogVisible2 = false;
       } else {
         this.centerDialogVisible2 = true;
+        this.flage = 0;
+        this.name = "";
+        this.phone = "";
+        this.QQ = "";
+        this.email = "";
+        this.remarks = "";
       }
     },
 
@@ -275,7 +281,7 @@ export default {
         this.$message.error("请输入人员联系电话");
       } else if (this.roleId == "") {
         this.$message.error("请选择人员所属角色");
-      } else {
+      } else if (this.flage == 0) {
         this.$post("/shops/addShopsDistributor", parmars).then(res => {
           if (res.error == "00") {
             this.$message("添加人员成功");
@@ -283,7 +289,67 @@ export default {
             this.addUser();
           }
         });
+      } else if (this.flage == 1) {
+        //进入修改流程
+        parmars.shopsDistributorId = this.shopsDistributorId;
+        parmars.userId = this.userId;
+        this.$post("/shops/editShopsDistributor", parmars).then(res => {
+          if (res.error == "00") {
+            this.$message("修改人员信息成功");
+            this.getlist();
+            this.centerDialogVisible2 = false;
+          } else {
+            this.$message.error(res.msg);
+          }
+        });
       }
+    },
+    //删除角色
+    delrole(item) {
+      this.$confirm("您确认删除此角色？?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let parmars = {
+            shopsRoleId: item.shopsRoleId
+          };
+          this.$post("/shops/delShopsRole", parmars).then(res => {
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "删除角色成功!"
+              });
+              this.getrole();
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.getlist();
+          });
+        })
+        .catch(() => {});
+    },
+    //编辑角色前的获取信息
+    getuserinfo(item) {
+      let parmars = {
+        shopsDistributorId: item.shopsDistributorId
+      };
+      this.shopsDistributorId = item.shopsDistributorId;
+      this.$post("/shops/editShopsDistributorInfo", parmars).then(res => {
+        if (res.error == "00") {
+          let drool = res.result;
+          this.name = drool.realName;
+          this.phone = drool.mobilePhone;
+          this.QQ = drool.QQ;
+          this.roleId = drool.shopsRoleId;
+          this.email = drool.email;
+          this.remarks = drool.remark;
+          this.userId = drool.userId;
+          this.centerDialogVisible2 = true;
+          this.flage = 1;
+        }
+      });
     }
   },
   mounted() {
@@ -370,9 +436,10 @@ export default {
   width: 273px;
   margin-top: 5px;
   float: left;
+  margin-bottom: 10px;
 }
 .soso-btns {
-  width: 200px;
+  width: 300px;
   float: left;
   margin-top: 5px;
   margin-left: 10px;
@@ -393,6 +460,23 @@ export default {
   width: 200px;
   margin-right: 50px;
   float: left;
+}
+
+.el-dropdown {
+  float: right;
+  margin-right: 15px;
+}
+
+.new-box {
+  width: 300px;
+  padding-bottom: 20px;
+  margin: 0 auto;
+}
+
+.new-title {
+  font-size: 16px;
+  font-family: PingFangSC;
+  font-weight: 400;
 }
 
 /*表格样式*/

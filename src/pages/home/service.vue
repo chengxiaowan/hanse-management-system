@@ -2,14 +2,14 @@
   <div class="service">
     <div class="soso">
       <div class="brand">
-        品牌:
+        门店:
         <el-select v-model="brand" filterable placeholder="请选择" @change="getList()">
           <el-option label="全部" value></el-option>
           <el-option
             v-for="item in brandlist"
-            :key="item.shopsBrandId"
-            :label="item.brandName"
-            :value="item.shopsBrandId"
+            :key="item.shopsId"
+            :label="item.shopsName"
+            :value="item.shopsId"
           ></el-option>
         </el-select>
       </div>
@@ -26,7 +26,7 @@
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
-            <th width="20%">酒店品牌名称</th>
+            <th width="20%">门店名称</th>
             <th width="20%">服务名称名称</th>
             <th width="10%">服务供应商</th>
             <th width="20%">服务位置</th>
@@ -38,7 +38,7 @@
         <tbody>
           <template v-if="list.length != 0">
             <tr v-for="item in list" :key="item.id">
-              <td>{{item.hotelBrandName}}</td>
+              <td>{{item.shopsName}}</td>
               <td>{{item.serviceName}}</td>
               <td>{{item.photoStudioName}}</td>
               <td>{{item.province}} {{item.city}}</td>
@@ -58,6 +58,8 @@
         </tbody>
       </table>
     </div>
+    <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
+
     <el-dialog title="审核" :visible.sync="dialogVisible" width="30%">
       <div class="shenhe">
         <el-radio v-model="radio" label="1">通过</el-radio>
@@ -95,17 +97,21 @@ export default {
       radio: "1",
       commissionPercent: "", //佣金比例
       reason: "", //驳回原因
-      id: ""
+      id: "",
+      total:"",
+      pageNo:1,
     };
   },
   methods: {
-    //品牌列表
-    getbrands() {
-      this.$get("/shopsBrand/shopsBrandList2").then(res => {
+    //门店列表
+    getshops() {
+      let parmars = {
+        pageSize: "100"
+      };
+
+      this.$post("/shops/dataList", parmars).then(res => {
         if (res.error == "00") {
-          this.brandlist = res.result;
-        } else {
-          this.$message.error(this.msg);
+          this.brandlist = res.result.list;
         }
       });
     },
@@ -113,17 +119,24 @@ export default {
     //获取审核服务列表
     getList() {
       let parmars = {
-        shopsBrandId: this.brand,
+        shopsId: this.brand,
         auditStatus: this.auditStatus,
-        pageSize: "100"
+        pageSize: "10",
+        pageNo:this.pageNo,
       };
-      this.$post("/shopsBrand/showAShopsBrandService", parmars).then(res => {
+      this.$post("/shops/showShopsService", parmars).then(res => {
         if (res.error == "00") {
           this.list = res.result.list;
+          this.total = res.result.total;
         } else {
           this.$message.error(res.msg);
         }
       });
+    },
+    //fenye
+    page(e){
+      this.pageNo = e;
+      this.getList()
     },
     //模态框
     open(item) {
@@ -142,27 +155,26 @@ export default {
     shenhe() {
       if (this.reason || this.commissionPercent) {
         let parmars = {
-          id: this.id,
+          shopsServiceId: this.id,
           auditStatus: this.radio,
           commissionPercent: this.commissionPercent || 0,
-          reason: this.reason
+          reason: this.reason,
+          roleList: ""
         };
-        this.$post("/shopsBrand/updateAShopsBrandServiceById", parmars).then(
-          res => {
-            if (res.error == "00") {
-              this.$message("操作成功");
-              this.open();
-              this.getList();
-            } else {
-              this.$message.error(res.msg);
-            }
+        this.$post("/shops/updateAShopsServiceById", parmars).then(res => {
+          if (res.error == "00") {
+            this.$message("操作成功");
+            this.open();
+            this.getList();
+          } else {
+            this.$message.error(res.msg);
           }
-        );
+        });
       }
     }
   },
   mounted() {
-    this.getbrands();
+    this.getshops();
     this.getList();
   }
 };

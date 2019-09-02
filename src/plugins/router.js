@@ -24,6 +24,7 @@ import password from '../pages/user/password.vue'
 import brandsadd from '../pages/brands/brandsAdd'
 import goodsAdd from '../pages/brands/addgoods' //添加商品
 import addService from "../pages/brands/addService" //添加服务
+import brandsinfo from '../pages/brands/info'
 
 //影楼相关
 import Studio from "../pages/studio/studio" //影楼详情入口？
@@ -33,6 +34,7 @@ import addShops from "../pages/offlineshops/addShops" //门店主添加
 import shopsinfo from "../pages/offlineshops/shopsinfo" //门店详情主入口
 import addgoods from "../pages/offlineshops/addgoods" //门店添加商品
 import addshopsservice from '../pages/offlineshops/addservice' //门店添加服务
+import addroom from '../pages/offlineshops/addroom' //门店添加服务
 
 
 
@@ -124,6 +126,11 @@ let routes = [{
                 name: "addService",
                 component: addService
             },
+            {
+                path:"brand/add",
+                name:"brandsAdd",
+                component:brandsinfo,
+            },
             //影楼部分
             {
                 path: "studio/studioAdd",
@@ -150,6 +157,11 @@ let routes = [{
                 path: 'offlineshop/addservice',
                 name: 'addshopsservice',
                 component: addshopsservice,
+            },
+            {
+                path: 'offlineshop/addroom',
+                name: 'addroom',
+                component: addroom,
             }
         ]
     },

@@ -62,17 +62,19 @@ export default {
     },
     //新增
     add() {
-      sessionStorage.removeItem("shopsBrandId")
-      sessionStorage.removeItem("labels")
+      sessionStorage.removeItem("shopsBrandId");
+      sessionStorage.removeItem("labels");
+      sessionStorage.setItem("flages", "1");
       this.$router.push({
-        name: "brandsadd"
+        name: "brandsAdd"
       });
     },
     //查看
     view(item) {
       sessionStorage.setItem("shopsBrandId", item.shopsBrandId);
       sessionStorage.setItem("labels", item.labels);
-      sessionStorage.removeItem('table')
+      sessionStorage.removeItem("table");
+      sessionStorage.setItem("flages", "0");
       console.log(item);
       this.$router.push({
         name: "brandsadd"
@@ -88,22 +90,20 @@ export default {
       })
         .then(() => {
           let parmars = {
-            shopsBrandId: item.shopsBrandId,
+            shopsBrandId: item.shopsBrandId
           };
-          this.$post("/shopsBrand/del", parmars).then(
-            res => {
-              console.log(res);
-              if (res.error == "00") {
-                this.$message({
-                  type: "success",
-                  message: "删除品牌成功!"
-                });
-              } else {
-                this.$message.error(res.msg);
-              }
-              this.getlist();
+          this.$post("/shopsBrand/del", parmars).then(res => {
+            console.log(res);
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "删除品牌成功!"
+              });
+            } else {
+              this.$message.error(res.msg);
             }
-          );
+            this.getlist();
+          });
         })
         .catch(() => {
           this.$message({
