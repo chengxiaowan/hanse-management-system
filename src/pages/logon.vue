@@ -81,8 +81,8 @@ export default {
       rule: "true",
       isDisabled: false,
       content: "",
-      count:'',
-      timer:"",
+      count: "",
+      timer: ""
     };
   },
   //实例上的方法
@@ -110,11 +110,13 @@ export default {
         this.$post("/service/registerMerchantsUser", parmars)
           .then(res => {
             if (res.error == "00") {
-              this.$alert("注册成功，即将跳转到登录页面", "注册成功", {
+              this.$alert("注册成功，即将跳转到首页", "注册成功", {
                 confirmButtonText: "确定",
                 callback: action => {
+                  sessionStorage.setItem("username", this.phone);
+                  sessionStorage.setItem("roleId", this.value);
                   this.$router.push({
-                    name: "login"
+                    path:"/"
                   });
                 }
               });
@@ -134,17 +136,15 @@ export default {
         flag: 0
       };
       if (/^1[3456789]\d{9}$/.test(this.phone)) {
-        this.$post("/service/getVerificationCode", parmars)
-          .then(res => {
-            //在这里处理按钮1分钟不可用
-            console.log(res)
-            if(res.error == "00"){
-              this.anniu();
-            }else{
-              this.$message.error(res.msg)
-            }
-            
-          })
+        this.$post("/service/getVerificationCode", parmars).then(res => {
+          //在这里处理按钮1分钟不可用
+          console.log(res);
+          if (res.error == "00") {
+            this.anniu();
+          } else {
+            this.$message.error(res.msg);
+          }
+        });
       } else {
         this.$message.error("请输入正确的的手机号码");
       }
@@ -152,7 +152,7 @@ export default {
     //按钮？？
     anniu() {
       const TIME_COUNT = 60;
-      console.log("1")
+      console.log("1");
       this.count = TIME_COUNT;
       this.timer = window.setInterval(() => {
         if (this.count > 0 && this.count <= TIME_COUNT) {

@@ -8,12 +8,15 @@
         <div class="user-role">
           <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>身份：
           <el-radio v-model="role" label="0" style="margin-left:8px">个人</el-radio>
-          <el-radio v-model="role" label="1" >企业（含企业、团体、组织）</el-radio>
+          <el-radio v-model="role" label="1">企业（含企业、团体、组织）</el-radio>
         </div>
         <div class="user-name">
-          <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>企业名称：
+          <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>
+          <span v-if="role == '1'">企业名称：</span>
+          <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;姓名：</span>
           <div class="user-name-input">
-            <el-input v-model="name" placeholder="请输入企业名称"></el-input>
+            <el-input v-model="name" placeholder="请输入企业名称" v-if="role == '1'"></el-input>
+            <el-input v-model="name" placeholder="请输入您的真实姓名" v-else></el-input>
           </div>
         </div>
         <div class="user-type">
@@ -153,7 +156,7 @@ export default {
         this.$post("/service/updateMerchantsUser", parmars)
           .then(res => {
             if (res.error == "00") {
-              this.$message("完善基本信息成功成功");
+              this.$message("基本信息保存成功");
             } else {
               this.$message(res.msg);
             }
@@ -185,14 +188,23 @@ export default {
 
 .tips {
   height: 44px;
+  font-size: 12px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(74, 74, 74, 1);
+  line-height: 44px;
   background: #f5f5f5;
-  font: 400 12px/44px "";
   text-indent: 18px;
+  border-radius: 2px;
 }
 .title-user {
   margin-top: 28px;
   margin-left: 34px;
-  font: 700 14px/20px "";
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  line-height: 20px;
 }
 .user-role {
   margin-left: 101px;
@@ -211,6 +223,8 @@ export default {
 .user-type {
   margin-left: 77px;
   margin-top: 27px;
+  font-size: 12px;
+  color: #666;
 }
 .info-user {
   font: 400 12px/17px "";
@@ -229,7 +243,9 @@ export default {
 
 .user-address {
   margin-left: 85px;
-  margin-top: 27px;
+  margin-top: 10px;
+  font: 400 12px/17px "";
+  color: #666;
 }
 .el-button {
   margin-left: 170px;

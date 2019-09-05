@@ -1,6 +1,7 @@
 <template>
   <div class="addService">
     <el-page-header @back="goBack" content="添加服务"></el-page-header>
+    <el-divider></el-divider>
     <div class="service-title">
       <div>说明</div>
       <p>
@@ -108,12 +109,7 @@ export default {
             this.getlist();
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消加入"
-          });
-        });
+        .catch(() => {});
     },
     page(e) {
       this.pageNo = e;
@@ -157,21 +153,25 @@ export default {
 .service-title {
   background: #e4e9ef;
   padding: 15px;
+  border-radius: 2px;
 }
 
 .service-title > div {
   font-size: 20px;
-  font-weight: 500;
-  color: #4a4a4a;
+  font-family: PingFangSC;
+  font-weight: 600;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
   padding-bottom: 10px;
 }
 
 .service-title > p {
   font-size: 14px;
+  font-family: PingFangSC;
   font-weight: 400;
   color: rgba(74, 74, 74, 1);
-  line-height: 20px;
-  padding-left: 18px;
+  line-height: 24px;
+  margin-left: 18px;
 }
 
 .soso {
@@ -188,6 +188,11 @@ export default {
 #soso {
   float: left;
   margin-left: 10px;
+}
+
+.el-divider {
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 
 /*表格样式*/

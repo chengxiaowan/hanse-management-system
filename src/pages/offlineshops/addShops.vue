@@ -1,8 +1,8 @@
 <template>
   <div class="add">
     <div class="info-box">
-      <el-page-header @back="goBack" content="新增门店" v-if="!flage"></el-page-header>
-      <el-divider></el-divider>
+      <el-page-header @back="goBack" :content="titles" v-if="!bobo"></el-page-header>
+      <el-divider v-if="!bobo"></el-divider>
       <div class="input-box">
         <div class="min-box">
           名称：
@@ -42,33 +42,20 @@
         </div>
         <div class="min-box">
           详细地址：
-          <el-input type="text" v-model="address"></el-input>
+          <el-input type="text" v-model="address" placeholder="请输入详细地址"></el-input>
         </div>
       </div>
       <div class="input-box">
         <div class="min-box">
           简介：
-          <el-input type="textarea" v-model="remark"></el-input>
+          <el-input type="textarea" v-model="remark" placeholder="请输入简介"></el-input>
         </div>
         <div class="min-box">
-          <div>标签：</div>
-          <el-tag
-            :key="tag"
-            v-for="tag in dynamicTags"
-            closable
-            :disable-transitions="false"
-            @close="handleClose(tag)"
-          >{{tag}}</el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-          ></el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+          <div>
+            标签：
+            <span class="tag-tips">建议每个标签2-5字</span>
+          </div>
+          <input-tag placeholder="添加标签,按回车生成标签。" v-model="tags" :limit="5" :addTagOnBlur="true"></input-tag>
         </div>
       </div>
       <div class="input-box">
@@ -293,13 +280,16 @@ export default {
       baseurl: "https://images.homeplus.fun/", //七牛云储存域名，用于拼接key得到图片url
       postdata: { token: "" },
       drool: "",
-      flage: 0
+      flage: 0,
+      bobo: 0,
+      userId: "",
+      tags: ""
     };
   },
   methods: {
     //在完整选择省市地后触发
     onSelected(data) {
-      console.log(data);
+      // console.log(data);
       this.province = data.province.value;
       this.city = data.city.value;
       this.area = data.area.value;
@@ -336,16 +326,16 @@ export default {
 
     //上船前的检测--公用
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+      // const isJPG = file.type === "image/*";
       const isLt5M = file.size / 1024 / 1024 < 5;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
       if (!isLt5M) {
-        this.$message.error("上传头像图片大小不能超过 5MB!");
+        this.$message.error("上传图片大小不能超过 5MB!");
       }
-      return isJPG && isLt5M;
+      return isLt5M;
     },
 
     //上传完成后的方法--封面
@@ -463,25 +453,27 @@ export default {
         let parmars = {
           shopsName: this.name,
           shopsBrandId: this.brand,
-          phone: "",
+          // mobilePhone: "",
           businessHours: "",
           summary: this.remark,
           logoPath: this.pic,
           shopsPicList: JSON.stringify(obj),
-          labels: this.dynamicTags.join(","),
+          labels: this.tags.join(",") || "",
           shopsType: this.shopsType,
           province: this.province,
           city: this.city,
           area: this.area,
-          userId: "", //疑似缺少的参数
-          address: this.address
+          userId: this.userId, //疑似缺少的参数
+          address: this.address,
+          titles: ""
         };
         if (this.flage == "1") {
           let shopsId = sessionStorage.getItem("shopsId");
           parmars.shopsId = shopsId;
+          // delete parmars.mobilePhone;
           this.$post("/shops/edit", parmars).then(res => {
             if (res.error == "00") {
-              this.$message("修改店铺信息成功");
+              this.$message("修改门店信息成功");
               this.getinfo();
             } else {
               this.$message.error(res.msg);
@@ -531,11 +523,16 @@ export default {
           this.brand = res.result.shopsBrandId + "";
           this.remark = res.result.summary;
           this.address = res.result.address;
-          this.dynamicTags = sessionStorage.getItem("shopslabel").split(",");
+          if (sessionStorage.getItem("shopslable") == "") {
+            this.tags = [];
+          } else {
+            this.tags = sessionStorage.getItem("shopslabel").split(",") || [];
+          }
           this.pic = res.result.logoPath;
           this.province = res.result.province;
           this.city = res.result.city;
           this.area = res.result.area;
+          this.userId = res.result.userId;
           if (res.result.shopsPicList[0]) {
             this.pic1 = res.result.shopsPicList[0];
           }
@@ -571,7 +568,17 @@ export default {
     if (sessionStorage.getItem("shopsId")) {
       console.log("获取信息");
       this.flage = 1;
+      this.bobo = 1;
       this.getinfo();
+    }
+    if (sessionStorage.getItem("shopsType") == "1") {
+      this.bobo = 0;
+    }
+
+    if (sessionStorage.getItem("shopsType") == "0") {
+      this.titles = "修改门店";
+    } else {
+      this.titles = "新增门店";
     }
   }
 };
@@ -589,13 +596,13 @@ export default {
   margin-left: 15px;
 }
 
-.el-divider{
+.el-divider {
   margin: 0px auto;
   margin-bottom: 24px;
 }
 
 .info-box {
-  margin: 15px;
+  /* margin: 15px; */
   background: #fff;
   /* width: 100%; */
   height: 100%;
@@ -607,15 +614,18 @@ export default {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .min-box {
   width: 690px;
   overflow: hidden;
   margin-bottom: 20px;
-  font-size: 16px;
+  font-size: 14px;
+  font-family: PingFangSC;
   font-weight: 500;
-  color: #000;
+  color: rgba(0, 0, 0, 1);
+  line-height: 20px;
 }
 
 .el-select {
@@ -641,6 +651,11 @@ textarea {
   width: 150px;
   margin: 0 auto;
   margin-top: 50px;
+}
+
+.el-divider {
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 
 /*标签支持*/
@@ -681,9 +696,8 @@ textarea {
 
 /*t图片上传*/
 .update {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  overflow: hidden;
+  margin-left: 80px;
 }
 
 .avatar-uploader .el-upload {
@@ -715,6 +729,7 @@ textarea {
   border: 1px dashed #e2e9f0;
   position: relative;
   float: left;
+  margin-right: 29px;
 }
 
 .image-tips {
@@ -726,5 +741,14 @@ textarea {
   left: 0;
   font: 12px/20px "";
   text-align: center;
+}
+
+.tag-tips {
+  float: right;
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(184, 184, 184, 1);
+  line-height: 20px;
 }
 </style>

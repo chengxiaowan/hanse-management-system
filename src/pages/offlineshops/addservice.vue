@@ -1,19 +1,19 @@
 <template>
   <div class="addservice">
     <el-page-header @back="goBack" content="添加服务"></el-page-header>
-    <div class="service-title">
+    <el-divider></el-divider>
+    <div class="addgoods-title">
       <div>说明</div>
       <p>
-        1、服务位置即服务覆盖的省市。
-        <br />2、佣金比例即商家与我方签订的商品的总佣金比例。
-        <br />3、预估收益即通过商家渠道售卖商品后，商家能得到的预计总收益，具体以实际为准。
+        1、价格取自服务的最低销售价。
+        <br />2、申请加入后的服务，需由门店对应的品牌方审核设置佣金比例等。
       </p>
     </div>
     <div class="service-soso">
       <div class="keywords">
         <el-input placeholder="请输入服务名称" v-model="keywords"></el-input>
       </div>
-      <div class="keywords">
+      <!-- <div class="keywords">
         上/下架：
         <div class="sele-box">
           <el-select v-model="isOnsell" placeholder="请选择">
@@ -22,7 +22,11 @@
             <el-option label="下架" value="0"></el-option>
           </el-select>
         </div>
-      </div>
+      </div>-->
+      <!-- <div class="keywords">
+        地区：
+        <v-distpicker hide-area></v-distpicker>
+      </div> -->
       <div class="soso-btns">
         <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
       </div>
@@ -61,8 +65,12 @@
   </div>
 </template>
 <script>
+import VDistpicker from "v-distpicker";
 export default {
   name: "addshopsservice",
+  components: {
+    VDistpicker //省市地联动
+  },
   data() {
     return {
       info: "店铺服务添加",
@@ -177,24 +185,29 @@ export default {
   background: #fff;
 }
 
-.service-title {
+.addgoods-title {
   background: #e4e9ef;
   width: 100%;
+  /* margin-top: 30px; */
   padding: 15px;
   border-radius: 4px;
-  margin-top: 10px;
 }
 
 .addgoods-title > div {
   font-size: 20px;
+  font-family: PingFangSC;
   font-weight: 600;
-  color: #4a4a4a;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
+  margin-bottom: 10px;
 }
 
 .addgoods-title > p {
-  font-weight: 14px;
-  line-height: 2em;
+  font-size: 14px;
+  font-family: PingFangSC;
   font-weight: 400;
+  color: rgba(74, 74, 74, 1);
+  line-height: 20px;
 }
 
 .service-soso {
@@ -235,6 +248,12 @@ export default {
 .sele-box {
   width: 150px;
   display: inline-block;
+}
+
+.el-divider {
+  margin: 0 auto;
+  margin-bottom: 20px;
+  margin-top: 15px;
 }
 
 /*表格样式*/

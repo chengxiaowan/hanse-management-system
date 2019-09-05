@@ -1,20 +1,20 @@
 <template>
   <div class="personnel">
-    <div class="personnel-title">
+    <div class="goods-title">
       <div>说明</div>
-      <p>1、该页面用来管理品牌下面各门店的负责人(一般情况下为店铺的直接受益人)信息。</p>
-      <p>2、门店负责人是该门店的直接受益人，门店里的商品售出后，可享受佣金，并且可以管理其门店里的商品，销售人员，服务等。</p>
-      <p>3、一个门店只有一名门店负责人，品牌负责人在给门店负责人创建好账号后，只需要通知对应的人员登录我方后台创建其名下的门店及其他信息即可。</p>
+      <p>
+        1、该页面用来管理品牌下面各门店的负责人(一般情况下为店铺的直接受益人)信息。
+        <br />2、门店负责人是该门店的直接受益人，门店里的商品售出后，可享受佣金，并且可以管理其门店里的商品，销售人员，服务等。
+        <br />3、一个门店只有一名门店负责人，品牌负责人在给门店负责人创建好账号后，只需要通知对应的人员登录我方后台创建其名下的门店及其他信息即可。
+      </p>
     </div>
     <div class="soso-box">
       <div class="soso-inputs">
         <el-input v-model="keywords" placeholder="请输入负责人姓名"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary" @click="getlist()">
-          <i class="el-icon-search"></i>搜索
-        </el-button>
-        <el-button type="success" @click="showAdd()">添加</el-button>
+        <el-button type="primary" @click="getlist()" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" @click="showAdd()" icon="el-icon-circle-plus-outline" plain>新增</el-button>
       </div>
     </div>
     <div class="user-list">
@@ -41,54 +41,54 @@
               </td>
             </tr>
           </template>
+          <tr v-else>
+            <td colspan="5">暂时没有数据</td>
+          </tr>
         </tbody>
       </table>
+      <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
     </div>
 
-    <!-- 新增的模态框 -->
-    <div class="adduser" v-if="add">
-      <div class="zzc"></div>
-      <div class="adduser-box">
-        <div class="adduser-title">
-          <div>新建联系人</div>
-          <span @click="showAdd()">X</span>
-        </div>
-        <div class="adduser-content">
-          <div class="adduser-input">
-            <div>姓名:</div>
-            <el-input v-model="name"></el-input>
-          </div>
-          <div class="adduser-input">
-            <div>手机号码:</div>
-            <el-input v-model="phone" @blur="phonetest()" maxlength="11"></el-input>
-          </div>
-        </div>
+    <!-- 这里废弃了一个手写的模态框，因为太丑了，想看的画自己去找历史本 -->
 
-        <div class="adduser-content">
-          <div class="adduser-input">
-            <div>QQ:</div>
-            <el-input v-model="qq"></el-input>
+    <el-dialog title="新建负责人" :visible.sync="dialogVisible" width="60%" center>
+      <div class="addpop">
+        <div class="input-row">
+          <div class="input-col">
+            姓名：
+            <el-input v-model="name" placeholder="请输入负责人姓名，1-30字"></el-input>
           </div>
-          <div class="adduser-input">
-            <div>邮箱:</div>
-            <el-input v-model="email"></el-input>
-          </div>
-        </div>
-        <div class="adduser-content">
-          <div class="adduser-input">
-            <div>备注:</div>
-            <el-input v-model="remark"></el-input>
-          </div>
-          <div class="adduser-input">
-            <div></div>
-            <!-- <el-input></el-input> -->
+          <div class="input-col">
+            手机号码：
+            <el-input v-model="phone" placeholder="请输入负责人手机号" @blur="phonetest()"></el-input>
           </div>
         </div>
-        <div class="save-btn">
-          <el-button type="primary" @click="save()">保存</el-button>
+        <div class="input-row">
+          <div class="input-col">
+            密码：
+            <el-input disabled placeholder="密码不用设置，默认12456"></el-input>
+          </div>
+          <div class="input-col">
+            QQ：
+            <el-input v-model="qq" placeholder="请输入负责人QQ号"></el-input>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-col">
+            邮箱：
+            <el-input placeholder="请输入负责人邮箱" v-model="email"></el-input>
+          </div>
+          <div class="input-col">
+            备注：
+            <el-input v-model="remark" placeholder="请输入备注信息"></el-input>
+          </div>
         </div>
       </div>
-    </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="save()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -106,13 +106,17 @@ export default {
       email: "",
       remark: "",
       flage: "",
-      id: ""
+      id: "",
+      dialogVisible: false,
+      pageNo: "",
+      total: 1,
+      isphone:false
     };
   },
   methods: {
     showAdd() {
-      if (this.add == false) {
-        this.add = true;
+      if (this.dialogVisible == false) {
+        this.dialogVisible = true;
         this.name = "";
         this.phone = "";
         this.email = "";
@@ -120,28 +124,34 @@ export default {
         this.remark = "";
         (this.id = ""), (this.flage = "");
       } else {
-        this.add = false;
+        this.dialogVisible = false;
       }
     },
 
     //手机号校验
     phonetest() {
+      if(this.phone == ""){
+        return;
+      }
       if (!/^1[3456789]\d{9}$/.test(this.phone)) {
         this.$message.error("输入手机号码格式有误");
+        this.isphone = false;
       } else {
-        var parmars = { username: this.phone };
-        this.$get("/shops/findByUserName", parmars).then(res => {
-          if (res.error == "01") {
-            this.$message.error("该手机号已被使用，请更换手机号后重试");
-          }
-        });
+        //这一块后端自己搞崩了 现在就不直接前端判断是否重复了，哈哈哈哈
+        // var parmars = { username: this.phone };
+        // this.$get("/shops/findByUserName", parmars).then(res => {
+        //   if (res.error == "01") {
+        //     this.$message.error("该手机号已被使用，请更换手机号后重试");
+        //   }
+        // });
+        this.isphone = true;
       }
     },
     //保存用户信息
     save() {
       if (this.name == "") {
         this.$message.error("请输入负责人姓名");
-      } else if (this.phone == "") {
+      } else if (this.phone == "" && this.isphone) {
         this.$message.error("请输入负责人手机号码");
       } else {
         var parmars = {
@@ -158,9 +168,11 @@ export default {
           parmars.shopsBrandShopsOwnerId = this.id;
           this.$post("/shopsBrand/editShopsBrandShopsOwner", parmars).then(
             res => {
-              if (error == "00") {
+              if (res.error == "00") {
                 this.message("修改成功");
-                this.add();
+                this.dialogVisible = false;
+              } else {
+                this.$message.error("该手机号码已存在");
               }
             }
           );
@@ -169,10 +181,10 @@ export default {
             res => {
               if (res.error == "00") {
                 this.$message("添加负责人成功");
-                this.showAdd();
-                this.getuser();
+                this.getlist();
+                this.dialogVisible = false;
               } else {
-                this.$message.error(res.msg);
+                this.$message.error("该手机号码已存在");
               }
             }
           );
@@ -183,13 +195,15 @@ export default {
     getlist() {
       let parmars = {
         keywords: this.keywords,
-        shopsBrandId: sessionStorage.getItem("shopsBrandId")
+        shopsBrandId: sessionStorage.getItem("shopsBrandId"),
+        pageSize: 10,
+        pageNo: this.pageNo
       };
       this.$post("/shopsBrand/shopsBrandShopsOwnerList", parmars).then(res => {
         console.log(res);
         if (res.error == "00") {
           this.list = res.result.list;
-          console.log(this.list);
+          this.total = res.result.total;
         }
       });
     },
@@ -203,7 +217,7 @@ export default {
         .then(() => {
           let parmars = {
             userId: item.userId,
-            isQuit:0
+            isQuit: 1
           };
           this.$post("/user/changeIsQuit", parmars).then(res => {
             console.log(res);
@@ -219,12 +233,11 @@ export default {
           });
         })
         .catch(() => {
-          console.log("取消操作")
         });
     },
     //读取负责人信息（查看和修改）
     getinfo(item) {
-      this.showAdd();
+      this.dialogVisible = true;
       this.flage = 1;
       this.id = item.shopsBrandShopsOwnerId;
       let parmars = {
@@ -245,8 +258,13 @@ export default {
         }
       );
     },
-    soso(){
-      this.getlist()
+    soso() {
+      this.getlist();
+      this.pageNo = 1;
+    },
+    page(e) {
+      this.pageNo = e;
+      this.getlist();
     }
   },
   mounted() {
@@ -259,29 +277,29 @@ export default {
 
 <style scoped>
 .personnel {
-  height: 100vh;
+  min-height: 100vh;
+  height: 1000px;
+  padding-bottom: 150px;
+  overflow: auto;
 }
 
-.personnel-title {
-  padding: 10px 0;
+.goods-title {
   background: #e4e9ef;
   border-radius: 4px;
+  padding: 15px;
 }
 
-.personnel-title > div {
+.goods-title > div {
   font-size: 20px;
   font-weight: 600;
   color: #4a4a4a;
   margin-bottom: 10px;
-  margin-left: 18px;
 }
-
-.personnel-title > p {
+.goods-title > p {
   font-size: 14px;
   color: #4a4a4a;
-  font-weight: 400;
-  text-indent: 25px;
-  margin: 0;
+  line-height: 20px;
+  padding-left: 14px;
 }
 
 .soso-box {
@@ -362,6 +380,20 @@ export default {
   width: 60px;
   margin: 0 auto;
   margin-top: 110px;
+}
+
+.addpop {
+  padding-bottom: 20px;
+}
+
+.input-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.input-col {
+  width: 410px;
 }
 
 /*表格样式*/

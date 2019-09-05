@@ -1,5 +1,13 @@
 <template>
   <div class="goods">
+    <div class="addgoods-title">
+      <div>说明</div>
+      <p>
+        1、只有审核成功的已上架的商品才会显示在小程序端。
+        <br />2、对于审核通过的商品，请及时设置各销售角色的销售提成比例。
+        <br />3、二维码可生成带有门店商品信息的小程序码，微信扫码可直接进入商品详情界面。
+      </p>
+    </div>
     <div class="goods-soso">
       <div class="keywords">
         <el-input type="text" placeholder="请输入商品名称" v-model="keywords"></el-input>
@@ -76,10 +84,10 @@
               <td v-else>--</td>
               <td v-if="item.auditStatus == '0'">待审核</td>
               <td v-if="item.auditStatus == '1'">审核通过</td>
-              <td v-if="item.auditStatus == '2'">审核失败</td>
-              <td v-if="item.isOnsell == '1' && item.auditStatus == '1'">上架</td>
+              <td v-if="item.auditStatus == '2'" style="color:red">审核失败</td>
+              <td v-if="item.isOnsell == '1' && item.auditStatus == '1'">已上架</td>
               <td v-if="item.auditStatus == '2' || item.auditStatus == '0'">--</td>
-              <td v-if="item.isOnsell == '0' && item.auditStatus == '1'" style="color:red">下架</td>
+              <td v-if="item.isOnsell == '0' && item.auditStatus == '1'">已下架</td>
               <td>
                 <span
                   style="color:red"
@@ -92,7 +100,12 @@
                 >上架</span>
                 <span @click="ewm(item)" v-if="item.auditStatus == '1'">二维码</span>
                 <span @click="open(item)" v-if="item.auditStatus == '1'">设置佣金</span>
-                <span @click="delgoods(item)" style="color:red">删除</span>
+                <span
+                  @click="delgoods(item)"
+                  style="color:red"
+                  v-if="item.auditStatus == '0' || item.auditStatus == '2'"
+                >删除</span>
+                <!-- <span @click="demo(item)">测试</span> -->
               </td>
             </tr>
           </template>
@@ -277,13 +290,17 @@ export default {
     },
 
     //获取角色列表以便于创建动态输入框
-    getrole() {
+    getrole(item) {
       let parmars = {
         shopsId: sessionStorage.getItem("shopsId")
       };
       this.$post("/shops/shopsRoleList", parmars).then(res => {
         if (res.error == "00") {
+          for (let i = 0; i < res.result.list.length; i++) {
+            res.result.list[i].commissionPercent = "";
+          }
           this.rolelist = res.result.list;
+          this.demo(item)
         }
       });
     },
@@ -294,7 +311,8 @@ export default {
         this.dialogVisible = true;
         this.commissionPercent = item.commissionPercent;
         this.goodsId = item.id;
-        this.getrole();
+        this.getrole(item);
+        // this.demo(item);
       }
     },
     //save
@@ -358,12 +376,35 @@ export default {
       };
       this.$post("/weixin/getwxTwoEconde", parmars).then(res => {
         if (res.error == "00") {
-          this.dialogVisible2 == true;
-          this.ewmimg == res.result;
+          this.dialogVisible2 = true;
+          this.ewmimg = res.result;
         } else {
           this.$message.error(res.msg);
         }
       });
+    },
+    demo(item) {
+      let parmars = {
+        id: item.id
+      };
+      this.$post("/shops/showShopsGoodsCommissionPercent", parmars).then(
+        res => {
+          if (res.error == "00" && res.result.roleList.length != 0) {
+            for (let i = 0; i < this.rolelist.length; i++) {
+              for (let j = 0; j < res.result.roleList.length; j++) {
+                if (
+                  this.rolelist[i].shopsRoleId ==
+                  res.result.roleList[j].shopsRoleId
+                ) {
+                  this.rolelist[i].commissionPercent =
+                    res.result.roleList[j].commissionPercent;
+                  console.log(res.result.roleList[j].commissionPercent);
+                }
+              }
+            }
+          }
+        }
+      );
     }
   },
   mounted() {
@@ -435,6 +476,31 @@ export default {
   width: 150px;
   height: 150px;
   margin: 20px auto;
+}
+
+.addgoods-title {
+  background: #e4e9ef;
+  width: 100%;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.addgoods-title > div {
+  font-size: 20px;
+  font-family: PingFangSC;
+  font-weight: 600;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
+  margin-bottom: 10px;
+}
+
+.addgoods-title > p {
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(74, 74, 74, 1);
+  line-height: 20px;
 }
 
 /*表格样式*/

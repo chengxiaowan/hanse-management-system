@@ -3,7 +3,7 @@
     <el-page-header @back="goBack()" content="门店全景"></el-page-header>
     <div class="add-body">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="店铺全景" name="info">
+        <el-tab-pane label="基本信息" name="info">
           <v-info></v-info>
         </el-tab-pane>
         <el-tab-pane label="销售人员" name="pop">
@@ -12,10 +12,10 @@
         <el-tab-pane label="商品信息" name="goods">
           <v-goods></v-goods>
         </el-tab-pane>
-        <el-tab-pane label="服务信息" name="service">
+        <el-tab-pane label="周边服务" name="service">
           <v-service></v-service>
         </el-tab-pane>
-        <el-tab-pane label="房间信息" name="room">
+        <el-tab-pane label="房间" name="room">
           <v-room></v-room>
         </el-tab-pane>
       </el-tabs>

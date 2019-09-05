@@ -5,7 +5,7 @@
       <p>
         1、佣金比例即商家与我方签订的商品总的佣金比例。
         <br />2、预估收益即通过商家渠道售卖商品后，商家能得到的预计总收益，具体以实际为准。
-        <br />3、二维码可生成带有酒店/民宿品牌信息的小程序码，微信扫码可直接进入商品详情界面。
+        <br />3、二维码可生成带有门店品牌信息的小程序码，微信扫码可直接进入商品详情界面。
       </p>
     </div>
     <div class="soso-goods">
@@ -14,19 +14,21 @@
       </div>
       <div class="lei">
         分类
-        <el-select placeholder="请选择" v-model="solt">
-          <el-option label="全部" value></el-option>
-          <el-option
-            v-for="item in type"
-            :key="item.typeId"
-            :label="item.name"
-            :value="item.typeId"
-          ></el-option>
-        </el-select>
+        <div class="sele-box">
+          <el-select placeholder="请选择" v-model="solt">
+            <el-option label="全部" value></el-option>
+            <el-option
+              v-for="item in type"
+              :key="item.typeId"
+              :label="item.name"
+              :value="item.typeId"
+            ></el-option>
+          </el-select>
+        </div>
       </div>
       <div class="goods-btn">
         <el-button type="primary" @click="getgoods()" icon="el-icon-search">搜索</el-button>
-        <el-button type="success" @click="open()" icon="el-icon-circle-plus-outline">添加商品</el-button>
+        <el-button type="success" @click="open()" icon="el-icon-circle-plus-outline" plain>添加商品</el-button>
       </div>
     </div>
     <div class="goods-tab">
@@ -70,15 +72,19 @@
               <td>
                 <!-- <span>查看</span> -->
                 <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="ewm(item)">二维码</span>
-                <span
-                  v-if="item.isOnsell == 1 && item.auditStatus == 1"
-                  style="color:red"
-                  @click="onsell(item,0)"
-                >下架</span>
+                <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="onsell(item,0)">下架</span>
                 <span v-if="item.isOnsell == 0 && item.auditStatus == 1" @click="onsell(item,1)">上架</span>
+                <span
+                  v-if="item.auditStatus == 2 || item.auditStatus == 0 "
+                  @click="delgoods(item)"
+                  style="color:red"
+                >删除</span>
               </td>
             </tr>
           </template>
+          <tr v-else>
+            <td colspan="10">暂时没有商品</td>
+          </tr>
         </tbody>
       </table>
       <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
@@ -232,6 +238,33 @@ export default {
           this.$message.error(res.msg);
         }
       });
+    },
+    //删除待审核和审核失败的商品
+    delgoods(item) {
+      this.$confirm("您确认删除此商品？?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let parmars = {
+            shopsBrandGoodsId: item.shopsBrandGoodsId
+          };
+          this.$post("/shopsBrand/delShopsBrandGoods", parmars).then(res => {
+            console.log(res);
+            if (res.error == "00") {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this.getgoods();
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.getlist();
+          });
+        })
+        .catch(() => {});
     }
   },
   mounted() {
@@ -248,7 +281,7 @@ export default {
   /* height: 1500px; */
   overflow: auto;
   background: #fff;
-  padding-bottom: 150px;
+  padding-bottom: 300px;
 }
 
 .goods-title {
@@ -362,6 +395,11 @@ export default {
   width: 150px;
   height: 150px;
   margin: 20px auto;
+}
+
+.sele-box {
+  width: 100px;
+  display: inline-block;
 }
 
 /*表格样式*/

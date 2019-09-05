@@ -1,5 +1,11 @@
 <template>
   <div class="room">
+    <div class="addgoods-title">
+      <div>说明</div>
+      <p>
+        1、二维码可生成带有门店房间信息的小程序码，微信扫码可直接进入房间详情界面。
+      </p>
+    </div>
     <div class="rom-soso">
       <div class="keywords">
         <el-input v-model="keywords" placeholder="请输入房间名称"></el-input>
@@ -387,16 +393,16 @@ export default {
 
     //上船前的检测--公用
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+      // const isJPG = file.type === "image/*";
       const isLt5M = file.size / 1024 / 1024 < 5;
 
-      if (!isJPG) {
-        this.$message.error("上传图片只能是 JPG 格式!");
-      }
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
       if (!isLt5M) {
         this.$message.error("上传图片大小不能超过 5MB!");
       }
-      return isJPG && isLt5M;
+      return isLt5M;
     },
     handleAvatarSuccess3(res, file) {
       let picurl = this.baseurl + res.url;
@@ -536,45 +542,52 @@ export default {
         });
       }
     },
-    //为了展示房间信息并且编辑，获取一下
+    // //为了展示房间信息并且编辑，获取一下
+    // getinfo(el) {
+    //   this.add();
+    //   this.flage = 1;
+    //   this.title = "房间详情";
+    //   this.roomId = el.shopsRoomId;
+    //   let parmars = {
+    //     shopsId: sessionStorage.getItem("shopsId"),
+    //     shopsRoomId: el.shopsRoomId
+    //   };
+    //   this.$post("/shopsLinkMan/getRoomsDetail", parmars).then(res => {
+    //     if (res.error == "00") {
+    //       let drool = res.result;
+    //       this.name = drool.roomName;
+    //       this.kai = drool.isOpen.toString();
+    //       this.dynamicTags = drool.roomLabels.split(",");
+    //       this.summary = drool.summary;
+    //       this.roompic = drool.imageUrl;
+    //       if (drool.pic[0]) {
+    //         this.pic2 = drool.pic[0];
+    //       }
+    //       if (drool.pic[1]) {
+    //         this.pic3 = drool.pic[1];
+    //       }
+    //       if (drool.pic[2]) {
+    //         this.pic4 = drool.pic[2];
+    //       }
+    //       if (drool.pic[3]) {
+    //         this.pic5 = drool.pic[3];
+    //       }
+    //       if (drool.pic[4]) {
+    //         this.pic6 = drool.pic[4];
+    //       }
+    //       if (drool.pic[5]) {
+    //         this.pic7 = drool.pic[5];
+    //       }
+    //     } else {
+    //       this.$message.error(res.msg);
+    //     }
+    //   });
+    // },
+
     getinfo(el) {
-      this.add();
-      this.flage = 1;
-      this.title = "房间详情";
-      this.roomId = el.shopsRoomId;
-      let parmars = {
-        shopsId: sessionStorage.getItem("shopsId"),
-        shopsRoomId: el.shopsRoomId
-      };
-      this.$post("/shopsLinkMan/getRoomsDetail", parmars).then(res => {
-        if (res.error == "00") {
-          let drool = res.result;
-          this.name = drool.roomName;
-          this.kai = drool.isOpen.toString();
-          this.dynamicTags = drool.roomLabels.split(",");
-          this.summary = drool.summary;
-          this.roompic = drool.imageUrl;
-          if (drool.pic[0]) {
-            this.pic2 = drool.pic[0];
-          }
-          if (drool.pic[1]) {
-            this.pic3 = drool.pic[1];
-          }
-          if (drool.pic[2]) {
-            this.pic4 = drool.pic[2];
-          }
-          if (drool.pic[3]) {
-            this.pic5 = drool.pic[3];
-          }
-          if (drool.pic[4]) {
-            this.pic6 = drool.pic[4];
-          }
-          if (drool.pic[5]) {
-            this.pic7 = drool.pic[5];
-          }
-        } else {
-          this.$message.error(res.msg);
-        }
+      sessionStorage.setItem("shopsRoomId", el.shopsRoomId);
+      this.$router.push({
+        name: "addroom"
       });
     },
     ewm(item) {
@@ -596,10 +609,11 @@ export default {
         }
       });
     },
-    tiao(){
+    tiao() {
+      sessionStorage.setItem("shopsRoomId", "");
       this.$router.push({
-        name:"addroom"
-      })
+        name: "addroom"
+      });
     }
   },
   mounted() {
@@ -695,6 +709,31 @@ export default {
   width: 150px;
   height: 150px;
   margin: 20px auto;
+}
+
+.addgoods-title {
+  background: #e4e9ef;
+  width: 100%;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.addgoods-title > div {
+  font-size: 20px;
+  font-family: PingFangSC;
+  font-weight: 600;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
+  margin-bottom: 10px;
+}
+
+.addgoods-title > p {
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(74, 74, 74, 1);
+  line-height: 20px;
 }
 /*表格样式*/
 

@@ -1,25 +1,41 @@
 <template>
   <div class="goods">
+    <div class="goods-title">
+      <div>说明</div>
+      <p>
+        1、旗下门店添加的商品在此进行审核操作。
+        <br />2、操作列点击审核按钮即可进行审核操作，审核状态选择通过代表审核通过，必须填写佣金比例；审核状态选择驳回即审核不通过。
+      </p>
+    </div>
     <div class="soso">
       <div class="brand">
         门店:
-        <el-select v-model="brand" filterable placeholder="请选择" @change="getList()">
-          <el-option label="全部" value></el-option>
-          <el-option
-            v-for="item in brandlist"
-            :key="item.shopsId"
-            :label="item.shopsName"
-            :value="item.shopsId"
-          ></el-option>
-        </el-select>
+        <div class="sele-box">
+          <el-select v-model="brand" filterable placeholder="请选择" @change="getList()">
+            <el-option label="全部" value></el-option>
+            <el-option
+              v-for="item in brandlist"
+              :key="item.shopsId"
+              :label="item.shopsName"
+              :value="item.shopsId"
+            ></el-option>
+          </el-select>
+        </div>
       </div>
       <div class="brand">
         审核状态:
-        <el-select v-model="auditStatus" filterable placeholder="请选择审核状态" @change="getList()">
-          <el-option label="待审核" value="0"></el-option>
-          <el-option label="审核通过" value="1"></el-option>
-          <el-option label="审核失败" value="2"></el-option>
-        </el-select>
+        <div class="sele-box">
+          <el-select v-model="auditStatus" filterable placeholder="请选择审核状态" @change="getList()">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="待审核" value="0"></el-option>
+            <el-option label="审核通过" value="1"></el-option>
+            <el-option label="审核失败" value="2"></el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="brand">
+        <!-- 摆设而已~两个sele都有@change事件，他图这么画了 我就加上吧,当刷新用吧-->
+        <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
       </div>
     </div>
     <div class="tab">
@@ -52,7 +68,7 @@
               <td v-if="item.auditStatus !='1'">-</td>
               <td v-else>{{item.commissionPercent}}</td>
               <td class="btn-hide">
-                <span @click="open(item)">审核</span>
+                <span @click="open(item)" v-if="item.auditStatus !='1'">审核</span>
               </td>
             </tr>
           </template>
@@ -75,7 +91,7 @@
       <div class="yes" v-if="radio == 1">
         <div>
           店铺佣金比例：
-          <el-input placeholder="请输入店铺提成比例" v-model="commissionPercent"></el-input>
+          <el-input placeholder="请输入店铺提成比例" v-model="commissionPercent" oninput ="value=value.replace(/[^0-9.]/g,'')" ></el-input>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -222,6 +238,38 @@ export default {
 .com {
   margin-top: 10px;
 }
+
+.sele-box {
+  width: 110px;
+  display: inline-block;
+}
+
+.goods-title {
+  padding: 16px 0;
+  background: #E4E9EF;
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+
+.goods-title > div {
+  font-size: 20px;
+  font-family: PingFangSC;
+  font-weight: 600;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
+  text-indent: 15px;
+  margin-bottom: 18px;
+}
+
+.goods-title > p {
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(74, 74, 74, 1);
+  line-height: 26px;
+  padding-left: 35px;
+}
+
 /*表格样式*/
 
 /*去掉表头边框+背景*/

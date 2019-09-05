@@ -1,11 +1,12 @@
 <template>
   <div class="addgoods">
-    <el-page-header @back="goback" content="详情页面"></el-page-header>
+    <el-page-header @back="goback" content="添加商品"></el-page-header>
+    <el-divider></el-divider>
     <div class="addgoods-title">
       <div>说明：</div>
       <p>
-        1、该页面显示品牌旗下商品列表，已加入门店的商品不再显示。
-        <br />2、申请加入后的商品将由品牌方确定佣金比例。
+        1、销售价取自商品的最低销售价。
+        <br />2、申请加入后的商品，需由门店对应的品牌方审核设置佣金比例等。
       </p>
     </div>
     <div class="addgoods-soso">
@@ -14,10 +15,17 @@
       </div>
       <div class="type">
         分类：
-        <el-select v-model="type" filterable placeholder="请选择">
-          <el-option label="全部" value></el-option>
-          <el-option v-for="item in types" :key="item.typeId" :label="item.name" :value="item.name"></el-option>
-        </el-select>
+        <div class="sele-box">
+          <el-select v-model="type" filterable placeholder="请选择">
+            <el-option label="全部" value></el-option>
+            <el-option
+              v-for="item in types"
+              :key="item.typeId"
+              :label="item.name"
+              :value="item.name"
+            ></el-option>
+          </el-select>
+        </div>
       </div>
       <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
     </div>
@@ -204,14 +212,19 @@ export default {
 
 .addgoods-title > div {
   font-size: 20px;
+  font-family: PingFangSC;
   font-weight: 600;
-  color: #4a4a4a;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
+  margin-bottom: 10px;
 }
 
 .addgoods-title > p {
-  font-weight: 14px;
-  line-height: 2em;
+  font-size: 14px;
+  font-family: PingFangSC;
   font-weight: 400;
+  color: rgba(74, 74, 74, 1);
+  line-height: 20px;
 }
 
 .addgoods-soso {
@@ -246,6 +259,17 @@ export default {
 
 .tab {
   margin-top: 20px;
+}
+
+.el-divider {
+  margin: 0 auto;
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
+
+.sele-box{
+  width: 100px;
+  display: inline-block;
 }
 
 /*表格样式*/

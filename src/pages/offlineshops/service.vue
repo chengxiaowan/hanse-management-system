@@ -1,11 +1,11 @@
 <template>
   <div class="service">
-    <div class="service-title">
+    <div class="addgoods-title">
       <div>说明</div>
       <p>
-        1、服务位置即服务覆盖的省市。
-        <br />2、佣金比例即商家与我方签订的商品的总佣金比例。
-        <br />3、预估收益即通过商家渠道售卖商品后，商家能得到的预计总收益，具体以实际为准。
+        1、只有审核成功的已上架的服务才会显示在小程序端。
+        <br />2、对于审核通过的服务，请及时设置各销售角色的销售提成比例。
+        <br />3、二维码可生成带有门店服务信息的小程序码，微信扫码可直接进入服务详情界面。
       </p>
     </div>
     <div class="service-soso">
@@ -56,24 +56,23 @@
               <td v-if="item.auditStatus == 1">通过</td>
               <td v-if="item.auditStatus == 2" style="color:red">失败</td>
               <td v-if="item.auditStatus == 0">待审核</td>
-              <td v-if="item.isOnsell == 1 && item.auditStatus == 1">上架</td>
-              <td v-else>--</td>
+              <td v-if="item.isOnsell == 1 && item.auditStatus == 1">已上架</td>
+              <td v-if="item.isOnsell == 0 && item.auditStatus == 1" style="color:red;">已下架</td>
+              <td v-if="item.auditStatus == 2 || item.auditStatus == 0">--</td>
 
               <td>
-                <span v-if="item.auditStatus == '1'" @click="ewm(item)">二维码</span>
                 <span v-if="item.auditStatus == 1 && item.isOnsell == 0" @click="onsell(item)">上架</span>
                 <span
                   style="color:red"
                   @click="nosell(item)"
                   v-if="item.auditStatus == 1 && item.isOnsell == 1"
                 >下架</span>
-                <el-dropdown>
-                  <span class="el-dropdown-link">更多</span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-if="item.auditStatus == 1" @click.native="open(item)">设置佣金比例</el-dropdown-item>
-                    <el-dropdown-item @click.native="delservice(item)">删除</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                <span v-if="item.auditStatus == '1' && item.isOnsell == 1" @click="ewm(item)">二维码</span>
+                <span v-if="item.auditStatus == 1 && item.isOnsell == 1" @click="open(item)">设置佣金</span>
+                <span
+                  v-if="item.auditStatus == 0 || item.auditStatus == 2"
+                  @click="delservice(item)"
+                >删除</span>
               </td>
             </tr>
           </template>
@@ -101,7 +100,9 @@
             <tr v-for="item in rolelist" :key="item.shopsRoleId">
               <td>{{item.roleName}}</td>
               <td>
-                <input type="text" placeholder="请输入提成比例%" v-model="item.commissionPercent" />
+                <div class="kuang">
+                  <el-input type="text" placeholder="请输入提成比例%" v-model="item.commissionPercent"></el-input>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -136,7 +137,7 @@ export default {
       serviceId: "",
       //ewm
       dialogVisible2: false,
-      ewmimg:""
+      ewmimg: ""
     };
   },
   methods: {
@@ -161,13 +162,17 @@ export default {
       });
     },
     //获取角色列表以便于创建动态输入框
-    getrole() {
+    getrole(item) {
       let parmars = {
         shopsId: sessionStorage.getItem("shopsId")
       };
       this.$post("/shops/shopsRoleList", parmars).then(res => {
         if (res.error == "00") {
+          for (let i = 0; i < res.result.list.length; i++) {
+            res.result.list[i].commissionPercent = "";
+          }
           this.rolelist = res.result.list;
+          this.demo(item);
         }
       });
     },
@@ -263,7 +268,7 @@ export default {
         this.dialogVisible = true;
         this.commissionPercent = item.commissionPercent;
         this.serviceId = item.id;
-        this.getrole();
+        this.getrole(item);
       }
     },
     set() {
@@ -312,12 +317,35 @@ export default {
       };
       this.$post("/weixin/getwxTwoEconde", parmars).then(res => {
         if (res.error == "00") {
-          this.dialogVisible2 == true;
-          this.ewmimg == res.result;
-        }else{
-          this.$message.error(res.msg)
+          this.dialogVisible2 = true;
+          this.ewmimg = res.result;
+        } else {
+          this.$message.error(res.msg);
         }
       });
+    },
+    demo(item) {
+      let parmars = {
+        id: item.id
+      };
+      this.$post("/shops/showShopsServiceCommissionPercent", parmars).then(
+        res => {
+          if (res.error == "00" && res.result.roleList.length != 0) {
+            for (let i = 0; i < this.rolelist.length; i++) {
+              for (let j = 0; j < res.result.roleList.length; j++) {
+                if (
+                  this.rolelist[i].shopsRoleId ==
+                  res.result.roleList[j].shopsRoleId
+                ) {
+                  this.rolelist[i].commissionPercent =
+                    res.result.roleList[j].commissionPercent;
+                  console.log(res.result.roleList[j].commissionPercent);
+                }
+              }
+            }
+          }
+        }
+      );
     }
   },
   mounted() {
@@ -335,7 +363,7 @@ export default {
   background: #fff;
 }
 
-.service-title {
+.addgoods-title {
   background: #e4e9ef;
   width: 100%;
   padding: 15px;
@@ -344,14 +372,19 @@ export default {
 
 .addgoods-title > div {
   font-size: 20px;
+  font-family: PingFangSC;
   font-weight: 600;
-  color: #4a4a4a;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
+  margin-bottom: 10px;
 }
 
 .addgoods-title > p {
-  font-weight: 14px;
-  line-height: 2em;
+  font-size: 14px;
+  font-family: PingFangSC;
   font-weight: 400;
+  color: rgba(74, 74, 74, 1);
+  line-height: 20px;
 }
 
 .service-soso {
@@ -391,7 +424,6 @@ export default {
   margin: 20px auto;
 }
 
-
 /*表格样式*/
 
 /*去掉表头边框+背景*/
@@ -423,13 +455,8 @@ tr:hover > td > span {
   display: inline;
 }
 
-td > div {
-  display: none;
-}
-
-tr:hover > td > div {
-  display: inline;
-  margin-left: 5px;
-  color: #4a90e2;
+.kuang {
+  width: 150px;
+  margin: 0 auto;
 }
 </style>

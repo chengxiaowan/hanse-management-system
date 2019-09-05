@@ -9,15 +9,20 @@
           </div>
         </div>
         <ul class="role-box">
-          <li @click="setrole()">所有角色</li>
-          <li v-for="item in rolelist" :key="item.shopsRoleId" @click="setrole(item)">
+          <li @click="setrole()" :class="activeClass == '-1' ? 'active':''">所有角色</li>
+          <li
+            v-for="item in rolelist"
+            :key="item.shopsRoleId"
+            @click="setrole(item)"
+            :class="activeClass == item.shopsRoleId ? 'active':''"
+          >
             {{item.roleName}}
             <el-dropdown>
               <span class="el-dropdown-link">
                 <i class="el-icon-more"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>编辑</el-dropdown-item>
+                <el-dropdown-item @click.native="editRole(item)">编辑</el-dropdown-item>
                 <el-dropdown-item @click.native="delrole(item)">删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -76,6 +81,17 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="newRole">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="编辑销售角色" :visible.sync="edit" width="30%" center>
+      <div class="new-box">
+        <div class="new-title">角色名称:</div>
+        <div class="keywords">
+          <el-input type="text" maxlength="30" v-model="roleNames" placeholder="请输入销售角色名称，1~30字"></el-input>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="roles()">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog title="新建销售人员" :visible.sync="centerDialogVisible2" width="60%" center>
@@ -149,7 +165,11 @@ export default {
       remarks: "",
       shopsDistributorId: "",
       flage: 0,
-      userId: ""
+      userId: "",
+      roleNames: "",
+      edit: false,
+      editroleId: "",
+      activeClass: -1 // 0为默认选择第一个，-1为不选择
     };
   },
   methods: {
@@ -172,8 +192,10 @@ export default {
       if (item) {
         this.role = item.shopsRoleId;
         this.roleId = item.shopsRoleId;
+        this.activeClass = item.shopsRoleId;
       } else {
         this.role = "";
+        this.activeClass = -1;
       }
       this.getlist();
       console.log("点了");
@@ -227,6 +249,7 @@ export default {
         this.centerDialogVisible = false;
       } else {
         this.centerDialogVisible = true;
+        this.roleName = "";
       }
     },
 
@@ -244,6 +267,8 @@ export default {
             this.$message("添加销售角色成功");
             this.getrole();
             this.centerDialogVisible = false;
+          } else {
+            this.$message.error(res.msg);
           }
         });
       }
@@ -287,6 +312,10 @@ export default {
             this.$message("添加人员成功");
             this.getlist();
             this.addUser();
+          } else if (res.error == "101") {
+            this.$message.error("该销售人员已存在");
+          } else {
+            this.$message.error(res.msg);
           }
         });
       } else if (this.flage == 1) {
@@ -298,6 +327,8 @@ export default {
             this.$message("修改人员信息成功");
             this.getlist();
             this.centerDialogVisible2 = false;
+          } else if (res.error == "101") {
+            this.$message.error("该手机号已存在");
           } else {
             this.$message.error(res.msg);
           }
@@ -348,6 +379,28 @@ export default {
           this.userId = drool.userId;
           this.centerDialogVisible2 = true;
           this.flage = 1;
+        }
+      });
+    },
+    editRole(item) {
+      this.editroleId = item.shopsRoleId;
+      this.roleNames = item.roleName;
+      this.edit = true;
+    },
+
+    roles() {
+      let parmars = {
+        roleName: this.roleNames,
+        shopsRoleId: this.editroleId,
+        shopsId: sessionStorage.getItem("shopsId")
+      };
+      this.$post("/shops/editShopsRole", parmars).then(res => {
+        if (res.error == "00") {
+          this.$message("修改角色名称成功");
+          this.getrole();
+          this.edit = false;
+        } else {
+          this.$message.error(res.msg);
         }
       });
     }
@@ -423,7 +476,7 @@ export default {
 }
 
 .role-box > li:hover {
-  background: #f5f5f5;
+  background: #d5d5d5;
 }
 
 .soso-pop {
@@ -477,6 +530,10 @@ export default {
   font-size: 16px;
   font-family: PingFangSC;
   font-weight: 400;
+}
+
+.active {
+  background: #f5f5f5;
 }
 
 /*表格样式*/

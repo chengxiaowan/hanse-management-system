@@ -2,8 +2,10 @@
   <div class="brand">
     <div class="brand-title">
       <p class="b-title">说明</p>
-      <p class="b-body">1、二维码可生成带有酒店/民宿品牌信息的小程序码。</p>
-      <p class="b-body">2、酒店/民宿品牌下有门店时，请先删除门店，在删除对应的品牌。</p>
+      <p class="b-body">
+        1、二维码可生成带有品牌信息的小程序码。
+        <br />2、品牌下有门店时，请先删除门店，在删除对应的品牌。
+      </p>
     </div>
     <div class="add">
       <el-button type="success" plain @click="add">
@@ -29,7 +31,7 @@
               <td>{{item.createTime}}</td>
               <td>
                 <span @click="view(item)">查看</span>
-                <span>二维码</span>
+                <span @click=" ewm(item)">二维码</span>
                 <span style="color:red;" @click="delbrand(item)">删除</span>
               </td>
             </tr>
@@ -40,6 +42,12 @@
         </tbody>
       </table>
     </div>
+    <el-dialog title="二维码" :visible.sync="dialogVisible" width="30%" center>
+      <img :src="ewmimg" v-if="ewmimg" class="ewmimg" />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -48,7 +56,9 @@ export default {
   data() {
     return {
       info: "品牌管理",
-      list: []
+      list: [],
+      dialogVisible: false,
+      ewmimg: ""
     };
   },
   methods: {
@@ -95,6 +105,7 @@ export default {
           this.$post("/shopsBrand/del", parmars).then(res => {
             console.log(res);
             if (res.error == "00") {
+              this.getList()
               this.$message({
                 type: "success",
                 message: "删除品牌成功!"
@@ -111,6 +122,21 @@ export default {
             message: "取消删除"
           });
         });
+    },
+    ewm(item) {
+      console.log(item);
+      let parmars = {
+        id: "relateId=" + item.shopsBrandId + ",type=1",
+        page: "pages/brandDetail/brandDetail"
+      };
+      this.$post("/weixin/getwxTwoEconde", parmars).then(res => {
+        if (res.error == "00") {
+          this.dialogVisible = true;
+          this.ewmimg = res.result;
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
     }
   },
   //挂载生命周期
@@ -143,15 +169,24 @@ export default {
 
 .b-body {
   font-size: 14px;
+  font-family: PingFangSC;
   font-weight: 400;
-  line-height: 20px;
-  margin-top: 9px;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
   margin-left: 25px;
+  padding: 0;
 }
 
 .add {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.ewmimg {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 20px auto;
 }
 
 /*表格样式*/

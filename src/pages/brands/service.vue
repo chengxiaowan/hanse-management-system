@@ -52,17 +52,17 @@
               <td v-else>-</td>
               <td v-if="item.auditStatus == 0">待审核</td>
               <td v-if="item.auditStatus == 1">审核成功</td>
-              <td v-if="item.auditStatus == 2">
-                <em class="failure">审核失败</em>
+              <td v-if="item.auditStatus == 2" style="color:red">
+                审核失败
               </td>
-              <td v-if="item.isOnsell == 0 && item.auditStatus == 1" style="color:red">下架</td>
-              <td v-if="item.isOnsell == 1 && item.auditStatus == 1">上架</td>
+              <td v-if="item.isOnsell == 0 && item.auditStatus == 1" style="color:red">已下架</td>
+              <td v-if="item.isOnsell == 1 && item.auditStatus == 1">已上架</td>
               <td v-if="item.auditStatus != 1">--</td>
-              <td class="btn-hide">
+              <td>
                 <span v-if="item.isOnsell == 0 && item.auditStatus == 1" @click="onSell(item)">上架</span>
                 <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="nosell(item)">下架</span>
                 <span v-if="item.auditStatus == 1" @click="ewm(item)">二维码</span>
-                <span @click="delservice(item)" style="color:red">删除</span>
+                <span @click="delservice(item)" style="color:red" v-if="item.auditStatus == 0 || item.auditStatus == 2">删除</span>
               </td>
             </tr>
           </template>
@@ -207,7 +207,7 @@ export default {
     },
     ewm(item) {
       let parmars = {
-        page: "pages/goodsDetail/goodsDetail",
+        page: "pages/clap/clap",
         id:
           "serviceId=" +
           item.serviceId +

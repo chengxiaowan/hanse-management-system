@@ -1,6 +1,7 @@
 <template>
   <div class="addgoods">
-    <el-page-header @back="goBack" content="添加商品" ></el-page-header>
+    <el-page-header @back="goBack" content="添加商品"></el-page-header>
+    <el-divider></el-divider>
     <div class="addgoods-title">
       <div>说明</div>
       <p>
@@ -16,15 +17,17 @@
       </div>
       <div class="lei">
         分类
-        <el-select placeholder="请选择" v-model="solt">
-          <el-option label="全部" value></el-option>
-          <el-option
-            v-for="item in type"
-            :key="item.typeId"
-            :label="item.name"
-            :value="item.typeId"
-          ></el-option>
-        </el-select>
+        <div class="sele-box">
+          <el-select placeholder="请选择" v-model="solt">
+            <el-option label="全部" value></el-option>
+            <el-option
+              v-for="item in type"
+              :key="item.typeId"
+              :label="item.name"
+              :value="item.typeId"
+            ></el-option>
+          </el-select>
+        </div>
       </div>
       <el-button type="primary" id="soso" @click="getAllgoods()" icon="el-icon-search">搜索</el-button>
     </div>
@@ -61,7 +64,12 @@
           </tbody>
         </table>
       </div>
-      <el-pagination background layout="prev, pager, next" :total="list.total" @current-change="page"></el-pagination>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="list.total"
+        @current-change="page"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -76,16 +84,14 @@ export default {
       keywords: "",
       solt: "",
       type: [],
-      pageNo:"",
-
-
+      pageNo: ""
     };
   },
   methods: {
     //返回商品页面
     goBack() {
       console.log("go back");
-      sessionStorage.setItem('table',"third")
+      sessionStorage.setItem("table", "third");
       this.$router.push({
         name: "brandsadd"
       });
@@ -110,7 +116,7 @@ export default {
         keywords: this.keywords,
         typeId: this.solt,
         skipType: 1,
-        pageNo:this.pageNo
+        pageNo: this.pageNo
       };
       this.$post("/goods/dataList3", parmars).then(res => {
         if (res.error == "00") {
@@ -147,12 +153,12 @@ export default {
           );
         })
         .catch(() => {
-          console.log("1")
+          console.log("1");
         });
     },
-    page(e){
-      this.pageNo = e
-      this.getAllgoods()
+    page(e) {
+      this.pageNo = e;
+      this.getAllgoods();
     }
   },
   mounted() {
@@ -180,20 +186,24 @@ export default {
 .addgoods-title {
   background: #e4e9ef;
   padding: 15px;
+  border-radius: 2px;
 }
 .addgoods-title > div {
   font-size: 20px;
-  font-weight: 500;
-  color: #4a4a4a;
+  font-family: PingFangSC;
+  font-weight: 600;
+  color: rgba(74, 74, 74, 1);
+  line-height: 28px;
   padding-bottom: 10px;
 }
 
 .addgoods-title > p {
   font-size: 14px;
+  font-family: PingFangSC;
   font-weight: 400;
   color: rgba(74, 74, 74, 1);
-  line-height: 20px;
-  padding-left: 18px;
+  line-height: 24px;
+  margin-left: 10px;
 }
 
 .soso {
@@ -221,11 +231,18 @@ export default {
   width: 60px;
 }
 
-.el-page-header{
-  background: #f5f5f5;
-  margin-bottom: 15px;
+.el-page-header {
   border-radius: 2px;
-  box-shadow: 2px 2px 2px #e5e5e5;
+}
+
+.sele-box {
+  width: 100px;
+  display: inline-block;
+}
+
+.el-divider{
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 
 /*表格样式*/

@@ -37,6 +37,9 @@ import addshopsservice from '../pages/offlineshops/addservice' //门店添加服
 import addroom from '../pages/offlineshops/addroom' //门店添加服务
 
 
+import demo from '../pages/demo/demo'
+
+
 
 
 
@@ -162,6 +165,11 @@ let routes = [{
                 path: 'offlineshop/addroom',
                 name: 'addroom',
                 component: addroom,
+            },
+            {
+                path: 'demo',
+                name: 'demo',
+                component: demo,
             }
         ]
     },

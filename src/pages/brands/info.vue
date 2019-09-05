@@ -1,11 +1,11 @@
 <template>
   <div class="brand-info">
-    <el-page-header @back="goBack" content="详情页面" v-if="flages == '1'"></el-page-header>
-
+    <el-page-header @back="goBack" content="新增品牌" v-if="flages == '1'"></el-page-header>
+    <el-divider v-if="flages == '1'"></el-divider>
     <div class="flex-row">
       <div class="brand-name">
         <div class="brand-title">品牌名称：</div>
-        <el-input placeholder="请输入品牌名称，1~30字" v-model="brandName" maxlength="30"></el-input>
+        <el-input placeholder="请输入品牌名称，1~30字" v-model="brandName" maxlength="30" show-word-limit></el-input>
         <i class="tips"></i>
       </div>
       <div class="flex-col"></div>
@@ -19,30 +19,19 @@
           placeholder="请输入简介"
           v-model="remark"
           maxlength="1000"
+          rows="4"
+          show-word-limit
         ></el-input>
       </div>
       <div class="flex-col"></div>
     </div>
     <div class="flex-row">
       <div class="flex-col">
-        <div class="brand-title">标签：</div>
-        <el-tag
-          :key="tag"
-          v-for="tag in dynamicTags"
-          closable
-          :disable-transitions="false"
-          @close="handleClose(tag)"
-        >{{tag}}</el-tag>
-        <el-input
-          class="input-new-tag"
-          v-if="inputVisible"
-          v-model="inputValue"
-          ref="saveTagInput"
-          size="small"
-          @keyup.enter.native="handleInputConfirm"
-          @blur="handleInputConfirm"
-        ></el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 点击输入标签</el-button>
+        <div class="brand-title">
+          标签：
+          <span class="tag-tips">建议每个标签2-5字</span>
+        </div>
+        <input-tag placeholder="添加标签,按回车生成标签。" v-model="tags" :limit="limit" addTagOnBlur="true"></input-tag>
       </div>
       <div class="flex-col"></div>
     </div>
@@ -50,12 +39,12 @@
     <div class="image-up">
       <div class="image-title">
         <h3>图片</h3>
-        <p>1、请上传png,jpg,jpeg等规范格式的图片，大小不能超过5MB 。</p>
         <p>
-          2、精美的logo和封面能吸引更多的关注哦，请参考
+          1、请上传png,jpg,jpeg等规范格式的图片，大小不能超过5MB 。
+          <br />2、精美的logo和封面能吸引更多的关注哦，请参考
           <span>图片示例</span>。
+          <br />3、如发现图片无法删除的情况，请先清除浏览器缓存或者换个浏览器再操作。
         </p>
-        <p>3、如发现图片无法删除的情况，请先清除浏览器缓存或者换个浏览器再操作。</p>
       </div>
       <div class="brand-logo">
         <p class="image-tips">LOGO</p>
@@ -114,31 +103,12 @@ export default {
       remark: "",
       shopsBrandId: "",
       flage: "",
-      flages: "1"
+      flages: "1",
+      tags: [],
+      limit: 5
     };
   },
   methods: {
-    //标签输入器支持
-    handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-    },
-
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        this.dynamicTags.push(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = "";
-    },
-
     goBack() {
       history.go(-1);
     },
@@ -154,18 +124,18 @@ export default {
       this.pic = this.baseurl + res.url;
     },
 
-    //上船前的检测
+    //上船前的检测--公用
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+      // const isJPG = file.type === "image/*";
       const isLt5M = file.size / 1024 / 1024 < 5;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
       if (!isLt5M) {
-        this.$message.error("上传头像图片大小不能超过 5MB!");
+        this.$message.error("上传图片大小不能超过 5MB!");
       }
-      return isJPG && isLt5M;
+      return isLt5M;
     },
 
     //token获取
@@ -200,13 +170,14 @@ export default {
           logoPath: this.logo,
           imagePath: this.pic,
           shopsBrandPicList: "",
-          labels: this.dynamicTags.join(",")
+          labels: this.tags.join(",") || ""
         };
         this.$post("/shopsBrand/edit", parmars).then(res => {
           if (res.error == "00") {
             this.$message("修改成功，请继续添加其他信息");
-            this.shopsBrandId = res.shopsBrandId;
-            sessionStorage.setItem("shopsBrandId", res.shopsBrandId);
+            // this.shopsBrandId = res.shopsBrandId;
+            //多了一行，难受，注释
+            // sessionStorage.setItem("shopsBrandId", res.shopsBrandId);
           } else {
             this.$message(res.msg);
           }
@@ -219,13 +190,14 @@ export default {
           logoPath: this.logo,
           imagePath: this.pic,
           shopsBrandPicList: "",
-          labels: this.dynamicTags.join(",")
+          labels: this.tags.join(",") || ""
         };
         this.$post("/shopsBrand/add", parmars).then(res => {
           if (res.error == "00") {
-            this.$message("保存成功，请继续添加其他信息");
+            this.$message("保存成功");
             this.shopsBrandId = res.shopsBrandId;
             sessionStorage.setItem("shopsBrandId", res.shopsBrandId);
+            this.goBack();
           } else {
             this.$message(res.msg);
           }
@@ -248,7 +220,7 @@ export default {
   mounted() {
     this.getToken();
     this.shopsBrandId = sessionStorage.getItem("shopsBrandId");
-    this.dynamicTags = sessionStorage.getItem("labels").split(",");
+    this.tags = sessionStorage.getItem("labels").split(",");
     this.flages = sessionStorage.getItem("flages");
     console.log(sessionStorage.getItem("labels"));
     if (this.shopsBrandId) {
@@ -268,8 +240,10 @@ export default {
   width: 690px;
 }
 
-/* .brand-info {
-} */
+.brand-info {
+  background: #fff;
+  height: 100vh;
+}
 
 .brand-name {
   position: relative;
@@ -277,9 +251,10 @@ export default {
 
 .brand-title {
   margin-bottom: 5px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #000;
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
 }
 
 .el-page-header {
@@ -333,7 +308,10 @@ export default {
 
 .image-title > p {
   font-size: 12px;
-  color: #6b6b6b;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(107, 107, 107, 1);
+  line-height: 19px;
 }
 
 .image-title > p > span {
@@ -363,6 +341,15 @@ export default {
 .save {
   text-align: center;
   margin-top: 80px;
+}
+
+.tag-tips {
+  float: right;
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(184, 184, 184, 1);
+  line-height: 20px;
 }
 
 /*标签支持*/
@@ -404,5 +391,10 @@ export default {
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.el-divider {
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 </style>

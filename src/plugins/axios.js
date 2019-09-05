@@ -6,7 +6,7 @@ import {
   Loading
 } from 'element-ui'
 // 响应时间
-axios.defaults.timeout = 500 * 1000
+axios.defaults.timeout = 5 * 1000
 // 配置cookie
 axios.defaults.withCredentials = true //允许携带cookie
 // 配置请求头

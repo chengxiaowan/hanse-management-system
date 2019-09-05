@@ -1,6 +1,8 @@
 <template>
   <div class="brandsadd">
-    <el-page-header @back="goBack" content="添加品牌"></el-page-header>
+    <el-page-header @back="goBack" content="品牌详情"></el-page-header>
+    <!-- 各种丑，涮了 不要了 -->
+    <!-- <el-divider></el-divider> -->
     <div class="add-body">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="基本信息" name="first">
@@ -12,7 +14,7 @@
         <el-tab-pane label="商品信息" name="third">
           <v-goods></v-goods>
         </el-tab-pane>
-        <el-tab-pane label="服务信息" name="fourth">
+        <el-tab-pane label="周边服务" name="fourth">
           <v-service></v-service>
         </el-tab-pane>
       </el-tabs>
@@ -76,4 +78,8 @@ export default {
 }
 /* .el-tab-pane{
 } */
+
+.el-divider{
+  margin:0 auto;
+}
 </style>

@@ -2,7 +2,7 @@
   <div class="offlineshop">
     <div class="shops-title">
       <div>说明</div>
-      <p>1、二维码可生成带有酒店/民宿信息的小程序码。</p>
+      <p>1、二维码可生成带有门店信息的小程序码。</p>
     </div>
     <div class="soso">
       <div class="keywords">
@@ -17,7 +17,7 @@
         </el-select>
       </div>
       <div class="sele">
-        审核
+        审核状态
         <el-select v-model="audit" placeholder="请选择">
           <el-option label="全部" value></el-option>
           <el-option label="待审核" value="0"></el-option>
@@ -40,8 +40,8 @@
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
-            <th width="20%">门店名称</th>
-            <th width="10%">联系电话</th>
+            <th width="30%">门店名称</th>
+            <!-- <th width="10%">联系电话</th> -->
             <th width="10%">类型</th>
             <!--<th width="20%">店铺标签</th>-->
             <!--<th width="10%">营业时间</th>-->
@@ -57,18 +57,18 @@
               <td>
                 <a @click="view(item);">{{item.shopsName}}</a>
               </td>
-              <td>{{item.phone}}</td>
+              <!-- <td>{{item.phone}}</td> -->
               <td>{{item.shopsType=='1'?'酒店':'民宿'}}</td>
               <!--<td>{{item.labels}}</td>-->
               <!--<td>{{item.businessHours}}</td>-->
-              <td>{{item.address}}</td>
-              <td
-                :class="{'htz-red':item.status=='2'}"
-              >{{item.status=='0'?'待审核':(item.status=='1'?'审核通过':'审核失败')}}</td>
+              <td>{{item.province}} {{item.city}} {{item.area}} {{item.address}}</td>
+              <td v-if="item.status == 0">待审核</td>
+              <td v-if="item.status == 1">审核通过</td>
+              <td v-if="item.status == 2" style="color:red">审核失败</td>
               <!--<td>{{item.createTime}}</td>-->
-              <td class="btn-hide">
+              <td>
                 <span @click="open(item)">查看</span>
-                <span v-if="item.status=='1'">二维码</span>
+                <span v-if="item.status=='1'" @click="ewm(item)">二维码</span>
                 <span style="color:red" @click="delshpos(item)">删除</span>
               </td>
             </tr>
@@ -79,6 +79,12 @@
         </tbody>
       </table>
     </div>
+    <el-dialog title="二维码" :visible.sync="dialogVisible" width="30%" center>
+      <img :src="ewmimg" v-if="ewmimg" class="ewmimg" />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -90,7 +96,9 @@ export default {
       keywords: "",
       type: "",
       audit: "",
-      list: []
+      list: [],
+      dialogVisible: false,
+      ewmimg: ""
     };
   },
   methods: {
@@ -115,6 +123,8 @@ export default {
     add() {
       sessionStorage.removeItem("shopsId");
       sessionStorage.removeItem("shopslabel");
+      sessionStorage.setItem("shopsType", "1");
+
       this.$router.push({
         name: "addOffineShops"
       });
@@ -125,9 +135,17 @@ export default {
       sessionStorage.setItem("shopsId", item.shopsId);
       sessionStorage.setItem("shopslabel", item.labels);
       sessionStorage.setItem("shopsBrandId", item.shopsBrandId);
-      this.$router.push({
-        name: "shopsinfo"
-      });
+      if (item.status == "0" || item.status == "0") {
+        sessionStorage.setItem("shopsType", "1");
+        this.$router.push({
+          name: "addOffineShops"
+        });
+      } else {
+        sessionStorage.setItem("shopsType", "0");
+        this.$router.push({
+          name: "shopsinfo"
+        });
+      }
     },
     //删除
     delshpos(item) {
@@ -159,6 +177,21 @@ export default {
             message: "取消删除"
           });
         });
+    },
+    ewm(item) {
+      console.log(item);
+      let parmars = {
+        id: "relateId=" + item.shopsId + ",type=1",
+        page: "pages/shopDetail/shopDetail"
+      };
+      this.$post("/weixin/getwxTwoEconde", parmars).then(res => {
+        if (res.error == "00") {
+          this.dialogVisible = true;
+          this.ewmimg = res.result;
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
     }
   },
   mounted() {
@@ -227,6 +260,10 @@ export default {
 .tab {
   width: 100%;
   overflow: auto;
+}
+
+.htz-red {
+  color: red;
 }
 
 /*表格样式*/
