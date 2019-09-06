@@ -105,7 +105,7 @@ export default {
       flage: "",
       flages: "1",
       tags: [],
-      limit: 5
+      limit: 10
     };
   },
   methods: {

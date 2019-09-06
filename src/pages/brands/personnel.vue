@@ -110,7 +110,8 @@ export default {
       dialogVisible: false,
       pageNo: "",
       total: 1,
-      isphone:false
+      isphone:false,
+      userId:"",
     };
   },
   methods: {
@@ -161,15 +162,16 @@ export default {
           mobilePhone: this.phone,
           password: "123456",
           email: this.email,
-          QQ: this.qq,
+          qq: this.qq,
           remark: this.remark
         };
         if (this.flage == 1) {
           parmars.shopsBrandShopsOwnerId = this.id;
+          parmars.userId = this.userId;
           this.$post("/shopsBrand/editShopsBrandShopsOwner", parmars).then(
             res => {
               if (res.error == "00") {
-                this.message("修改成功");
+                this.$message("修改成功");
                 this.dialogVisible = false;
               } else {
                 this.$message.error("该手机号码已存在");
@@ -240,6 +242,7 @@ export default {
       this.dialogVisible = true;
       this.flage = 1;
       this.id = item.shopsBrandShopsOwnerId;
+      this.userId = item.userId;
       let parmars = {
         shopsBrandShopsOwnerId: item.shopsBrandShopsOwnerId
       };

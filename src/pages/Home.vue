@@ -26,7 +26,8 @@
           <el-menu-item-group>
             <el-menu-item index="/goods">商品审核</el-menu-item>
             <el-menu-item index="/service">服务审核</el-menu-item>
-            <el-menu-item index="/shops">门店审核</el-menu-item>
+            <!-- 暂时隐藏 未完成 -->
+            <!-- <el-menu-item index="/shops">门店审核</el-menu-item> -->
           </el-menu-item-group>
         </el-submenu>
         <el-menu-item index="/brand" v-if="role=='7'|| role == '8'">

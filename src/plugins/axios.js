@@ -15,11 +15,11 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 Vue.prototype.$static = ''
 
 // 配置接口地址 开发
-axios.defaults.baseURL = '/api'
+// axios.defaults.baseURL = '/api'
 //测试
 // axios.defaults.baseURL = 'http://192.168.0.107:8080'
 //线上
-// axios.defaults.baseURL = ''
+axios.defaults.baseURL = ''
 var loadingInstance
 // POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use(
@@ -28,7 +28,7 @@ axios.interceptors.request.use(
       lock: true,
       text: '数据加载中，请稍后...',
       spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.7)'
+      background: 'rgba(0, 0, 0, 0)'
     })
     if (config.method === 'post') {
       config.data = qs.stringify(config.data)

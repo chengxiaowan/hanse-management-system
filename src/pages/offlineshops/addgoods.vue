@@ -117,7 +117,8 @@ export default {
         auditStatus: 1,
         pageNo: this.pageNo,
         keywords: this.keywords,
-        typeName: this.type
+        typeName: this.type,
+        isOnsell:"1"
       };
       this.$post("/shopsBrand/showAShopsBrandGoods", parmars).then(res => {
         if (res.error == "00") {

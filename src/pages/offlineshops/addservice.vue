@@ -85,7 +85,7 @@ export default {
       serviceId: "",
       total: "",
       pageNo: "",
-      isOnsell: ""
+      isOnsell: "1"
     };
   },
   methods: {

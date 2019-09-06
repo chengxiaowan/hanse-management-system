@@ -18,7 +18,7 @@
       </div>
       <div class="tag-box">
         <div>标签：</div>
-        <input-tag placeholder="请输入标签，按回车键生成" v-model="tags" limit=5 addTagOnBlur="true"></input-tag>
+        <input-tag placeholder="请输入标签，按回车键生成" v-model="tags" limit=10 addTagOnBlur="true"></input-tag>
       </div>
     </div>
     <div class="textarea-box">

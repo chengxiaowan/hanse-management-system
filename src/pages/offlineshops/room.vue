@@ -602,8 +602,8 @@ export default {
       };
       this.$post("/weixin/getwxTwoEconde", parmars).then(res => {
         if (res.error == "00") {
-          this.dialogVisible2 == true;
-          this.ewmimg == res.result;
+          this.dialogVisible2 = true;
+          this.ewmimg = res.result;
         } else {
           this.$message.error(res.msg);
         }

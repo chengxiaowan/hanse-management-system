@@ -11,7 +11,15 @@
         <div class="min-box">
           <div class="minn-box te">
             所属品牌：
-            <el-select v-model="brand" filterable placeholder="请选择">
+            <el-select v-model="brand" filterable placeholder="请选择" v-if="status != '1'">
+              <el-option
+                v-for="item in brandlist"
+                :key="item.shopsBrandId"
+                :label="item.brandName"
+                :value="item.shopsBrandId"
+              ></el-option>
+            </el-select>
+            <el-select v-model="brand" filterable placeholder="请选择" disabled  v-if="status == '1'">
               <el-option
                 v-for="item in brandlist"
                 :key="item.shopsBrandId"
@@ -55,7 +63,7 @@
             标签：
             <span class="tag-tips">建议每个标签2-5字</span>
           </div>
-          <input-tag placeholder="添加标签,按回车生成标签。" v-model="tags" :limit="5" :addTagOnBlur="true"></input-tag>
+          <input-tag placeholder="添加标签,按回车生成标签。" v-model="tags" limit=10 :addTagOnBlur="true"></input-tag>
         </div>
       </div>
       <div class="input-box">
@@ -283,7 +291,8 @@ export default {
       flage: 0,
       bobo: 0,
       userId: "",
-      tags: ""
+      tags: "",
+      status:""
     };
   },
   methods: {
@@ -523,6 +532,7 @@ export default {
           this.brand = res.result.shopsBrandId + "";
           this.remark = res.result.summary;
           this.address = res.result.address;
+          this.status = res.result.status
           if (sessionStorage.getItem("shopslable") == "") {
             this.tags = [];
           } else {

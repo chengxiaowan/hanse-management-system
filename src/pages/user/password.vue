@@ -105,7 +105,7 @@ export default {
           verificationCode: this.code,
           password: this.password
         };
-        this.$post("service/updatePassword", parmars)
+        this.$get("/service/updatePassword", parmars)
           .then(res => {
             if (res.error == "00") {
               this.$message("修改密码成功！");

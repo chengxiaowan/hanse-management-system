@@ -266,6 +266,13 @@ export default {
   color: red;
 }
 
+.ewmimg {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 20px auto;
+}
+
 /*表格样式*/
 
 /*去掉表头边框+背景*/
