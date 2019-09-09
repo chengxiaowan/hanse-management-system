@@ -24,6 +24,7 @@ module.exports = {
                 Popper: ['popper.js', 'default']
             })
         ]
-    }
+    },
 
+    publicPath: '/static/merchants/'
 }

@@ -25,7 +25,8 @@
             <th width="20%">手机号</th>
             <th width="20%">邮箱</th>
             <th width="20%">备注</th>
-            <th width="20%">操作</th>
+            <th width="10%">状态</th>
+            <th width="10%">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -35,6 +36,8 @@
               <td>{{item.mobilePhone}}</td>
               <td>{{item.email}}</td>
               <td>{{item.remark}}</td>
+              <td v-if="item.isQuit == '1'">离职</td>
+              <td v-if="item.isQuit == '0'">在职</td>
               <td>
                 <span @click="getinfo(item)">查看</span>
                 <span style="color:red;" @click="deluser(item)" v-if="item.isQuit == '0'">离职</span>
@@ -219,9 +222,9 @@ export default {
         .then(() => {
           let parmars = {
             userId: item.userId,
-            isQuit: 1
+            // isQuit: 1
           };
-          this.$post("/user/changeIsQuit", parmars).then(res => {
+          this.$post("/user/changeIsQuit1", parmars).then(res => {
             console.log(res);
             if (res.error == "00") {
               this.$message({
@@ -239,7 +242,6 @@ export default {
     },
     //读取负责人信息（查看和修改）
     getinfo(item) {
-      this.dialogVisible = true;
       this.flage = 1;
       this.id = item.shopsBrandShopsOwnerId;
       this.userId = item.userId;
@@ -255,6 +257,7 @@ export default {
             this.email = drool.email;
             this.qq = drool.QQ;
             this.remark = drool.remark;
+            this.dialogVisible = true;
           } else {
             this.$message.error(res.msg);
           }

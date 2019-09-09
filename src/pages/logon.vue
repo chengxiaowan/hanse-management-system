@@ -64,10 +64,11 @@ export default {
           value: "8",
           label: "民宿"
         },
-        {
-          value: "10",
-          label: "摄影"
-        },
+        //暂时去掉
+        // {
+        //   value: "10",
+        //   label: "摄影"
+        // },
         {
           value: "9",
           label: "公寓"
@@ -180,6 +181,7 @@ export default {
 .logon {
   position: relative;
   height: 100vh;
+  background: #F5F5F6;
 }
 
 .logon-box {
