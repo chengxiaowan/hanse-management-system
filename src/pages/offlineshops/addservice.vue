@@ -26,9 +26,9 @@
       <!-- <div class="keywords">
         地区：
         <v-distpicker hide-area></v-distpicker>
-      </div> -->
+      </div>-->
       <div class="soso-btns">
-        <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getlist()" size="small">搜索</el-button>
       </div>
     </div>
     <div class="tab">
@@ -285,5 +285,16 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.keywords >>> .el-input__inner {
+  height: 35px;
+  border-radius: 2px;
+}
+
+.sele-box >>> .el-input__inner {
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
 }
 </style>

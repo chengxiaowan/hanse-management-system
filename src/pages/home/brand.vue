@@ -8,8 +8,7 @@
       </p>
     </div>
     <div class="add">
-      <el-button type="success" plain @click="add">
-        <i class="el-icon-circle-plus-outline"></i>
+      <el-button type="success" @click="add" icon="el-icon-circle-plus-outline" size="small">
         添加
       </el-button>
     </div>

@@ -7,18 +7,20 @@
         名称：
         <el-input placeholder="请输入房间名称，1~30字" v-model="name"></el-input>
       </div>
-      <div class="sele-box">
-        是否公开：
-        <div>
-          <el-select v-model="kai" placeholder="请选择">
-            <el-option label="是" value="1"></el-option>
-            <el-option label="否" value="0"></el-option>
-          </el-select>
+      <div class="input-box">
+        <div class="sele-box">
+          是否公开：
+          <div>
+            <el-select v-model="kai" placeholder="请选择">
+              <el-option label="是" value="1"></el-option>
+              <el-option label="否" value="0"></el-option>
+            </el-select>
+          </div>
         </div>
-      </div>
-      <div class="tag-box">
-        <div>标签：</div>
-        <input-tag placeholder="请输入标签，按回车键生成" v-model="tags" limit=10 addTagOnBlur="true"></input-tag>
+        <div class="tag-box">
+          <div>标签：</div>
+          <input-tag placeholder="请输入标签，按回车键生成" v-model="tags" limit="10" addTagOnBlur="true"></input-tag>
+        </div>
       </div>
     </div>
     <div class="textarea-box">
@@ -154,7 +156,7 @@
       <div class="goods-title">
         <span>房间商品</span>
         <div class="btn-box">
-          <el-button type="success" @click="dialogVisible = true">新增</el-button>
+          <el-button type="success" @click="dialogVisible = true" size="small">新增</el-button>
         </div>
       </div>
       <div class="tab">
@@ -214,7 +216,7 @@
           </div>
         </div>
         <div class="soso-btns">
-          <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="getlist()" size="small">搜索</el-button>
         </div>
       </div>
       <div class="tab">
@@ -694,9 +696,10 @@ export default {
   background: #fff;
   height: 1700px;
   font-size: 16px;
-  font-weight: 500;
-  overflow: auto;
-  padding-bottom: 150px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  line-height: 22px;
 }
 
 .el-page-header {
@@ -712,24 +715,30 @@ export default {
   width: 100%;
   overflow: hidden;
   padding-top: 39px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .input-box {
   width: 690px;
-  float: left;
-  margin-right: 113px;
-  margin-left: 85px;
+  /* float: left; */
+  /* margin-right: 113px; */
+  /* margin-left: 85px; */
+  margin-bottom: 15px;
 }
 
 .sele-box {
   float: left;
   width: 106px;
-  margin-right: 31px;
+  margin-right: 30px;
+  /* margin-left: 30px; */
 }
 
 .tag-box {
   float: left;
-  width: 560px;
+  width: 480px;
+  margin-left: 30px;
 }
 
 .textarea-box {
@@ -788,6 +797,7 @@ export default {
   border: 1px dashed #e2e9f0;
   position: relative;
   float: left;
+  margin-bottom: 15px;
 }
 
 .image-tips {
@@ -885,6 +895,45 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.input-box >>> .el-input > .el-input__inner {
+  margin-top: 6px;
+}
+
+/* .sele-box >>> .el-select {
+  margin-top: 6px;
+} */
+
+.tag-box >>> .vue-input-tag-wrapper {
+  border: 1px solid #e4e7ed;
+  border-radius: 2px;
+  margin-top: 6px;
+}
+
+.tag-box >>> .vue-input-tag-wrapper > .input-tag {
+  border: 1px solid #fff;
+  color: #fff;
+  background: #4a90e2;
+}
+
+.tag-box >>> .vue-input-tag-wrapper > .input-tag > .remove {
+  color: #fff;
+}
+
+.textarea-box >>> .el-textarea {
+  margin-top: 6px;
+}
+
+.inputs-box >>> .el-input__inner {
+  height: 35px;
+  border-radius: 2px;
+}
+
+.sele-box >>> .el-input__inner {
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
 }
 </style>
     

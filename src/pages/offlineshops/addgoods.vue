@@ -27,7 +27,7 @@
           </el-select>
         </div>
       </div>
-      <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="getlist()" size="small">搜索</el-button>
     </div>
     <div class="tab">
       <table class="table table-bordered table-hover">
@@ -302,5 +302,16 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.keywords >>> .el-input__inner {
+  height: 35px;
+  border-radius: 2px;
+}
+
+.sele-box >>> .el-input__inner {
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
 }
 </style>

@@ -13,8 +13,8 @@
         <el-input v-model="keywords" placeholder="请输入负责人姓名"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary" @click="getlist()" icon="el-icon-search">搜索</el-button>
-        <el-button type="success" @click="showAdd()" icon="el-icon-circle-plus-outline" plain>新增</el-button>
+        <el-button type="primary" @click="getlist()" icon="el-icon-search" size="small">搜索</el-button>
+        <el-button type="success" @click="showAdd()" icon="el-icon-circle-plus-outline " size="small">新增</el-button>
       </div>
     </div>
     <div class="user-list">
@@ -88,8 +88,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="save()">确 定</el-button>
+        <el-button @click="dialogVisible = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="save()" size="small">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -283,10 +283,10 @@ export default {
 
 <style scoped>
 .personnel {
-  min-height: 100vh;
+  /* min-height: 100vh; */
   height: 1000px;
-  padding-bottom: 150px;
-  overflow: auto;
+  padding-bottom: 400px;
+  /* overflow: auto; */
 }
 
 .goods-title {
@@ -430,5 +430,21 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.input-col >>> .el-input > .el-input__inner{
+  height: 30px;
+  font-size: 12px;
+  line-height: 30px;
+  border-radius: 2px;
+  margin-top: 6px;
+}
+
+.soso-inputs >>> .el-input > .el-input__inner{
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
+  border-radius: 2px;
+  /* margin-top: 6px; */
 }
 </style>

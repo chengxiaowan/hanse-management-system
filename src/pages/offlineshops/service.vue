@@ -13,12 +13,12 @@
         <el-input placeholder="请输入服务名称" v-model="keywords"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary" @click="getlist()" icon="el-icon-search">搜索</el-button>
+        <el-button type="primary" @click="getlist()" icon="el-icon-search" size="small">搜索</el-button>
         <el-button
           type="success"
-          plain
           @click="addservice()"
           icon="el-icon-circle-plus-outline"
+          size="small"
         >添加服务</el-button>
       </div>
     </div>
@@ -458,5 +458,16 @@ tr:hover > td > span {
 .kuang {
   width: 150px;
   margin: 0 auto;
+}
+
+.keywords >>> .el-input__inner {
+  height: 35px;
+  border-radius: 2px;
+}
+
+.sele-box >>> .el-input__inner {
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
 }
 </style>

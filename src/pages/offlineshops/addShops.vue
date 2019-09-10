@@ -19,7 +19,7 @@
                 :value="item.shopsBrandId"
               ></el-option>
             </el-select>
-            <el-select v-model="brand" filterable placeholder="请选择" disabled  v-if="status == '1'">
+            <el-select v-model="brand" filterable placeholder="请选择" disabled v-if="status == '1'">
               <el-option
                 v-for="item in brandlist"
                 :key="item.shopsBrandId"
@@ -63,7 +63,7 @@
             标签：
             <span class="tag-tips">建议每个标签2-5字</span>
           </div>
-          <input-tag placeholder="添加标签,按回车生成标签。" v-model="tags" limit=10 :addTagOnBlur="true"></input-tag>
+          <input-tag placeholder="添加标签,按回车生成标签。" v-model="tags" limit="10" :addTagOnBlur="true"></input-tag>
         </div>
       </div>
       <div class="input-box">
@@ -292,7 +292,7 @@ export default {
       bobo: 0,
       userId: "",
       tags: "",
-      status:""
+      status: ""
     };
   },
   methods: {
@@ -532,7 +532,7 @@ export default {
           this.brand = res.result.shopsBrandId + "";
           this.remark = res.result.summary;
           this.address = res.result.address;
-          this.status = res.result.status
+          this.status = res.result.status;
           if (sessionStorage.getItem("shopslable") == "") {
             this.tags = [];
           } else {
@@ -595,10 +595,14 @@ export default {
 </script>
 
 <style scoped>
-/* .add {
-  height: 1000px;
-  overflow: auto;
-} */
+.add {
+  min-height: 1500px;
+  background: #fff;
+
+  /* overflow: auto; */
+  /* padding-bottom: 400px; */
+  
+}
 
 .el-page-header {
   height: 40px;
@@ -615,9 +619,9 @@ export default {
   /* margin: 15px; */
   background: #fff;
   /* width: 100%; */
-  height: 100%;
+  /* height: 100%; */
   /* overflow: auto; */
-  padding-bottom: 150px;
+  /* padding-bottom: 150px; */
 }
 
 .input-box {
@@ -629,7 +633,7 @@ export default {
 
 .min-box {
   width: 690px;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin-bottom: 20px;
   font-size: 14px;
   font-family: PingFangSC;
@@ -708,6 +712,7 @@ textarea {
 .update {
   overflow: hidden;
   margin-left: 80px;
+  /* margin-bottom: 10px; */
 }
 
 .avatar-uploader .el-upload {
@@ -740,6 +745,8 @@ textarea {
   position: relative;
   float: left;
   margin-right: 29px;
+  margin-bottom: 10px;
+
 }
 
 .image-tips {
@@ -760,5 +767,34 @@ textarea {
   font-weight: 400;
   color: rgba(184, 184, 184, 1);
   line-height: 20px;
+}
+
+.min-box >>> .el-input > .el-input__inner {
+  height: 30px;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.min-box >>> .distpicker-address-wrapper select {
+  height: 30px;
+  font-size: 12px;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.min-box >>> .vue-input-tag-wrapper {
+  border: 1px solid #dcdfe6;
+  border-radius: 2px;
+  margin-top: 5px;
+}
+
+.min-box >>> .vue-input-tag-wrapper > .input-tag {
+  background: #4a90e2;
+  border: 1px solid #4a90e2;
+  color: #fff;
+}
+
+.min-box >>> .vue-input-tag-wrapper > .input-tag > .remove {
+  color: #fff;
 }
 </style>

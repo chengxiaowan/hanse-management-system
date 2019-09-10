@@ -5,7 +5,7 @@
         <div class="menu-box-title">
           <span>销售角色</span>
           <div class="btn-box">
-            <el-button type="primary" style="width:72px;" @click="addRole">新增</el-button>
+            <el-button type="primary" style="width:72px;" @click="addRole" size="small">新增</el-button>
           </div>
         </div>
         <ul class="role-box">
@@ -35,8 +35,8 @@
             <el-input type="text" v-model="keywords" placeholder="请输入姓名、手机号码"></el-input>
           </div>
           <div class="soso-btns">
-            <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
-            <el-button type="success" plain @click="addUser" icon="el-icon-circle-plus-outline">新增销售</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="getlist()" size="small">搜索</el-button>
+            <el-button type="success" @click="addUser" icon="el-icon-circle-plus-outline" size="small">新增销售</el-button>
           </div>
         </div>
         <div class="tab">
@@ -94,7 +94,7 @@
         <el-button type="primary" @click="roles()">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="新建销售人员" :visible.sync="centerDialogVisible2" width="60%" center>
+    <el-dialog :title="titles" :visible.sync="centerDialogVisible2" width="60%" center>
       <div class="flex-row">
         <div class="min-box">
           姓名：
@@ -169,7 +169,8 @@ export default {
       roleNames: "",
       edit: false,
       editroleId: "",
-      activeClass: -1 // 0为默认选择第一个，-1为不选择
+      activeClass: -1, // 0为默认选择第一个，-1为不选择
+      titles:""
     };
   },
   methods: {
@@ -285,6 +286,7 @@ export default {
         this.QQ = "";
         this.email = "";
         this.remarks = "";
+        this.titles = "新建销售"
       }
     },
 
@@ -379,6 +381,7 @@ export default {
           this.userId = drool.userId;
           this.centerDialogVisible2 = true;
           this.flage = 1;
+          this.titles = "编辑销售"
         }
       });
     },
@@ -566,4 +569,21 @@ td > span {
 tr:hover > td > span {
   display: inline;
 }
+
+.keywords >>> .el-input__inner{
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
+  border-radius: 2px;
+}
+
+.min-box >>> .el-input__inner{
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
+  border-radius: 2px;
+  margin-top: 6px;
+}
+
+
 </style>

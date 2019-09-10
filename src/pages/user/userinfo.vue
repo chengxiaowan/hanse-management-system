@@ -6,28 +6,28 @@
       <div class="info-user">
         <div class="title-user" style="color:#000">基本信息</div>
         <div class="user-role">
-          <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>身份：
-          <el-radio v-model="role" label="0" style="margin-left:8px">个人</el-radio>
-          <el-radio v-model="role" label="1">企业（含企业、团体、组织）</el-radio>
+          <i>*</i>身份：
+          <el-radio v-model="role" label="0" style="margin-left:8px" class="test">个人</el-radio>
+          <el-radio v-model="role" label="1" class="test">企业（含企业、团体、组织）</el-radio>
         </div>
         <div class="user-name">
-          <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>
+          <i v-if="role == '1'">*</i>
           <span v-if="role == '1'">企业名称：</span>
-          <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;姓名：</span>
+          <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>*</i>姓名：</span>
           <div class="user-name-input">
-            <el-input v-model="name" placeholder="请输入企业名称" v-if="role == '1'"></el-input>
-            <el-input v-model="name" placeholder="请输入您的真实姓名" v-else></el-input>
+            <el-input v-model="name" placeholder="请输入企业名称" v-if="role == '1'" class="woner-input"></el-input>
+            <el-input v-model="name" placeholder="请输入您的真实姓名" v-else class="woner-input"></el-input>
           </div>
         </div>
         <div class="user-type">
-          <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>经营类型：
+          <i>*</i>经营类型：
           <span style="color:#333;margin-left:8px;">{{type}}</span>
         </div>
       </div>
       <div class="link-user">
         <div class="title-user" style="color:#000">联系信息</div>
         <div class="user-type">
-          <i class="iconfont icon-xinghao" style="color:red;font-size:12px;"></i>所在地区：
+         <i>*</i>所在地区：
           <!-- 省市地联动插件 -->
           <v-distpicker
             @selected="onSelected"
@@ -40,24 +40,24 @@
         <div class="user-address">
           详细地址：
           <div class="user-name-input">
-            <el-input v-model="address" placeholder="请输入详细地址"></el-input>
+            <el-input v-model="address" placeholder="请输入详细地址" class="woner-input"></el-input>
           </div>
         </div>
         <div class="user-address">
           联系电话：
           <div class="user-name-input">
-            <el-input v-model="phone" placeholder="例如：0519-8888888"></el-input>
+            <el-input v-model="phone" placeholder="例如：0519-8888888" class="woner-input"></el-input>
           </div>
         </div>
         <div class="user-address">
           电子邮箱：
           <div class="user-name-input">
-            <el-input v-model="email" placeholder="例如：czhoso@heanshe.app"></el-input>
+            <el-input v-model="email" placeholder="例如：czhoso@heanshe.app" class="woner-input"></el-input>
           </div>
         </div>
       </div>
     </div>
-    <el-button type="primary" @click="save()">保存</el-button>
+    <el-button type="primary" size="medium" @click="save()">保存</el-button>
   </div>
 </template>
 <script>
@@ -254,5 +254,35 @@ export default {
 .drool {
   display: inline-block;
   margin-left: 4px;
+}
+
+/*
+  2019年9月9日09:49:33
+  开始针对性样式修改
+ */
+
+.test >>> .el-radio__label {
+  padding-left: 3px;
+}
+
+.woner-input >>> .el-input__inner {
+  height: 30px;
+  font-size: 12px;
+}
+
+.user-type >>> .distpicker-address-wrapper > select {
+  height: 30px;
+  font-size: 12px;
+  padding: 0px;
+  margin-left: 5px;
+}
+
+.user-info >>> i{
+  font-size: 16px;
+  color: #F64D62;
+  display: inline-block;
+  margin-right: 5px;
+  font-style:normal;
+  font-weight: 500;
 }
 </style>

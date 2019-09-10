@@ -15,7 +15,7 @@
       <div class="keywords">
         <el-input type="text" v-model="keywords" placeholder="请输入服务名称"></el-input>
       </div>
-      <el-button type="primary" id="soso" @click="getlist()">搜索</el-button>
+      <el-button type="primary" id="soso" @click="getlist()" size="small" style="margin-top:2px;">搜索</el-button>
     </div>
     <div class="tab">
       <table class="table table-hover table-bordered">
@@ -224,5 +224,16 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.keywords >>> .el-input__inner {
+  height: 35px;
+  border-radius: 2px;
+}
+
+.sele-box >>> .el-input__inner {
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
 }
 </style>

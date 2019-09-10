@@ -242,7 +242,8 @@ export default {
 
 .brand-info {
   background: #fff;
-  height: 100vh;
+  height: 1500px;
+  padding-bottom: 150px;
 }
 
 .brand-name {
@@ -270,7 +271,7 @@ export default {
   background: #ff8d41;
   position: absolute;
   right: 40px;
-  top: 45px;
+  top: 37px;
 }
 
 .flex-row {
@@ -396,5 +397,30 @@ export default {
 .el-divider {
   margin: 0 auto;
   margin-bottom: 20px;
+}
+
+.brand-name >>> .el-input > .el-input__inner{
+  height: 30px;
+}
+
+.flex-col >>> .vue-input-tag-wrapper{
+  border: 1px solid #DCDFE6;
+  border-radius: 2px;
+  /* height: 30px; */
+}
+
+.flex-col>>> .vue-input-tag-wrapper {
+  border: 1px solid #e4e7ed;
+  border-radius: 2px;
+  margin-top: 6px;
+}
+
+.flex-col >>> .vue-input-tag-wrapper > .input-tag {
+  border: 1px solid #fff;
+  color: #fff;
+  background: #4a90e2;
+}
+.flex-col >>> .vue-input-tag-wrapper > .input-tag > .remove {
+  color: #fff;
 }
 </style>

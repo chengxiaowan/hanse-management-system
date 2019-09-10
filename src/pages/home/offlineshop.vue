@@ -26,14 +26,8 @@
         </el-select>
       </div>
       <div class="soso-btn">
-        <el-button type="primary" @click="getList()">
-          <i class="el-icon-search"></i>
-          搜索
-        </el-button>
-        <el-button type="success" plain @click="add()">
-          <i class="el-icon-circle-plus-outline"></i>
-          新增
-        </el-button>
+        <el-button type="primary" @click="getList()" size="small" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" @click="add()" size="small" icon="el-icon-circle-plus-outline">新增</el-button>
       </div>
     </div>
     <div class="tab">
@@ -202,10 +196,15 @@ export default {
 <style scoped>
 .offlineshop {
   padding: 15px;
-  height: 1000px;
+  min-height: 1000px;
   padding-bottom: 150px;
-  overflow: auto;
+  /* overflow: auto; */
   background: #fff;
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  line-height: 20px;
 }
 
 .shops-title {
@@ -301,5 +300,16 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.keywords >>> .el-input__inner {
+  height: 35px;
+  border-radius: 2px;
+}
+
+.sele >>> .el-input__inner {
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
 }
 </style>

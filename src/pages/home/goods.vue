@@ -26,7 +26,7 @@
         审核状态:
         <div class="sele-box">
           <el-select v-model="auditStatus" filterable placeholder="请选择审核状态" @change="getList()">
-            <el-option label="全部" value=""></el-option>
+            <el-option label="全部" value></el-option>
             <el-option label="待审核" value="0"></el-option>
             <el-option label="审核通过" value="1"></el-option>
             <el-option label="审核失败" value="2"></el-option>
@@ -35,7 +35,7 @@
       </div>
       <div class="brand">
         <!-- 摆设而已~两个sele都有@change事件，他图这么画了 我就加上吧,当刷新用吧-->
-        <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getList()" size="mini">搜索</el-button>
       </div>
     </div>
     <div class="tab">
@@ -85,13 +85,17 @@
         <el-radio v-model="radio" label="2">驳回</el-radio>
       </div>
       <div class="no" v-if="radio == 2">
-        驳回原因：
+        <span class="xing">*</span> 驳回原因：
         <el-input type="textarea" rows="3" v-model="reason" placeholder="请输入驳回原因..."></el-input>
       </div>
       <div class="yes" v-if="radio == 1">
         <div>
-          店铺佣金比例：
-          <el-input placeholder="请输入店铺提成比例" v-model="commissionPercent" oninput ="value=value.replace(/[^0-9.]/g,'')" ></el-input>
+          <span class="xing">*</span> 店铺佣金比例：
+          <el-input
+            placeholder="请输入店铺提成比例"
+            v-model="commissionPercent"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
+          ></el-input>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -158,6 +162,15 @@ export default {
 
     //审核
     shenhe() {
+      if(this.commissionPercent == "" && this.radio == "1"){
+        this.$message.error("请输入店铺提成比例")
+        return
+      }
+
+      if(this.reason == "" && this.radio == "2"){
+        this.$message.error("请输入驳回原因")
+        return
+      }
       let parmars = {
         shopsGoodsId: this.id,
         auditStatus: this.radio,
@@ -225,14 +238,22 @@ export default {
 }
 
 .no {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 2em;
+  font-size: 12px;
+  font-size: 12px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  /* color: rgba(246, 77, 98, 1); */
+  line-height: 17px;
 }
 
 .yes {
   widows: 500px;
   margin: 0 auto;
+  font-size: 12px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  /* color: rgba(246, 77, 98, 1); */
+  line-height: 17px;
 }
 
 .com {
@@ -246,7 +267,7 @@ export default {
 
 .goods-title {
   padding: 16px 0;
-  background: #E4E9EF;
+  background: #e4e9ef;
   border-radius: 2px;
   margin-bottom: 20px;
 }
@@ -299,5 +320,34 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.sele-box >>> .el-select {
+  height: 30px;
+}
+
+.sele-box >>> .el-select > .el-input > .el-input__inner {
+  height: 30px;
+}
+
+.SH >>> .el-radio__label {
+  padding: 2px;
+}
+
+.xing{
+  font-size: 16px;
+  color: rgba(246, 77, 98, 1);
+}
+
+.yes >>> .el-input__inner{
+  height: 30px;
+  font-size: 12px;
+  margin-top: 6px;
+  line-height: 30px;
+}
+
+.no >>> .el-textarea__inner{
+  margin-top: 6px;
+  font-size: 12px;
 }
 </style>

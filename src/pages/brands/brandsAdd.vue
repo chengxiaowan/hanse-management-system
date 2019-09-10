@@ -63,6 +63,10 @@ export default {
 </script>
 
 <style scoped>
+
+.brandsadd{
+  overflow: auto;
+}
 /*页头*/
 .el-page-header {
   height: 60px;

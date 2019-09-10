@@ -48,8 +48,13 @@
         </div>
       </div>
       <div class="type">
-        <el-button type="primary" @click="getlist" icon="el-icon-search">搜索</el-button>
-        <el-button type="success" plain @click="addgoods" icon="el-icon-circle-plus-outline">添加商品</el-button>
+        <el-button type="primary" @click="getlist" icon="el-icon-search" size="small">搜索</el-button>
+        <el-button
+          type="success"
+          @click="addgoods"
+          icon="el-icon-circle-plus-outline"
+          size="small"
+        >添加商品</el-button>
       </div>
     </div>
     <div class="tab">
@@ -300,7 +305,7 @@ export default {
             res.result.list[i].commissionPercent = "";
           }
           this.rolelist = res.result.list;
-          this.demo(item)
+          this.demo(item);
         }
       });
     },
@@ -421,6 +426,11 @@ export default {
   /* overflow: auto; */
   padding: 15px;
   padding-bottom: 150px;
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  line-height: 20px;
 }
 
 .goods-soso {
@@ -531,5 +541,16 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.keywords >>> .el-input__inner {
+  height: 35px;
+  border-radius: 2px;
+}
+
+.sele-box >>> .el-input__inner {
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
 }
 </style>

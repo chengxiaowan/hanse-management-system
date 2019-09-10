@@ -35,7 +35,7 @@
       </div>
       <div class="brand">
         <!-- 摆设而已~两个sele都有@change事件，他图这么画了 我就加上吧,当刷新用吧-->
-        <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getList()" size="mini">搜索</el-button>
       </div>
     </div>
     <div class="tab">
@@ -298,6 +298,14 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
+}
+
+.sele-box >>> .el-select{
+  height: 30px;
+}
+
+.sele-box >>> .el-select >.el-input >.el-input__inner{
+  height: 30px;
 }
 </style>
     

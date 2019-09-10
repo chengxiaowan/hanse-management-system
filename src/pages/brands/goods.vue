@@ -27,8 +27,8 @@
         </div>
       </div>
       <div class="goods-btn">
-        <el-button type="primary" @click="getgoods()" icon="el-icon-search">搜索</el-button>
-        <el-button type="success" @click="open()" icon="el-icon-circle-plus-outline" plain>添加商品</el-button>
+        <el-button type="primary" @click="getgoods()" icon="el-icon-search" size="small">搜索</el-button>
+        <el-button type="success" @click="open()" icon="el-icon-circle-plus-outline" size="small">添加商品</el-button>
       </div>
     </div>
     <div class="goods-tab">
@@ -432,4 +432,21 @@ td > span {
 tr:hover > td > span {
   display: inline;
 }
+
+.goods-keywords >>> .el-input > .el-input__inner{
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
+  border-radius: 2px;
+  /* margin-top: 6px; */
+}
+
+.sele-box >>> .el-select > .el-input--suffix .el-input__inner{
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
+  border-radius: 2px;
+}
+
+
 </style>

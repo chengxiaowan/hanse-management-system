@@ -80,6 +80,18 @@ export default {
   background-color: inherit;
 }
 
+.el-input__inner{
+  border-radius: 2px!important;
+}
+
+.el-page-header__title{
+  font-size: 18px!important;
+}
+
+.el-button{
+  margin-top:2px !important;
+}
+
 
   #app{
     /* width: 1920px; */

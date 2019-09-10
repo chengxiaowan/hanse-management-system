@@ -11,8 +11,8 @@
         <el-input v-model="keywords" placeholder="请输入房间名称"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary" @click="getlist()" icon="el-icon-search">搜索</el-button>
-        <el-button type="success" plain @click="tiao()" icon="el-icon-circle-plus-outline">新增</el-button>
+        <el-button type="primary" @click="getlist()" icon="el-icon-search" size="small">搜索</el-button>
+        <el-button type="success" @click="tiao()" icon="el-icon-circle-plus-outline" size="small">新增</el-button>
       </div>
     </div>
     <div class="tab">
@@ -813,5 +813,16 @@ tr:hover > td > span {
   left: 0;
   font: 12px/20px "";
   text-align: center;
+}
+
+.keywords >>> .el-input__inner {
+  height: 35px;
+  border-radius: 2px;
+}
+
+.sele-box >>> .el-input__inner {
+  height: 35px;
+  font-size: 12px;
+  line-height: 35px;
 }
 </style>
