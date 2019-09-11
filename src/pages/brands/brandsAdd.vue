@@ -69,13 +69,13 @@ export default {
 }
 /*页头*/
 .el-page-header {
-  height: 60px;
-  line-height: 60px;
+  height: 45px;
+  line-height: 45px;
 }
 .brandsadd {
   background: #fff;
-  padding: 15px;
-  height: 100vh;
+  /* padding: 15px; */
+  /* height: 100vh; */
 }
 .el-tabs {
   margin-top: 5px;
@@ -85,5 +85,9 @@ export default {
 
 .el-divider{
   margin:0 auto;
+}
+
+.add-body{
+  padding: 0 20px;
 }
 </style>

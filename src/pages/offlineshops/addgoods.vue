@@ -201,6 +201,7 @@ export default {
   padding-bottom: 150px;
   overflow: auto;
   background: #fff;
+  padding-top: 0;
 }
 
 .addgoods-title {
@@ -225,7 +226,7 @@ export default {
   font-family: PingFangSC;
   font-weight: 400;
   color: rgba(74, 74, 74, 1);
-  line-height: 20px;
+  line-height: 24px;
 }
 
 .addgoods-soso {
@@ -265,7 +266,6 @@ export default {
 .el-divider {
   margin: 0 auto;
   margin-bottom: 20px;
-  margin-top: 15px;
 }
 
 .sele-box{

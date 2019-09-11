@@ -253,7 +253,7 @@ export default {
 .el-divider {
   margin: 0 auto;
   margin-bottom: 20px;
-  margin-top: 15px;
+  /* margin-top: 15px; */
 }
 
 /*表格样式*/

@@ -304,7 +304,7 @@ export default {
 .goods-title > p {
   font-size: 14px;
   color: #4a4a4a;
-  line-height: 20px;
+  line-height: 24px;
   padding-left: 14px;
 }
 

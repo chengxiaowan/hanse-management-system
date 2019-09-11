@@ -259,9 +259,9 @@ export default {
 }
 
 .el-page-header {
-  height: 50px;
-  line-height: 50px;
-  margin-block: 20px;
+  height: 45px;
+  line-height: 45px;
+  margin-bottom: 25px;
 }
 
 .tips {
@@ -312,7 +312,8 @@ export default {
   font-family: PingFangSC;
   font-weight: 400;
   color: rgba(107, 107, 107, 1);
-  line-height: 19px;
+  line-height: 2em;
+  margin-bottom: 20px;
 }
 
 .image-title > p > span {

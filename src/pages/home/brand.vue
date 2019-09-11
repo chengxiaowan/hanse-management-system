@@ -171,8 +171,8 @@ export default {
   font-family: PingFangSC;
   font-weight: 400;
   color: rgba(74, 74, 74, 1);
-  line-height: 28px;
-  margin-left: 25px;
+  line-height: 24px;
+  margin-left: 30px;
   padding: 0;
 }
 

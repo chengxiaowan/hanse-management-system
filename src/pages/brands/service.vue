@@ -257,7 +257,7 @@ export default {
   font-size: 14px;
   font-weight: 400;
   color: rgba(74, 74, 74, 1);
-  line-height: 20px;
+  line-height: 24px;
   padding-left: 18px;
 }
 
@@ -334,9 +334,9 @@ tr:hover > td > span {
 .el-dialog__header > .el-dialog__title {
   color: #fff;
   float: left;
-  font-size: 18px;
+  font-size: 16px;
   font-family: PingFangSC;
   font-weight: 500;
-  line-height: 25px;
+  /* line-height: 25px; */
 }
 </style>

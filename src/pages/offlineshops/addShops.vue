@@ -605,8 +605,8 @@ export default {
 }
 
 .el-page-header {
-  height: 40px;
-  line-height: 40px;
+  height: 45px;
+  line-height: 45px;
   margin-left: 15px;
 }
 

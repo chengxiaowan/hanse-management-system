@@ -703,8 +703,8 @@ export default {
 }
 
 .el-page-header {
-  height: 50px;
-  line-height: 50px;
+  height: 45px;
+  line-height: 45px;
 }
 
 .el-divider {
@@ -750,6 +750,10 @@ export default {
 .upadte-box {
   margin-left: 85px;
   margin-top: 33px;
+}
+
+.upadte-title{
+  margin-bottom: 20px;
 }
 
 .upadte-title > p {

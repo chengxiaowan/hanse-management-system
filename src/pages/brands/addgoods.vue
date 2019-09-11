@@ -179,8 +179,8 @@ export default {
 }
 
 .el-page-header {
-  height: 60px;
-  line-height: 60px;
+  height: 45px;
+  line-height: 45px;
 }
 
 .addgoods-title {

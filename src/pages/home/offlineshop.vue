@@ -227,6 +227,7 @@ export default {
   font-weight: 400;
   color: #4a4a4a;
   padding-top: 18px;
+  margin-left: 20px;
 }
 
 .soso {

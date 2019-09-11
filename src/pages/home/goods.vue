@@ -81,6 +81,7 @@
     <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
     <el-dialog title="审核" :visible.sync="dialogVisible" width="30%" center>
       <div class="SH">
+        <!-- <span class="xing">*</span> 审核状态： -->
         <el-radio v-model="radio" label="1">通过</el-radio>
         <el-radio v-model="radio" label="2">驳回</el-radio>
       </div>
@@ -235,6 +236,7 @@ export default {
   width: 200px;
   margin: 0 auto;
   text-align: center;
+  margin-top: 20px;
 }
 
 .no {
@@ -350,4 +352,11 @@ tr:hover > td > span {
   margin-top: 6px;
   font-size: 12px;
 }
+
+.goods >>> .dialog-footer{
+  margin-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
 </style>

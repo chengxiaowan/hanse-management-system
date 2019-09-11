@@ -83,7 +83,7 @@
       </div>
       <div class="shenhe-info">
         <div class="shenhe1" v-if="radio==1">
-          佣金比例：
+          <span class="xing">*</span>佣金比例：
           <el-input
             type="text"
             v-model.number="commissionPercent"
@@ -92,7 +92,7 @@
           ></el-input>
         </div>
         <div class="shenhe1" v-if="radio==2">
-          驳回原因：
+          <span class="xing">*</span>驳回原因：
           <el-input type="textarea" v-model="reason" placeholder="请输入驳回原因"></el-input>
         </div>
       </div>
@@ -231,6 +231,7 @@ export default {
 
 .shenhe {
   text-align: center;
+  margin-top: 20px;
 }
 
 .shenhe1 {
@@ -300,12 +301,39 @@ tr:hover > td > span {
   display: inline;
 }
 
-.sele-box >>> .el-select{
+.sele-box >>> .el-select {
   height: 30px;
 }
 
-.sele-box >>> .el-select >.el-input >.el-input__inner{
+.sele-box >>> .el-select > .el-input > .el-input__inner {
   height: 30px;
+}
+
+.SH >>> .el-radio__label {
+  padding: 2px;
+}
+
+.xing{
+  font-size: 16px;
+  color: rgba(246, 77, 98, 1);
+}
+
+.shenhe1 >>> .el-input__inner{
+  height: 30px;
+  font-size: 12px;
+  margin-top: 6px;
+  line-height: 30px;
+}
+
+.shenhe1 >>> .el-textarea__inner{
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.service >>> .el-dialog__footer{
+  margin-top: 20px;
+  padding-bottom: 20px;
+  text-align: center!important;
 }
 </style>
     

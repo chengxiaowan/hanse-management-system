@@ -18,7 +18,7 @@ export default {
   ul,ol{padding:0;}
   body{ background:#f2f4f5;height: 100%;}
 
-  body{ font-size:12px;font-family:"冬青黑体简体中文","微软雅黑","宋体",Arial,sans-serif;}
+  body{ font-size:12px;font-family:"PingFangSC","微软雅黑","宋体",Arial,sans-serif;}
   a{ text-decoration:none; color:#666666; }
   li{ list-style:none; }
   img{ border:none 0;}
@@ -82,16 +82,55 @@ export default {
 
 .el-input__inner{
   border-radius: 2px!important;
+  color: #333!important;
+}
+
+.el-textarea__inner{
+  color: #333!important;
+  font-size: 12px!important;
+  /* line-height: 2em!important; */
+}
+
+.el-dialog__header{
+  height: 45px;
+  line-height: 45px!important;
+  padding: 0!important;
+}
+
+.el-dialog__header > .el-dialog__title{
+  line-height: 45px!important;
+  text-indent: 23px;
+}
+
+.el-dialog__headerbtn{
+  top:0!important;
 }
 
 .el-page-header__title{
-  font-size: 18px!important;
+  font-size: 14px!important;
+  line-height: 45px!important;
 }
 
 .el-button{
   margin-top:2px !important;
 }
 
+.el-page-header__content{
+  font-size: 14px!important;
+  color: #333!important;
+}
+
+ #app >>> .el-page-header{
+  height: 45px!important;
+  line-height: 45px!important;
+}
+
+.el-dialog__headerbtn .el-dialog__close{
+  font-size: 30px!important;
+  line-height: 45px!important;
+  font-weight: 400px!important;
+  color: #fff!important
+}
 
   #app{
     /* width: 1920px; */
