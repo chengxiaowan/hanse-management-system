@@ -5,12 +5,12 @@
       <el-divider v-if="!bobo"></el-divider>
       <div class="input-box">
         <div class="min-box">
-          名称：
+          <span class="zi">名称：</span>
           <el-input type="text" placeholder="请输入名称 1-30字以内" v-model="name" maxlength="30"></el-input>
         </div>
         <div class="min-box">
           <div class="minn-box te">
-            所属品牌：
+            <span class="zi">所属品牌：</span>
             <el-select v-model="brand" filterable placeholder="请选择" v-if="status != '1'">
               <el-option
                 v-for="item in brandlist"
@@ -29,7 +29,7 @@
             </el-select>
           </div>
           <div class="minn-box te">
-            类型：
+            <span class="zi">类型：</span>
             <el-select v-model="shopsType" filterable placeholder="请选择">
               <el-option label="酒店" value="1"></el-option>
               <el-option label="民宿" value="2"></el-option>
@@ -39,7 +39,7 @@
       </div>
       <div class="input-box">
         <div class="min-box">
-          所在地区：
+          <span class="zi">所在地区：</span>
           <v-distpicker
             @selected="onSelected"
             class="drool"
@@ -49,13 +49,13 @@
           ></v-distpicker>
         </div>
         <div class="min-box">
-          详细地址：
+          <span class="zi">详细地址：</span>
           <el-input type="text" v-model="address" placeholder="请输入详细地址"></el-input>
         </div>
       </div>
       <div class="input-box">
         <div class="min-box">
-          简介：
+          <span class="zi">简介：</span>
           <el-input type="textarea" v-model="remark" placeholder="请输入简介"></el-input>
         </div>
         <div class="min-box">
@@ -69,7 +69,7 @@
       <div class="input-box">
         <div class="min-box">
           <div class="update-title">
-            <div>图片</div>
+            <div class="zi">图片</div>
             <p>
               1、请上传png,jpg,jpeg等规范格式的图片，大小不能超过5MB。
               <br />2、精致封面会吸引更多的人关注哦。
@@ -601,18 +601,11 @@ export default {
 
   /* overflow: auto; */
   /* padding-bottom: 400px; */
-  
-}
-
-.el-page-header {
-  height: 45px;
-  line-height: 45px;
-  margin-left: 15px;
 }
 
 .el-divider {
   margin: 0px auto;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 }
 
 .info-box {
@@ -746,7 +739,6 @@ textarea {
   float: left;
   margin-right: 29px;
   margin-bottom: 10px;
-
 }
 
 .image-tips {
@@ -769,32 +761,10 @@ textarea {
   line-height: 20px;
 }
 
-.min-box >>> .el-input > .el-input__inner {
-  height: 30px;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-.min-box >>> .distpicker-address-wrapper select {
-  height: 30px;
-  font-size: 12px;
-  padding: 0;
-  margin-top: 5px;
-}
-
-.min-box >>> .vue-input-tag-wrapper {
-  border: 1px solid #dcdfe6;
-  border-radius: 2px;
-  margin-top: 5px;
-}
-
-.min-box >>> .vue-input-tag-wrapper > .input-tag {
-  background: #4a90e2;
-  border: 1px solid #4a90e2;
-  color: #fff;
-}
-
-.min-box >>> .vue-input-tag-wrapper > .input-tag > .remove {
-  color: #fff;
+.zi {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
 }
 </style>

@@ -2,67 +2,69 @@
   <div class="addgoods">
     <el-page-header @back="goback" content="添加商品"></el-page-header>
     <el-divider></el-divider>
-    <div class="addgoods-title">
-      <div>说明：</div>
-      <p>
-        1、销售价取自商品的最低销售价。
-        <br />2、申请加入后的商品，需由门店对应的品牌方审核设置佣金比例等。
-      </p>
-    </div>
-    <div class="addgoods-soso">
-      <div class="keywords">
-        <el-input class="text" placeholder="请输入商品名称" v-model="keywords"></el-input>
+    <div class="max-box">
+      <div class="addgoods-title">
+        <div>说明：</div>
+        <p>
+          1、销售价取自商品的最低销售价。
+          <br />2、申请加入后的商品，需由门店对应的品牌方审核设置佣金比例等。
+        </p>
       </div>
-      <div class="type">
-        分类：
-        <div class="sele-box">
-          <el-select v-model="type" filterable placeholder="请选择">
-            <el-option label="全部" value></el-option>
-            <el-option
-              v-for="item in types"
-              :key="item.typeId"
-              :label="item.name"
-              :value="item.name"
-            ></el-option>
-          </el-select>
+      <div class="addgoods-soso">
+        <div class="keywords">
+          <el-input class="text" placeholder="请输入商品名称" v-model="keywords"></el-input>
         </div>
+        <div class="type">
+          分类：
+          <div class="sele-box">
+            <el-select v-model="type" filterable placeholder="请选择">
+              <el-option label="全部" value></el-option>
+              <el-option
+                v-for="item in types"
+                :key="item.typeId"
+                :label="item.name"
+                :value="item.name"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
+        <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
       </div>
-      <el-button type="primary" icon="el-icon-search" @click="getlist()" size="small">搜索</el-button>
-    </div>
-    <div class="tab">
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th width="30%">商品名称</th>
-            <th width="10%">分类</th>
-            <th width="20%">品牌</th>
-            <th width="10%">图片</th>
-            <th width="10%">销售价</th>
-            <th width="10%">操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="list.length !='0' ">
-            <tr v-for="item in list" :key="item.goodsId">
-              <td>{{item.name}}</td>
-              <td>{{item.typeName}}</td>
-              <!--<td>{{item.supplierName}}</td>-->
-              <td>{{item.brandName}}</td>
-              <td>
-                <img :src="item.image" style="width: 60px" />
-              </td>
-              <td>{{item.price}}</td>
-              <td>
-                <span @click="addgoods(item)">申请加入</span>
-              </td>
+      <div class="tab">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th width="30%">商品名称</th>
+              <th width="10%">分类</th>
+              <th width="20%">品牌</th>
+              <th width="10%">图片</th>
+              <th width="10%">销售价</th>
+              <th width="10%">操作</th>
             </tr>
-          </template>
-          <tr class="main_info" v-else>
-            <td colspan="6">没有相关数据</td>
-          </tr>
-        </tbody>
-      </table>
-      <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
+          </thead>
+          <tbody>
+            <template v-if="list.length !='0' ">
+              <tr v-for="item in list" :key="item.goodsId">
+                <td>{{item.name}}</td>
+                <td>{{item.typeName}}</td>
+                <!--<td>{{item.supplierName}}</td>-->
+                <td>{{item.brandName}}</td>
+                <td>
+                  <img :src="item.image" style="width: 60px" />
+                </td>
+                <td>{{item.price}}</td>
+                <td>
+                  <span @click="addgoods(item)">申请加入</span>
+                </td>
+              </tr>
+            </template>
+            <tr class="main_info" v-else>
+              <td colspan="6">没有相关数据</td>
+            </tr>
+          </tbody>
+        </table>
+        <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -118,7 +120,7 @@ export default {
         pageNo: this.pageNo,
         keywords: this.keywords,
         typeName: this.type,
-        isOnsell:"1"
+        isOnsell: "1"
       };
       this.$post("/shopsBrand/showAShopsBrandGoods", parmars).then(res => {
         if (res.error == "00") {
@@ -196,7 +198,7 @@ export default {
 
 <style scoped>
 .addgoods {
-  padding: 15px;
+  /* padding: 15px; */
   height: 1000px;
   padding-bottom: 150px;
   overflow: auto;
@@ -205,8 +207,8 @@ export default {
 }
 
 .addgoods-title {
+  margin: 0 10px;
   background: #e4e9ef;
-  width: 100%;
   margin-top: 30px;
   padding: 15px;
   border-radius: 4px;
@@ -232,6 +234,8 @@ export default {
 .addgoods-soso {
   overflow: hidden;
   margin-top: 20px;
+  margin-left: 10px;
+  margin-bottom: 15px;
 }
 
 .keywords {
@@ -268,9 +272,13 @@ export default {
   margin-bottom: 20px;
 }
 
-.sele-box{
+.sele-box {
   width: 100px;
   display: inline-block;
+}
+
+.max-box {
+  padding: 0 15px;
 }
 
 /*表格样式*/
@@ -302,16 +310,5 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
-}
-
-.keywords >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele-box >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
 }
 </style>

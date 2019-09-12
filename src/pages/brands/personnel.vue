@@ -13,11 +13,11 @@
         <el-input v-model="keywords" placeholder="请输入负责人姓名"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary" @click="getlist()" icon="el-icon-search" size="small">搜索</el-button>
-        <el-button type="success" @click="showAdd()" icon="el-icon-circle-plus-outline " size="small">新增</el-button>
+        <el-button type="primary" @click="getlist()" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" @click="showAdd()" icon="el-icon-circle-plus-outline ">新增</el-button>
       </div>
     </div>
-    <div class="user-list">
+    <div class="tab">
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
@@ -25,8 +25,7 @@
             <th width="20%">手机号</th>
             <th width="20%">邮箱</th>
             <th width="20%">备注</th>
-            <th width="10%">状态</th>
-            <th width="10%">操作</th>
+            <th width="20%">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -36,11 +35,9 @@
               <td>{{item.mobilePhone}}</td>
               <td>{{item.email}}</td>
               <td>{{item.remark}}</td>
-              <td v-if="item.isQuit == '1'">离职</td>
-              <td v-if="item.isQuit == '0'">在职</td>
               <td>
                 <span @click="getinfo(item)">查看</span>
-                <span style="color:red;" @click="deluser(item)" v-if="item.isQuit == '0'">离职</span>
+                <span style="color:#D0021B;" @click="deluser(item)" v-if="item.isQuit == '0'">离职</span>
               </td>
             </tr>
           </template>
@@ -88,8 +85,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false" size="small">取 消</el-button>
         <el-button type="primary" @click="save()" size="small">确 定</el-button>
+        <el-button @click="dialogVisible = false" size="small">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -222,9 +219,9 @@ export default {
         .then(() => {
           let parmars = {
             userId: item.userId,
-            // isQuit: 1
+            isQuit: 1
           };
-          this.$post("/user/changeIsQuit1", parmars).then(res => {
+          this.$post("/user/changeIsQuit", parmars).then(res => {
             console.log(res);
             if (res.error == "00") {
               this.$message({
@@ -242,6 +239,7 @@ export default {
     },
     //读取负责人信息（查看和修改）
     getinfo(item) {
+      this.dialogVisible = true;
       this.flage = 1;
       this.id = item.shopsBrandShopsOwnerId;
       this.userId = item.userId;
@@ -257,7 +255,6 @@ export default {
             this.email = drool.email;
             this.qq = drool.QQ;
             this.remark = drool.remark;
-            this.dialogVisible = true;
           } else {
             this.$message.error(res.msg);
           }
@@ -293,6 +290,7 @@ export default {
   background: #e4e9ef;
   border-radius: 4px;
   padding: 15px;
+  margin: 0 10px;
 }
 
 .goods-title > div {
@@ -312,6 +310,7 @@ export default {
   margin-top: 24px;
   overflow: hidden;
   margin-bottom: 25px;
+  margin-left: 10px;
 }
 .soso-inputs {
   width: 350px;
@@ -432,19 +431,4 @@ tr:hover > td > span {
   display: inline;
 }
 
-.input-col >>> .el-input > .el-input__inner{
-  height: 30px;
-  font-size: 12px;
-  line-height: 30px;
-  border-radius: 2px;
-  margin-top: 6px;
-}
-
-.soso-inputs >>> .el-input > .el-input__inner{
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-  border-radius: 2px;
-  /* margin-top: 6px; */
-}
 </style>

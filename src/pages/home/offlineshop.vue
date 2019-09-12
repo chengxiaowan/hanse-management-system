@@ -9,7 +9,7 @@
         <el-input type="text" placeholder="请输入门店名称" v-model="keywords"></el-input>
       </div>
       <div class="sele">
-        类型
+        <span class="zi">类型</span>
         <el-select v-model="type" placeholder="请选择">
           <el-option label="全部" value></el-option>
           <el-option label="酒店" value="1"></el-option>
@@ -17,7 +17,7 @@
         </el-select>
       </div>
       <div class="sele">
-        审核状态
+        <span class="zi">审核状态</span>
         <el-select v-model="audit" placeholder="请选择">
           <el-option label="全部" value></el-option>
           <el-option label="待审核" value="0"></el-option>
@@ -26,8 +26,8 @@
         </el-select>
       </div>
       <div class="soso-btn">
-        <el-button type="primary" @click="getList()" size="small" icon="el-icon-search">搜索</el-button>
-        <el-button type="success" @click="add()" size="small" icon="el-icon-circle-plus-outline">新增</el-button>
+        <el-button type="primary" @click="getList()" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" @click="add()" icon="el-icon-circle-plus-outline">新增</el-button>
       </div>
     </div>
     <div class="tab">
@@ -63,7 +63,7 @@
               <td>
                 <span @click="open(item)">查看</span>
                 <span v-if="item.status=='1'" @click="ewm(item)">二维码</span>
-                <span style="color:red" @click="delshpos(item)">删除</span>
+                <span style="color:#D0021B" @click="delshpos(item)">删除</span>
               </td>
             </tr>
           </template>
@@ -255,6 +255,7 @@ export default {
   float: left;
   width: 200px;
   margin-top: 0;
+  margin-left: 10px;
 }
 
 .tab {
@@ -271,6 +272,11 @@ export default {
   width: 150px;
   height: 150px;
   margin: 20px auto;
+}
+
+.zi{
+  margin-right: 5px;
+  margin-left: 10px;
 }
 
 /*表格样式*/
@@ -303,14 +309,4 @@ tr:hover > td > span {
   display: inline;
 }
 
-.keywords >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-}
 </style>

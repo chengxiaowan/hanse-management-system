@@ -2,6 +2,7 @@
   <div class="addservice">
     <el-page-header @back="goBack" content="添加服务"></el-page-header>
     <el-divider></el-divider>
+    <div class="max-box">
     <div class="addgoods-title">
       <div>说明</div>
       <p>
@@ -28,7 +29,7 @@
         <v-distpicker hide-area></v-distpicker>
       </div>-->
       <div class="soso-btns">
-        <el-button type="primary" icon="el-icon-search" @click="getlist()" size="small">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
       </div>
     </div>
     <div class="tab">
@@ -62,6 +63,7 @@
       </table>
     </div>
     <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -178,7 +180,6 @@ export default {
 
 <style scoped>
 .addservice {
-  padding: 15px;
   height: 1000px;
   padding-bottom: 150px;
   overflow: auto;
@@ -186,8 +187,8 @@ export default {
 }
 
 .addgoods-title {
+  margin:0 10px;
   background: #e4e9ef;
-  width: 100%;
   /* margin-top: 30px; */
   padding: 15px;
   border-radius: 4px;
@@ -213,6 +214,8 @@ export default {
 .service-soso {
   overflow: hidden;
   margin-top: 20px;
+  margin-left: 10px;
+  margin-bottom: 15px;
 }
 
 .keywords {
@@ -256,6 +259,10 @@ export default {
   /* margin-top: 15px; */
 }
 
+.max-box{
+  padding: 0 15px;
+}
+
 /*表格样式*/
 
 /*去掉表头边框+背景*/
@@ -287,14 +294,4 @@ tr:hover > td > span {
   display: inline;
 }
 
-.keywords >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele-box >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-}
 </style>

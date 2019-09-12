@@ -258,12 +258,6 @@ export default {
   color: rgba(0, 0, 0, 1);
 }
 
-.el-page-header {
-  height: 45px;
-  line-height: 45px;
-  margin-bottom: 25px;
-}
-
 .tips {
   width: 8px;
   height: 8px;
@@ -400,28 +394,6 @@ export default {
   margin-bottom: 20px;
 }
 
-.brand-name >>> .el-input > .el-input__inner{
-  height: 30px;
-}
 
-.flex-col >>> .vue-input-tag-wrapper{
-  border: 1px solid #DCDFE6;
-  border-radius: 2px;
-  /* height: 30px; */
-}
 
-.flex-col>>> .vue-input-tag-wrapper {
-  border: 1px solid #e4e7ed;
-  border-radius: 2px;
-  margin-top: 6px;
-}
-
-.flex-col >>> .vue-input-tag-wrapper > .input-tag {
-  border: 1px solid #fff;
-  color: #fff;
-  background: #4a90e2;
-}
-.flex-col >>> .vue-input-tag-wrapper > .input-tag > .remove {
-  color: #fff;
-}
 </style>

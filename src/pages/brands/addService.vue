@@ -2,51 +2,53 @@
   <div class="addService">
     <el-page-header @back="goBack" content="添加服务"></el-page-header>
     <el-divider></el-divider>
-    <div class="service-title">
-      <div>说明</div>
-      <p>
-        1、服务位置即服务覆盖的省市。
-        <br />2、佣金比例即商家与我方签订的商品的总佣金比例。
-        <br />3、预估收益即通过商家渠道售卖商品后，商家能得到的预计总收益，具体以实际为准。
-        <br />4、申请加入服务后，需由我方审核后才能上架。
-      </p>
-    </div>
-    <div class="soso">
-      <div class="keywords">
-        <el-input type="text" v-model="keywords" placeholder="请输入服务名称"></el-input>
+    <div class="max-box">
+      <div class="service-title">
+        <div>说明</div>
+        <p>
+          1、服务位置即服务覆盖的省市。
+          <br />2、佣金比例即商家与我方签订的商品的总佣金比例。
+          <br />3、预估收益即通过商家渠道售卖商品后，商家能得到的预计总收益，具体以实际为准。
+          <br />4、申请加入服务后，需由我方审核后才能上架。
+        </p>
       </div>
-      <el-button type="primary" id="soso" @click="getlist()" size="small" style="margin-top:2px;">搜索</el-button>
-    </div>
-    <div class="tab">
-      <table class="table table-hover table-bordered">
-        <thead>
-          <tr>
-            <th width="20%">名称</th>
-            <th width="20%">服务位置</th>
-            <th width="10%">类型</th>
-            <th width="10%">价格</th>
-            <th width="10%">佣金比例（%）</th>
-            <th width="10%">预估收益</th>
-            <th width="20%">操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in list" :key="item.serviceId">
-            <td>{{item.serviceName}}</td>
-            <td>{{item.province}} {{item.city}}</td>
-            <td v-if="item.type == 1">定值</td>
-            <td v-else>团购</td>
-            <td>{{item.price}}</td>
-            <td>5</td>
-            <td>{{(item.price*0.05).toFixed(2)}}</td>
-            <td>
-              <!-- <span>查看</span> -->
-              <span @click="addservice(item)">申请加入</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
+      <div class="soso">
+        <div class="keywords">
+          <el-input type="text" v-model="keywords" placeholder="请输入服务名称"></el-input>
+        </div>
+        <el-button type="primary" id="soso" @click="getlist()">搜索</el-button>
+      </div>
+      <div class="tab">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th width="20%">名称</th>
+              <th width="20%">服务位置</th>
+              <th width="10%">类型</th>
+              <th width="10%">价格</th>
+              <th width="10%">佣金比例（%）</th>
+              <th width="10%">预估收益</th>
+              <th width="20%">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in list" :key="item.serviceId">
+              <td>{{item.serviceName}}</td>
+              <td>{{item.province}} {{item.city}}</td>
+              <td v-if="item.type == 1">定值</td>
+              <td v-else>团购</td>
+              <td>{{item.price}}</td>
+              <td>5</td>
+              <td>{{(item.price*0.05).toFixed(2)}}</td>
+              <td>
+                <!-- <span>查看</span> -->
+                <span @click="addservice(item)">申请加入</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -139,21 +141,18 @@ export default {
 
 <style scoped>
 .addService {
-  padding: 15px;
+  /* padding: 15px; */
   height: 1000px;
   overflow: auto;
   background: #fff;
-}
-.el-page-header {
-  height: 45px;
-  line-height: 45px;
-  margin-left: 15px;
+  padding-top: 0;
 }
 
 .service-title {
   background: #e4e9ef;
   padding: 15px;
   border-radius: 2px;
+  margin: 0 10px;
 }
 
 .service-title > div {
@@ -195,6 +194,10 @@ export default {
   margin-bottom: 20px;
 }
 
+.max-box{
+  padding: 0 15px;
+}
+
 /*表格样式*/
 
 /*去掉表头边框+背景*/
@@ -224,16 +227,5 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
-}
-
-.keywords >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele-box >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
 }
 </style>

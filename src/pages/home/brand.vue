@@ -8,7 +8,7 @@
       </p>
     </div>
     <div class="add">
-      <el-button type="success" @click="add" icon="el-icon-circle-plus-outline" size="small">
+      <el-button type="success" @click="add" icon="el-icon-circle-plus-outline">
         添加
       </el-button>
     </div>
@@ -31,7 +31,7 @@
               <td>
                 <span @click="view(item)">查看</span>
                 <span @click=" ewm(item)">二维码</span>
-                <span style="color:red;" @click="delbrand(item)">删除</span>
+                <span style="color:#D0021B;" @click="delbrand(item)">删除</span>
               </td>
             </tr>
           </template>
@@ -179,6 +179,7 @@ export default {
 .add {
   margin-top: 20px;
   margin-bottom: 20px;
+  margin-left: 10px;
 }
 
 .ewmimg {
@@ -186,6 +187,10 @@ export default {
   width: 150px;
   height: 150px;
   margin: 20px auto;
+}
+
+.tab{
+  margin:0 10px;
 }
 
 /*表格样式*/

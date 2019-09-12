@@ -27,11 +27,11 @@
         </div>
       </div>
       <div class="goods-btn">
-        <el-button type="primary" @click="getgoods()" icon="el-icon-search" size="small">搜索</el-button>
-        <el-button type="success" @click="open()" icon="el-icon-circle-plus-outline" size="small">添加商品</el-button>
+        <el-button type="primary" @click="getgoods()" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" @click="open()" icon="el-icon-circle-plus-outline">添加商品</el-button>
       </div>
     </div>
-    <div class="goods-tab">
+    <div class="goods-tab tab">
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
@@ -64,21 +64,21 @@
               <td v-if="item.auditStatus == 0">待审核</td>
               <td v-if="item.auditStatus == 1">审核通过</td>
               <td v-if="item.auditStatus == 2">
-                <p style="color: red">审核失败</p>
+                <p style="color: #D0021B">审核失败</p>
               </td>
               <td v-if="item.isOnsell == 1 && item.auditStatus == 1">已上架</td>
-              <td v-if="item.isOnsell == 0 && item.auditStatus == 1">下架</td>
+              <td v-if="item.isOnsell == 0 && item.auditStatus == 1">已下架</td>
               <td v-if="item.auditStatus != 1">--</td>
               <td>
                 <!-- <span>查看</span> -->
                 <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="ewm(item)">二维码</span>
-                <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="onsell(item,0)">下架</span>
                 <span v-if="item.isOnsell == 0 && item.auditStatus == 1" @click="onsell(item,1)">上架</span>
                 <span
                   v-if="item.auditStatus == 2 || item.auditStatus == 0 "
                   @click="delgoods(item)"
-                  style="color:red"
+                  style="color:#D0021B"
                 >删除</span>
+                <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="onsell(item,0)">下架</span>
               </td>
             </tr>
           </template>
@@ -288,6 +288,7 @@ export default {
   background: #e4e9ef;
   border-radius: 4px;
   padding: 15px;
+  margin: 0 10px;
 }
 
 .goods-title > div {
@@ -306,6 +307,8 @@ export default {
 .soso-goods {
   overflow: hidden;
   margin-top: 28px;
+  margin-left: 10px;
+  margin-bottom: 25px;
 }
 
 .goods-keywords {
@@ -320,7 +323,7 @@ export default {
 
 .goods-btn {
   float: left;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .goods-tab {
@@ -432,21 +435,5 @@ td > span {
 tr:hover > td > span {
   display: inline;
 }
-
-.goods-keywords >>> .el-input > .el-input__inner{
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-  border-radius: 2px;
-  /* margin-top: 6px; */
-}
-
-.sele-box >>> .el-select > .el-input--suffix .el-input__inner{
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-  border-radius: 2px;
-}
-
 
 </style>

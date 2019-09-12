@@ -13,12 +13,11 @@
         <el-input placeholder="请输入服务名称" v-model="keywords"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary" @click="getlist()" icon="el-icon-search" size="small">搜索</el-button>
+        <el-button type="primary" @click="getlist()" icon="el-icon-search">搜索</el-button>
         <el-button
           type="success"
           @click="addservice()"
           icon="el-icon-circle-plus-outline"
-          size="small"
         >添加服务</el-button>
       </div>
     </div>
@@ -54,25 +53,26 @@
               >{{item.price*item.commissionPercent/100}}</td>
               <td v-else>--</td>
               <td v-if="item.auditStatus == 1">通过</td>
-              <td v-if="item.auditStatus == 2" style="color:red">失败</td>
+              <td v-if="item.auditStatus == 2" style="color:#D0021B">失败</td>
               <td v-if="item.auditStatus == 0">待审核</td>
               <td v-if="item.isOnsell == 1 && item.auditStatus == 1">已上架</td>
-              <td v-if="item.isOnsell == 0 && item.auditStatus == 1" style="color:red;">已下架</td>
+              <td v-if="item.isOnsell == 0 && item.auditStatus == 1" style="color:#D0021B;">已下架</td>
               <td v-if="item.auditStatus == 2 || item.auditStatus == 0">--</td>
 
               <td>
                 <span v-if="item.auditStatus == 1 && item.isOnsell == 0" @click="onsell(item)">上架</span>
-                <span
-                  style="color:red"
-                  @click="nosell(item)"
-                  v-if="item.auditStatus == 1 && item.isOnsell == 1"
-                >下架</span>
                 <span v-if="item.auditStatus == '1' && item.isOnsell == 1" @click="ewm(item)">二维码</span>
                 <span v-if="item.auditStatus == 1 && item.isOnsell == 1" @click="open(item)">设置佣金</span>
                 <span
                   v-if="item.auditStatus == 0 || item.auditStatus == 2"
                   @click="delservice(item)"
+                  style="clolr:#D0021B"
                 >删除</span>
+                <span
+                  style="color:#9B9B9B"
+                  @click="nosell(item)"
+                  v-if="item.auditStatus == 1 && item.isOnsell == 1"
+                >下架</span>
               </td>
             </tr>
           </template>
@@ -83,7 +83,7 @@
       </table>
     </div>
     <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
-    <el-dialog title="设置佣金比例" :visible.sync="dialogVisible" width="30%" center>
+    <el-dialog title="设置佣金比例" :visible.sync="dialogVisible" width="30%">
       <div class="com">
         店铺提成比例(%)
         <el-input v-model="commissionPercent" disabled></el-input>
@@ -109,8 +109,8 @@
         </table>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="set()">确 定</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
     <el-dialog title="二维码" :visible.sync="dialogVisible2" width="30%" center>
@@ -365,9 +365,9 @@ export default {
 
 .addgoods-title {
   background: #e4e9ef;
-  width: 100%;
   padding: 15px;
   border-radius: 4px;
+  margin:0 10px;
 }
 
 .addgoods-title > div {
@@ -390,6 +390,8 @@ export default {
 .service-soso {
   overflow: hidden;
   margin-top: 20px;
+  margin-left: 10px;
+  margin-bottom: 15px;
 }
 
 .keywords {
@@ -458,16 +460,5 @@ tr:hover > td > span {
 .kuang {
   width: 150px;
   margin: 0 auto;
-}
-
-.keywords >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele-box >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
 }
 </style>

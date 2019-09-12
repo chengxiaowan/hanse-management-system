@@ -87,7 +87,4 @@ export default {
   margin:0 auto;
 }
 
-.add-body{
-  padding: 0 20px;
-}
 </style>

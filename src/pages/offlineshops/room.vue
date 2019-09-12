@@ -11,8 +11,8 @@
         <el-input v-model="keywords" placeholder="请输入房间名称"></el-input>
       </div>
       <div class="soso-btns">
-        <el-button type="primary" @click="getlist()" icon="el-icon-search" size="small">搜索</el-button>
-        <el-button type="success" @click="tiao()" icon="el-icon-circle-plus-outline" size="small">新增</el-button>
+        <el-button type="primary" @click="getlist()" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" @click="tiao()" icon="el-icon-circle-plus-outline">新增</el-button>
       </div>
     </div>
     <div class="tab">
@@ -37,7 +37,7 @@
                 <span @click="getinfo(el)">编辑</span>
                 <!-- <span>打标签</span> -->
                 <span @click="ewm(el)">二维码</span>
-                <span style="color:red;" @click="delroom(el)">删除</span>
+                <span style="color:#D0021B;" @click="delroom(el)">删除</span>
               </td>
             </tr>
           </template>
@@ -199,8 +199,9 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="save()">确 定</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        
       </span>
     </el-dialog>
     <el-dialog title="二维码" :visible.sync="dialogVisible2" width="30%" center>
@@ -634,6 +635,8 @@ export default {
 
 .rom-soso {
   overflow: hidden;
+  margin-left: 10px;
+  margin-bottom: 15px;
 }
 
 .keywords {
@@ -712,8 +715,8 @@ export default {
 }
 
 .addgoods-title {
+  margin: 0 10px;
   background: #e4e9ef;
-  width: 100%;
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 20px;
@@ -813,16 +816,5 @@ tr:hover > td > span {
   left: 0;
   font: 12px/20px "";
   text-align: center;
-}
-
-.keywords >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele-box >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
 }
 </style>

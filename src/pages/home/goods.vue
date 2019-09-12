@@ -9,7 +9,7 @@
     </div>
     <div class="soso">
       <div class="brand">
-        门店:
+        <span class="zi">门店：</span>
         <div class="sele-box">
           <el-select v-model="brand" filterable placeholder="请选择" @change="getList()">
             <el-option label="全部" value></el-option>
@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="brand">
-        审核状态:
+        <span class="zi">审核状态：</span>
         <div class="sele-box">
           <el-select v-model="auditStatus" filterable placeholder="请选择审核状态" @change="getList()">
             <el-option label="全部" value></el-option>
@@ -35,7 +35,7 @@
       </div>
       <div class="brand">
         <!-- 摆设而已~两个sele都有@change事件，他图这么画了 我就加上吧,当刷新用吧-->
-        <el-button type="primary" icon="el-icon-search" @click="getList()" size="mini">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
       </div>
     </div>
     <div class="tab">
@@ -79,29 +79,36 @@
       </table>
     </div>
     <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
-    <el-dialog title="审核" :visible.sync="dialogVisible" width="30%" center>
+    <el-dialog title="审核" :visible.sync="dialogVisible" width="30%">
       <div class="SH">
-        <!-- <span class="xing">*</span> 审核状态： -->
+        <span class="SH-title">
+          <span class="xing">*</span> 审核状态：
+        </span>
         <el-radio v-model="radio" label="1">通过</el-radio>
         <el-radio v-model="radio" label="2">驳回</el-radio>
       </div>
       <div class="no" v-if="radio == 2">
         <span class="xing">*</span> 驳回原因：
-        <el-input type="textarea" rows="3" v-model="reason" placeholder="请输入驳回原因..."></el-input>
+        <el-input
+            placeholder="请输入驳回原因"
+            v-model="reason"
+            class="com-input"
+          ></el-input>
       </div>
       <div class="yes" v-if="radio == 1">
         <div>
-          <span class="xing">*</span> 店铺佣金比例：
+          <span class="xing">*</span> 佣金比例：
           <el-input
             placeholder="请输入店铺提成比例"
             v-model="commissionPercent"
             oninput="value=value.replace(/[^0-9.]/g,'')"
+            class="com-input"
           ></el-input>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="shenhe()">确 定</el-button>
+        <el-button type="primary" @click="shenhe()" size="small">确 定</el-button>
+        <el-button @click="dialogVisible = false" size="small">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -163,14 +170,14 @@ export default {
 
     //审核
     shenhe() {
-      if(this.commissionPercent == "" && this.radio == "1"){
-        this.$message.error("请输入店铺提成比例")
-        return
+      if (this.commissionPercent == "" && this.radio == "1") {
+        this.$message.error("请输入店铺提成比例");
+        return;
       }
 
-      if(this.reason == "" && this.radio == "2"){
-        this.$message.error("请输入驳回原因")
-        return
+      if (this.reason == "" && this.radio == "2") {
+        this.$message.error("请输入驳回原因");
+        return;
       }
       let parmars = {
         shopsGoodsId: this.id,
@@ -214,6 +221,11 @@ export default {
   padding-bottom: 150px;
   overflow: auto;
   background: #fff;
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  line-height: 20px;
 }
 
 .soso {
@@ -230,13 +242,16 @@ export default {
 .tab {
   width: 100%;
   overflow: auto;
+  margin:0 10px;
 }
 
 .SH {
   width: 200px;
-  margin: 0 auto;
-  text-align: center;
+  /* margin: 0 auto; */
+  /* text-align: center; */
   margin-top: 20px;
+  margin-left: 67px;
+  margin-bottom: 35px;
 }
 
 .no {
@@ -246,16 +261,18 @@ export default {
   font-weight: 400;
   /* color: rgba(246, 77, 98, 1); */
   line-height: 17px;
+  margin-left: 67px;
 }
 
 .yes {
-  widows: 500px;
+  width: 500px;
   margin: 0 auto;
   font-size: 12px;
   font-family: PingFangSC;
   font-weight: 400;
   /* color: rgba(246, 77, 98, 1); */
   line-height: 17px;
+  margin-left: 67px;
 }
 
 .com {
@@ -292,6 +309,26 @@ export default {
   line-height: 26px;
   padding-left: 35px;
 }
+.zi {
+  font-size: 14px;
+  /* margin-right: 5px; */
+}
+
+.SH-title {
+  margin-right: 10px;
+}
+
+.xing {
+  color: #f64d62;
+}
+
+.com-input {
+  width: 209px;
+}
+
+.goods >>> .el-dialog__headerbtn{
+  top: 7px!important;
+}
 
 /*表格样式*/
 
@@ -323,40 +360,4 @@ td > span {
 tr:hover > td > span {
   display: inline;
 }
-
-.sele-box >>> .el-select {
-  height: 30px;
-}
-
-.sele-box >>> .el-select > .el-input > .el-input__inner {
-  height: 30px;
-}
-
-.SH >>> .el-radio__label {
-  padding: 2px;
-}
-
-.xing{
-  font-size: 16px;
-  color: rgba(246, 77, 98, 1);
-}
-
-.yes >>> .el-input__inner{
-  height: 30px;
-  font-size: 12px;
-  margin-top: 6px;
-  line-height: 30px;
-}
-
-.no >>> .el-textarea__inner{
-  margin-top: 6px;
-  font-size: 12px;
-}
-
-.goods >>> .dialog-footer{
-  margin-top: 20px;
-  padding-bottom: 20px;
-  text-align: center;
-}
-
 </style>

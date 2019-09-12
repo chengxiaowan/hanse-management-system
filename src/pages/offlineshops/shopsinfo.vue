@@ -78,10 +78,6 @@ export default {
 }
 
 /*页头*/
-.el-page-header {
-  height: 45px;
-  line-height: 45px;
-}
 .brandsadd {
   background: #fff;
   padding: 15px;

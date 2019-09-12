@@ -52,18 +52,18 @@
     </el-aside>
     <el-container>
       <el-header>
-        <div class="soso">
+        <!-- <div class="soso">
           <el-input placeholder="请输入内容" class="input-with-select" v-model="keywords">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
-        </div>
+        </div> -->
         <div class="user" @mouseenter="show" @mouseleave="noShow">
           <img :src="drool" />
 
           <div class="userinfo" v-if="showUser">
             <div class="user-title">
               <img :src="drool" />
-              <a href="#">{{username}}</a>
+              <!-- <a href="#">{{username}}</a> -->
               <span>{{phone}}</span>
             </div>
             <div class="user-menu">
@@ -239,7 +239,7 @@ export default {
   line-height: 32px;
   margin-left: 12px;
   font-weight: 400;
-  margin-left: 40px;
+  margin-left: 60px;
 }
 
 .user-menu {

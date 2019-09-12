@@ -2,74 +2,76 @@
   <div class="addgoods">
     <el-page-header @back="goBack" content="添加商品"></el-page-header>
     <el-divider></el-divider>
-    <div class="addgoods-title">
-      <div>说明</div>
-      <p>
-        1、销售价取自商品的最低销售价。
-        <br />2、预估佣金比例即商家预计能得到的佣金比例，具体以实际佣金比例为准。
-        <br />3、预估收益即通过商家渠道售卖商品后，商家能得到的预计收益，具体以实际为准。
-        <br />4、申请加入商品后，需由我方审核后才能上架。
-      </p>
-    </div>
-    <div class="soso">
-      <div class="keywords">
-        <el-input type="text" v-model="keywords" placeholder="请输入商品名称"></el-input>
+    <div class="max-box">
+      <div class="addgoods-title">
+        <div>说明</div>
+        <p>
+          1、销售价取自商品的最低销售价。
+          <br />2、预估佣金比例即商家预计能得到的佣金比例，具体以实际佣金比例为准。
+          <br />3、预估收益即通过商家渠道售卖商品后，商家能得到的预计收益，具体以实际为准。
+          <br />4、申请加入商品后，需由我方审核后才能上架。
+        </p>
       </div>
-      <div class="lei">
-        分类
-        <div class="sele-box">
-          <el-select placeholder="请选择" v-model="solt">
-            <el-option label="全部" value></el-option>
-            <el-option
-              v-for="item in type"
-              :key="item.typeId"
-              :label="item.name"
-              :value="item.typeId"
-            ></el-option>
-          </el-select>
+      <div class="soso">
+        <div class="keywords">
+          <el-input type="text" v-model="keywords" placeholder="请输入商品名称"></el-input>
         </div>
+        <div class="lei">
+          分类
+          <div class="sele-box">
+            <el-select placeholder="请选择" v-model="solt">
+              <el-option label="全部" value></el-option>
+              <el-option
+                v-for="item in type"
+                :key="item.typeId"
+                :label="item.name"
+                :value="item.typeId"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
+        <el-button type="primary" id="soso" @click="getAllgoods()" icon="el-icon-search">搜索</el-button>
       </div>
-      <el-button type="primary" id="soso" @click="getAllgoods()" icon="el-icon-search" size="small">搜索</el-button>
-    </div>
-    <div class="tab">
-      <div class="addgoods-tab">
-        <table class="table table-hover table-bordered">
-          <thead>
-            <tr>
-              <th width="20%">商品名称</th>
-              <th width="10%">分类</th>
-              <th width="10%">品牌</th>
-              <th width="15%">图片</th>
-              <th width="10%">销售价（元）</th>
-              <th width="10%">佣金比例（%）</th>
-              <th width="10%">预估收益（元）</th>
-              <th width="20%">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in list.list" :key="item.goodsId">
-              <td>{{item.name}}</td>
-              <td>{{item.typeName}}</td>
-              <td>{{item.brandName}}</td>
-              <td>
-                <img :src="item.image" class="img-box" />
-              </td>
-              <td>{{item.price}}</td>
-              <td>5</td>
-              <td>{{(item.price * 0.05).toFixed(2)}}</td>
-              <td class="btn-hide">
-                <span @click="addgoodsinbrand(item)">申请加入</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="tab">
+        <div class="addgoods-tab">
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th width="20%">商品名称</th>
+                <th width="10%">分类</th>
+                <th width="10%">品牌</th>
+                <th width="15%">图片</th>
+                <th width="10%">销售价（元）</th>
+                <th width="10%">佣金比例（%）</th>
+                <th width="10%">预估收益（元）</th>
+                <th width="20%">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in list.list" :key="item.goodsId">
+                <td>{{item.name}}</td>
+                <td>{{item.typeName}}</td>
+                <td>{{item.brandName}}</td>
+                <td>
+                  <img :src="item.image" class="img-box" />
+                </td>
+                <td>{{item.price}}</td>
+                <td>5</td>
+                <td>{{(item.price * 0.05).toFixed(2)}}</td>
+                <td class="btn-hide">
+                  <span @click="addgoodsinbrand(item)">申请加入</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="list.total"
+          @current-change="page"
+        ></el-pagination>
       </div>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="list.total"
-        @current-change="page"
-      ></el-pagination>
     </div>
   </div>
 </template>
@@ -173,9 +175,10 @@ export default {
 .addgoods {
   height: 1000px;
   overflow: scroll;
-  padding: 15px;
+  /* padding: 15px; */
   padding-bottom: 150px;
   background: #fff;
+  padding-top: 0;
 }
 
 .el-page-header {
@@ -187,6 +190,7 @@ export default {
   background: #e4e9ef;
   padding: 15px;
   border-radius: 2px;
+  margin: 0 10px;
 }
 .addgoods-title > div {
   font-size: 20px;
@@ -240,9 +244,13 @@ export default {
   display: inline-block;
 }
 
-.el-divider{
+.el-divider {
   margin: 0 auto;
   margin-bottom: 20px;
+}
+
+.max-box{
+  padding:0 15px;
 }
 
 /*表格样式*/
@@ -274,16 +282,5 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
-}
-
-.keywords >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele-box >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
 }
 </style>

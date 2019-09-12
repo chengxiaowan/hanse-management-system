@@ -37,7 +37,7 @@ import addshopsservice from '../pages/offlineshops/addservice' //门店添加服
 import addroom from '../pages/offlineshops/addroom' //门店添加服务
 
 
-import demo from '../pages/demo/demo'
+import demo from '../pages/demo/wonergoods'
 
 
 

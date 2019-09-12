@@ -12,16 +12,15 @@
       <div class="keywords">
         <el-input type="text" v-model="keywords" placeholder="请输入服务名称"></el-input>
       </div>
-      <el-button type="primary" id="soso" @click="getlist" icon="el-icon-search" size="small">搜索</el-button>
+      <el-button type="primary" id="soso" @click="getlist" icon="el-icon-search">搜索</el-button>
       <el-button
         type="success"
         id="soso"
         @click="addservice()"
         icon="el-icon-circle-plus-outline"
-        size="small"
       >添加服务</el-button>
     </div>
-    <div class="teb">
+    <div class="tab">
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
@@ -52,19 +51,19 @@
               <td v-else>-</td>
               <td v-if="item.auditStatus == 0">待审核</td>
               <td v-if="item.auditStatus == 1">审核成功</td>
-              <td v-if="item.auditStatus == 2" style="color:red">审核失败</td>
-              <td v-if="item.isOnsell == 0 && item.auditStatus == 1" style="color:red">已下架</td>
+              <td v-if="item.auditStatus == 2" style="color:#D0021B">审核失败</td>
+              <td v-if="item.isOnsell == 0 && item.auditStatus == 1" style="color:#D0021B">已下架</td>
               <td v-if="item.isOnsell == 1 && item.auditStatus == 1">已上架</td>
               <td v-if="item.auditStatus != 1">--</td>
               <td>
                 <span v-if="item.isOnsell == 0 && item.auditStatus == 1" @click="onSell(item)">上架</span>
-                <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="nosell(item)">下架</span>
                 <span v-if="item.auditStatus == 1" @click="ewm(item)">二维码</span>
                 <span
                   @click="delservice(item)"
-                  style="color:red"
+                  style="color:#D0021B"
                   v-if="item.auditStatus == 0 || item.auditStatus == 2"
                 >删除</span>
+                <span v-if="item.isOnsell == 1 && item.auditStatus == 1" @click="nosell(item)">下架</span>
               </td>
             </tr>
           </template>
@@ -245,6 +244,7 @@ export default {
 .service-title {
   background: #e4e9ef;
   padding: 15px;
+  margin: 0 10px;
 }
 .service-title > div {
   font-size: 20px;
@@ -265,11 +265,13 @@ export default {
   width: 100%;
   overflow: hidden;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .keywords {
   float: left;
   width: 260px;
+  margin-right: 10px;
 }
 
 #soso {
@@ -313,30 +315,5 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
-}
-
-.keywords >>> .el-input > .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-  border-radius: 2px;
-  /* margin-top: 6px; */
-}
-</style>
-
-<style>
-.el-dialog__header {
-  background: #233646;
-  /* height: 25px; */
-  overflow: hidden;
-}
-
-.el-dialog__header > .el-dialog__title {
-  color: #fff;
-  float: left;
-  font-size: 16px;
-  font-family: PingFangSC;
-  font-weight: 500;
-  /* line-height: 25px; */
 }
 </style>

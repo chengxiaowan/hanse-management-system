@@ -1,34 +1,44 @@
 <template>
-    <div class="page-title">
-        {{page}}
-        <router-link to="/index">X</router-link>
-    </div>
+  <div class="page-title">
+    {{page}}
+    <i class="el-icon-close bobodrool" @click="close"></i>
+  </div>
 </template>
 <script>
 export default {
-    name:"heads",
-    props:["page"],
-    data(){
-        return{
-            show:true
-        }
-    }
-}
+  name: "heads",
+  props: ["page"],
+  data() {
+    return {
+      show: true
+    };
+  },
+  methods:{
+      close(){
+          this.$router.push({
+              path:"/index"
+          })
+      }
+  }
+};
 </script>
 
 <style >
-   .page-title {
-       height: 50px;
-       background: #2C3D4C;
-       color: #fff;
-       line-height: 50px;
-       font: 18px;
-       font-weight: 500px;
-       padding-left: 35px;
-       border-top: 1px solid #333;
-   }
-   .page-title > a{
-       float: right;
-       margin-right: 35px;
-   }
+.page-title {
+  height: 40px;
+  background: #2c3d4c;
+  color: #fff;
+  line-height: 40px;
+  font-size: 16px;
+  font-weight: 400;
+  padding-left: 35px;
+  border-top: 1px solid #333;
+}
+#app .bobodrool {
+  float: right;
+  margin-right: 35px;
+  color: #fff;
+  line-height: 40px;
+  cursor: pointer;
+}
 </style>

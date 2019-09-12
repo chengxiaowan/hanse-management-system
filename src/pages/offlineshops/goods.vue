@@ -48,13 +48,8 @@
         </div>
       </div>
       <div class="type">
-        <el-button type="primary" @click="getlist" icon="el-icon-search" size="small">搜索</el-button>
-        <el-button
-          type="success"
-          @click="addgoods"
-          icon="el-icon-circle-plus-outline"
-          size="small"
-        >添加商品</el-button>
+        <el-button type="primary" @click="getlist" icon="el-icon-search">搜索</el-button>
+        <el-button type="success" @click="addgoods" icon="el-icon-circle-plus-outline">添加商品</el-button>
       </div>
     </div>
     <div class="tab">
@@ -89,16 +84,11 @@
               <td v-else>--</td>
               <td v-if="item.auditStatus == '0'">待审核</td>
               <td v-if="item.auditStatus == '1'">审核通过</td>
-              <td v-if="item.auditStatus == '2'" style="color:red">审核失败</td>
+              <td v-if="item.auditStatus == '2'" style="color:#D0021B">审核失败</td>
               <td v-if="item.isOnsell == '1' && item.auditStatus == '1'">已上架</td>
               <td v-if="item.auditStatus == '2' || item.auditStatus == '0'">--</td>
-              <td v-if="item.isOnsell == '0' && item.auditStatus == '1'">已下架</td>
+              <td v-if="item.isOnsell == '0' && item.auditStatus == '1'" style="color:#D0021B">已下架</td>
               <td>
-                <span
-                  style="color:red"
-                  v-if="item.isOnsell == '1' && item.auditStatus == '1'"
-                  @click="nosell(item)"
-                >下架</span>
                 <span
                   v-if="item.isOnsell == '0' && item.auditStatus == '1'"
                   @click="onsell(item)"
@@ -107,9 +97,14 @@
                 <span @click="open(item)" v-if="item.auditStatus == '1'">设置佣金</span>
                 <span
                   @click="delgoods(item)"
-                  style="color:red"
+                  style="color:#D0021B"
                   v-if="item.auditStatus == '0' || item.auditStatus == '2'"
                 >删除</span>
+                <span
+                  style="color:#9B9B9B"
+                  v-if="item.isOnsell == '1' && item.auditStatus == '1'"
+                  @click="nosell(item)"
+                >下架</span>
                 <!-- <span @click="demo(item)">测试</span> -->
               </td>
             </tr>
@@ -120,7 +115,7 @@
         </tbody>
       </table>
       <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
-      <el-dialog title="设置佣金比例" :visible.sync="dialogVisible" width="30%" center>
+      <el-dialog title="设置佣金比例" :visible.sync="dialogVisible" width="30%">
         <div class="com">
           店铺提成比例(%)
           <el-input v-model="commissionPercent" disabled></el-input>
@@ -146,8 +141,8 @@
           </table>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="set()">确 定</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
         </span>
       </el-dialog>
     </div>
@@ -436,6 +431,8 @@ export default {
 .goods-soso {
   width: 100%;
   overflow: hidden;
+  margin-left: 10px;
+  margin-bottom: 15px;
 }
 
 .keywords {
@@ -489,8 +486,8 @@ export default {
 }
 
 .addgoods-title {
+  margin: 0 10px;
   background: #e4e9ef;
-  width: 100%;
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 20px;
@@ -541,16 +538,5 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
-}
-
-.keywords >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele-box >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
 }
 </style>

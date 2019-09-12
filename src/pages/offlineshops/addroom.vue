@@ -4,12 +4,12 @@
     <el-divider></el-divider>
     <div class="flex-row">
       <div class="input-box">
-        名称：
+        <span class="zi">名称：</span>
         <el-input placeholder="请输入房间名称，1~30字" v-model="name"></el-input>
       </div>
       <div class="input-box">
         <div class="sele-box">
-          是否公开：
+          <span class="zi">是否公开</span>
           <div>
             <el-select v-model="kai" placeholder="请选择">
               <el-option label="是" value="1"></el-option>
@@ -18,18 +18,18 @@
           </div>
         </div>
         <div class="tag-box">
-          <div>标签：</div>
+          <div class="zi">标签：</div>
           <input-tag placeholder="请输入标签，按回车键生成" v-model="tags" limit="10" addTagOnBlur="true"></input-tag>
         </div>
       </div>
     </div>
     <div class="textarea-box">
-      简介：
+      <span class="zi">简介：</span>
       <el-input type="textarea" rows="4" v-model="summary" placeholder="请输入房间简介"></el-input>
     </div>
     <div class="upadte-box">
       <div class="upadte-title">
-        <div>图片</div>
+        <div class="zi">图片</div>
         <p>
           1、请上传png,jpg,jpeg等规范格式的图片，大小不能超过5MB。
           <br />2、精致封面会吸引更多的人关注哦。
@@ -154,7 +154,7 @@
     </div>
     <div class="goods">
       <div class="goods-title">
-        <span>房间商品</span>
+        <span class="zi">房间商品</span>
         <div class="btn-box">
           <el-button type="success" @click="dialogVisible = true" size="small">新增</el-button>
         </div>
@@ -216,7 +216,7 @@
           </div>
         </div>
         <div class="soso-btns">
-          <el-button type="primary" icon="el-icon-search" @click="getlist()" size="small">搜索</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
         </div>
       </div>
       <div class="tab">
@@ -752,7 +752,7 @@ export default {
   margin-top: 33px;
 }
 
-.upadte-title{
+.upadte-title {
   margin-bottom: 20px;
 }
 
@@ -833,7 +833,8 @@ export default {
   margin-right: 91px;
 }
 
-.tab {
+#app .tab {
+  margin: 0 10px;
   margin-right: 90px;
   margin-top: 11px;
 }
@@ -871,6 +872,12 @@ export default {
   display: inline-block;
 }
 
+.zi{
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
 /*表格样式*/
 
 /*去掉表头边框+背景*/
@@ -901,43 +908,8 @@ tr:hover > td > span {
   display: inline;
 }
 
-.input-box >>> .el-input > .el-input__inner {
-  margin-top: 6px;
-}
-
-/* .sele-box >>> .el-select {
-  margin-top: 6px;
+/* #app .addroom >>> .tab{
+  margin:0
 } */
-
-.tag-box >>> .vue-input-tag-wrapper {
-  border: 1px solid #e4e7ed;
-  border-radius: 2px;
-  margin-top: 6px;
-}
-
-.tag-box >>> .vue-input-tag-wrapper > .input-tag {
-  border: 1px solid #fff;
-  color: #fff;
-  background: #4a90e2;
-}
-
-.tag-box >>> .vue-input-tag-wrapper > .input-tag > .remove {
-  color: #fff;
-}
-
-.textarea-box >>> .el-textarea {
-  margin-top: 6px;
-}
-
-.inputs-box >>> .el-input__inner {
-  height: 35px;
-  border-radius: 2px;
-}
-
-.sele-box >>> .el-input__inner {
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-}
 </style>
     

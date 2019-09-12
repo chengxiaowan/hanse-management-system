@@ -9,7 +9,7 @@
     </div>
     <div class="soso">
       <div class="brand">
-        门店:
+        <span class="zi">门店：</span>
         <div class="sele-box">
           <el-select v-model="brand" filterable placeholder="请选择" @change="getList()">
             <el-option label="全部" value></el-option>
@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="brand">
-        审核状态:
+        <span class="zi">审核状态:</span>
         <div class="sele-box">
           <el-select v-model="auditStatus" filterable placeholder="请选择审核状态" @change="getList()">
             <el-option label="全部" value></el-option>
@@ -35,7 +35,7 @@
       </div>
       <div class="brand">
         <!-- 摆设而已~两个sele都有@change事件，他图这么画了 我就加上吧,当刷新用吧-->
-        <el-button type="primary" icon="el-icon-search" @click="getList()" size="mini">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
       </div>
     </div>
     <div class="tab">
@@ -75,9 +75,11 @@
       </table>
     </div>
     <el-pagination background layout="prev, pager, next" :total="total" @current-change="page"></el-pagination>
-
     <el-dialog title="审核" :visible.sync="dialogVisible" width="30%">
       <div class="shenhe">
+        <span>
+          <span class="xing">*</span> 审核状态：
+        </span>
         <el-radio v-model="radio" label="1">通过</el-radio>
         <el-radio v-model="radio" label="2">驳回</el-radio>
       </div>
@@ -88,17 +90,18 @@
             type="text"
             v-model.number="commissionPercent"
             placeholder="请输入佣金比例"
-            oninput ="value=value.replace(/[^0-9.]/g,'')"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
+            class="drools"
           ></el-input>
         </div>
         <div class="shenhe1" v-if="radio==2">
           <span class="xing">*</span>驳回原因：
-          <el-input type="textarea" v-model="reason" placeholder="请输入驳回原因"></el-input>
+          <el-input type="text" v-model.number="reason" placeholder="请输入驳回原因" class="drools"></el-input>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="open()">取 消</el-button>
-        <el-button type="primary" @click="shenhe()">确 定</el-button>
+        <el-button type="primary" @click="shenhe()" size="small">确 定</el-button>
+        <el-button @click="open()" size="small">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -211,6 +214,10 @@ export default {
   padding-bottom: 150px;
   overflow: auto;
   background: #fff;
+  font-size: 12px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  /* color: rgba(246, 77, 98, 1); */
 }
 
 .soso {
@@ -227,11 +234,13 @@ export default {
 .tab {
   width: 100%;
   overflow: auto;
+  margin: 0 10px;
 }
 
 .shenhe {
-  text-align: center;
   margin-top: 20px;
+  margin-left: 66px;
+  margin-bottom: 36px;
 }
 
 .shenhe1 {
@@ -270,6 +279,25 @@ export default {
   padding-left: 35px;
 }
 
+.shenhe > .el-radio {
+  margin-left: 50px;
+}
+
+.drools {
+  display: inline-block;
+  width: 200px;
+  margin-left: 45px;
+}
+
+.xing {
+  color: #f64d62;
+}
+
+.zi {
+  font-size: 14px;
+  margin-right: 5px;
+}
+
 /*表格样式*/
 
 /*去掉表头边框+背景*/
@@ -299,41 +327,6 @@ td > span {
 
 tr:hover > td > span {
   display: inline;
-}
-
-.sele-box >>> .el-select {
-  height: 30px;
-}
-
-.sele-box >>> .el-select > .el-input > .el-input__inner {
-  height: 30px;
-}
-
-.SH >>> .el-radio__label {
-  padding: 2px;
-}
-
-.xing{
-  font-size: 16px;
-  color: rgba(246, 77, 98, 1);
-}
-
-.shenhe1 >>> .el-input__inner{
-  height: 30px;
-  font-size: 12px;
-  margin-top: 6px;
-  line-height: 30px;
-}
-
-.shenhe1 >>> .el-textarea__inner{
-  margin-top: 6px;
-  font-size: 12px;
-}
-
-.service >>> .el-dialog__footer{
-  margin-top: 20px;
-  padding-bottom: 20px;
-  text-align: center!important;
 }
 </style>
     

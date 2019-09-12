@@ -35,8 +35,8 @@
             <el-input type="text" v-model="keywords" placeholder="请输入姓名、手机号码"></el-input>
           </div>
           <div class="soso-btns">
-            <el-button type="primary" icon="el-icon-search" @click="getlist()" size="small">搜索</el-button>
-            <el-button type="success" @click="addUser" icon="el-icon-circle-plus-outline" size="small">新增销售</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="getlist()">搜索</el-button>
+            <el-button type="success" @click="addUser" icon="el-icon-circle-plus-outline">新增销售</el-button>
           </div>
         </div>
         <div class="tab">
@@ -72,43 +72,55 @@
         </div>
       </div>
     </div>
-    <el-dialog title="新增销售角色" :visible.sync="centerDialogVisible" width="30%" center>
+    <el-dialog title="新增销售角色" :visible.sync="centerDialogVisible" width="30%">
       <div class="new-box">
         <div class="new-title">角色名称:</div>
         <div class="keywords">
-          <el-input type="text" maxlength="30" v-model="roleName" placeholder="请输入销售角色名称，1~30字"></el-input>
+          <el-input
+            type="text"
+            maxlength="30"
+            v-model="roleName"
+            placeholder="请输入销售角色名称，1~30字"
+            show-word-limit
+          ></el-input>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="newRole">确 定</el-button>
+        <el-button type="primary" @click="newRole" size="small">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog title="编辑销售角色" :visible.sync="edit" width="30%" center>
       <div class="new-box">
         <div class="new-title">角色名称:</div>
         <div class="keywords">
-          <el-input type="text" maxlength="30" v-model="roleNames" placeholder="请输入销售角色名称，1~30字"></el-input>
+          <el-input
+            type="text"
+            maxlength="30"
+            v-model="roleNames"
+            placeholder="请输入销售角色名称，1~30字"
+            show-word-limit
+          ></el-input>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="roles()">确 定</el-button>
+        <el-button type="primary" @click="roles()" size="small">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog :title="titles" :visible.sync="centerDialogVisible2" width="60%" center>
+    <el-dialog :title="titles" :visible.sync="centerDialogVisible2" width="60%">
       <div class="flex-row">
         <div class="min-box">
-          姓名：
+          <span class="zi">姓名</span>
           <el-input type="text" maxlength="30" placeholder="请输入负责人姓名 1-30字" v-model="name"></el-input>
         </div>
         <div class="min-box">
-          电话：
+          <span class="zi">电话：</span>
           <el-input type="text" maxlength="11" placeholder="请输入手机号码" v-model="phone"></el-input>
         </div>
       </div>
       <div class="flex-row">
         <div class="min-box">
           <div class="minn-box">
-            销售角色：
+            <span class="zi">销售角色：</span>
             <el-select v-model="roleId" filterable placeholder="请选择销售角色">
               <el-option
                 v-for="item in rolelist"
@@ -119,25 +131,25 @@
             </el-select>
           </div>
           <div class="minn-box">
-            QQ:
+            <span class="zi">QQ：</span>
             <el-input type="text" placeholder="请输入QQ号" v-model="QQ"></el-input>
           </div>
         </div>
         <div class="min-box">
-          邮箱：
+          <span class="zi">邮箱：</span>
           <el-input type="text" v-model="email" placeholder="请输入邮箱"></el-input>
         </div>
       </div>
       <div class="flex-row">
         <div class="min-box">
-          备注：
+          <span class="zi">备注：</span>
           <el-input type="text" v-model="remarks" placeholder="请输入备注信息"></el-input>
         </div>
         <div class="min-box"></div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible2 = false">取 消</el-button>
         <el-button type="primary" @click="newUser">确 定</el-button>
+        <el-button @click="centerDialogVisible2 = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -170,7 +182,7 @@ export default {
       edit: false,
       editroleId: "",
       activeClass: -1, // 0为默认选择第一个，-1为不选择
-      titles:""
+      titles: ""
     };
   },
   methods: {
@@ -286,7 +298,7 @@ export default {
         this.QQ = "";
         this.email = "";
         this.remarks = "";
-        this.titles = "新建销售"
+        this.titles = "新建销售";
       }
     },
 
@@ -381,7 +393,7 @@ export default {
           this.userId = drool.userId;
           this.centerDialogVisible2 = true;
           this.flage = 1;
-          this.titles = "编辑销售"
+          this.titles = "编辑销售";
         }
       });
     },
@@ -486,6 +498,7 @@ export default {
   overflow: hidden;
   width: 100%;
   margin-bottom: 10px;
+  margin-left: 10px;
 }
 
 .keywords {
@@ -525,18 +538,27 @@ export default {
 
 .new-box {
   width: 300px;
-  padding-bottom: 20px;
+  padding-bottom: 60px;
   margin: 0 auto;
+  padding-top: 40px;
 }
 
 .new-title {
-  font-size: 16px;
+  font-size: 14px;
   font-family: PingFangSC;
   font-weight: 400;
+  color: rgba(0, 0, 0, 1);
 }
 
 .active {
   background: #f5f5f5;
+}
+
+.zi {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
 }
 
 /*表格样式*/
@@ -569,21 +591,4 @@ td > span {
 tr:hover > td > span {
   display: inline;
 }
-
-.keywords >>> .el-input__inner{
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-  border-radius: 2px;
-}
-
-.min-box >>> .el-input__inner{
-  height: 35px;
-  font-size: 12px;
-  line-height: 35px;
-  border-radius: 2px;
-  margin-top: 6px;
-}
-
-
 </style>
