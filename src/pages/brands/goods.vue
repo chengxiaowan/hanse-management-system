@@ -1,13 +1,5 @@
 <template>
   <div class="goods">
-    <div class="goods-title">
-      <div>说明</div>
-      <p>
-        1、佣金比例即商家与我方签订的商品总的佣金比例。
-        <br />2、预估收益即通过商家渠道售卖商品后，商家能得到的预计总收益，具体以实际为准。
-        <br />3、二维码可生成带有门店品牌信息的小程序码，微信扫码可直接进入商品详情界面。
-      </p>
-    </div>
     <div class="soso-goods">
       <div class="goods-keywords">
         <el-input type="text" v-model="keywords" placeholder="请输入商品名称"></el-input>
@@ -307,7 +299,7 @@ export default {
 .soso-goods {
   overflow: hidden;
   margin-top: 28px;
-  margin-left: 10px;
+  /* margin-left: 10px; */
   margin-bottom: 25px;
 }
 

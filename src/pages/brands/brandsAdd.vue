@@ -12,7 +12,8 @@
           <v-personnel></v-personnel>
         </el-tab-pane>
         <el-tab-pane label="商品信息" name="third">
-          <v-goods></v-goods>
+          <!-- <v-goods></v-goods> -->
+          <v-goodsv2></v-goodsv2>
         </el-tab-pane>
         <el-tab-pane label="周边服务" name="fourth">
           <v-service></v-service>
@@ -27,13 +28,15 @@ import brandinfo from "./info";
 import personnel from './personnel'
 import goods from './goods'
 import service from './service'
+import goodsv2 from './goods.v2'
 export default {
   name: "brandsadd",
   components: {
     "v-info": brandinfo,
     "v-personnel":personnel,
     "v-goods":goods,
-    "v-service":service
+    "v-service":service,
+    "v-goodsv2":goodsv2
   },
   data() {
     return {
