@@ -34,14 +34,17 @@ export default {
       info: "新版goods",
       activeName: "first"
     };
+  },
+  mounted(){
+    let table = sessionStorage.getItem("goods-table")
+    if(table){
+      this.activeName = table;
+      sessionStorage.removeItem("goods-table")
+    }
   }
 };
 </script>
 <style scoped>
-.goodsv2 {
-  /* height: 5000px; */
-}
-
 .goods-title {
   background: #e4e9ef;
   border-radius: 4px;

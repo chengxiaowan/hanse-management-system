@@ -28,7 +28,7 @@ import brandsinfo from '../pages/brands/info'
 import addowngoods from '../pages/brands/addowngoods'
 
 //影楼相关
-import Studio from "../pages/studio/studio" //影楼详情入口？
+import Studio from "../pages/studio/studio" //影楼详情入口？没做完
 
 //门店相关
 import addShops from "../pages/offlineshops/addShops" //门店主添加
@@ -37,7 +37,7 @@ import addgoods from "../pages/offlineshops/addgoods" //门店添加商品
 import addshopsservice from '../pages/offlineshops/addservice' //门店添加服务
 import addroom from '../pages/offlineshops/addroom' //门店添加服务
 
-
+//测试文件及练习
 import demo from '../pages/demo/wonergoods'
 
 

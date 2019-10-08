@@ -92,8 +92,8 @@ export default {
   methods: {
     //返回商品页面
     goBack() {
-      console.log("go back");
       sessionStorage.setItem("table", "third");
+      sessionStorage.setItem("goods-table", "second");
       this.$router.push({
         name: "brandsadd"
       });
