@@ -28,7 +28,7 @@ import brandsinfo from '../pages/brands/info'
 import addowngoods from '../pages/brands/addowngoods'
 
 //影楼相关
-import Studio from "../pages/studio/studio" //影楼详情入口？
+import Studio from "../pages/studio/studio" //影楼详情入口？没做完
 
 //门店相关
 import addShops from "../pages/offlineshops/addShops" //门店主添加

@@ -25,7 +25,7 @@
 <script>
 import addShops from "./addShops";
 import pop from "./pop";
-import goods from "./goods";
+import goods from "./goods.v2";   //开发注释：出现问题请替换回goods
 import shopsservice from './service'
 import room from './room'
 export default {
