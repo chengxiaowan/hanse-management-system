@@ -63,8 +63,10 @@ export default {
       keywords: "",
       type: "",
       //分页处理
-      pageNo: "", //当前页
-      total: "" //总条目
+      pageNo: 1, //当前页
+      total: "", //总条目，
+      list: "", //数据列表,
+      total: ""
     };
   },
   methods: {
@@ -82,9 +84,27 @@ export default {
     },
     add() {
       this.$router.push({
-        name:"addowngoods"
+        name: "addowngoods"
+      });
+    },
+    getlist() {
+      let parmars = {
+        shopsBrandId: sessionStorage.getItem("shopsBrandId"),
+        keywords: this.keywords,
+        pageNo: this.pageNo,
+        isOnsell: this.type
+      };
+      this.$post("/shopsBrand/getShopsBrandMGoodsList/0", parmars).then(res => {
+        if (res.error == "00") {
+          this.list = res.result.list;
+          this.pageNo = res.result.pageNum;
+          this.total = res.result.total;
+        }
       });
     }
+  },
+  mounted() {
+    this.getlist();
   }
 };
 </script>

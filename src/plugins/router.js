@@ -37,7 +37,7 @@ import addgoods from "../pages/offlineshops/addgoods" //门店添加商品
 import addshopsservice from '../pages/offlineshops/addservice' //门店添加服务
 import addroom from '../pages/offlineshops/addroom' //门店添加服务
 
-
+//测试文件及练习
 import demo from '../pages/demo/wonergoods'
 
 

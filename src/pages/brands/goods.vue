@@ -23,7 +23,7 @@
         <el-button type="success" @click="open()" icon="el-icon-circle-plus-outline">添加商品</el-button>
       </div>
     </div>
-    <div class="goods-tab tab">
+    <div class="goods-tab ">
       <table class="table table-hover table-bordered">
         <thead>
           <tr>

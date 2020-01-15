@@ -6,22 +6,22 @@
     <div class="form-goods">
       <div class="form-body">
         <div class="form-title">名称：</div>
-        <el-input type="text" maxlength="30" placeholder="请输入商品名称，1~30个字"></el-input>
+        <el-input type="text" maxlength="30" placeholder="请输入商品名称，1~30个字" v-model="name"></el-input>
       </div>
       <div class="form-body">
         <div class="form-title">价格：</div>
-        <el-input type="text" maxlength="30" placeholder="请输入商品价格"></el-input>
+        <el-input type="text" maxlength="30" placeholder="请输入商品价格" v-model="price"></el-input>
       </div>
       <div class="form-body">
         <div class="form-title">价格：</div>
-        <el-input type="textarea" maxlength="30" placeholder="请输入商品描述" rows="4"></el-input>
+        <el-input type="textarea" maxlength="30" placeholder="请输入商品描述" rows="4" v-model="remark"></el-input>
       </div>
       <div class="form-body">
         <div class="form-title">
           标签：
           <span class="tips">建议每个标签2-5字</span>
         </div>
-        <input-tag placeholder="添加标签,按回车生成标签" v-model="tags" limit="10"></input-tag>
+        <input-tag placeholder="添加标签,按回车生成标签" v-model="tags" limit=10></input-tag>
       </div>
       <div class="form-body">
         <div class="form-title">图片</div>
@@ -33,7 +33,7 @@
       </div>
       <div class="upload-box">
         <div class="img-box">
-          <p class="image-tips">封面</p>
+          <p class="image-tips">商品主图</p>
           <el-upload
             class="avatar-uploader"
             :action="actionPath"
@@ -49,7 +49,6 @@
         </div>
         <!-- 案例 -->
         <div class="img-box">
-          <p class="image-tips">门头</p>
           <el-upload
             class="avatar-uploader"
             :action="actionPath"
@@ -149,6 +148,9 @@
         </div>
       </div>
     </div>
+    <div class="save">
+      <el-button type="primary" @click="save">保存</el-button>
+    </div>
   </div>
 </template>
   
@@ -159,7 +161,7 @@ export default {
     return {
       info: "addowngoods",
       tags: [],
-      namr: "",
+      name: "",
       price: "",
       remark: "",
       //主图
@@ -316,9 +318,60 @@ export default {
       return Y + M + D + h + m + s;
     },
     //返回
-    goBack(){
-        history.go(-1);
+    goBack() {
+      history.go(-1);
+    },
+
+    save() {
+      if (this.name == "") {
+        this.$message.error("请输入自营商品名称");
+        return;
+      }
+      if (this.price == "") {
+        this.$message.error("请输入自营商品价格");
+        return;
+      }
+      let drool = [];
+      if (this.pic1.url) {
+        drool.push(this.pic1);
+      }
+      if (this.pic2.url) {
+        drool.push(this.pic2);
+      }
+      if (this.pic3.url) {
+        drool.push(this.pic3);
+      }
+      if (this.pic4.url) {
+        drool.push(this.pic4);
+      }
+      if (this.pic5.url) {
+        drool.push(this.pic5);
+      }
+      if (this.pic6.url) {
+        drool.push(this.pic6);
+      }
+      if (this.pic7.url) {
+        drool.push(this.pic7);
+      }
+      let parmars = {
+        shopsBrandId: sessionStorage.getItem("shopsBrandId"),
+        name: this.name,
+        price: this.price,
+        describes: this.remark,
+        labels: this.tags.join(",") || "",
+        pic: this.pic,
+        picList: JSON.stringify(drool)
+      };
+      this.$post('/shopsBrand/addShopsBrandMGoods',parmars).then(res=>{
+        if(res.error == "00"){
+          this.$message("新增自营商品成功")
+        }
+      })
     }
+  },
+  mounted() {
+    //获取token
+    this.getToken();
   }
 };
 </script>
@@ -345,7 +398,8 @@ export default {
 
 .wonergoods {
   background: #fff;
-  height: 100%;
+  /* height: 100%; */
+  padding-bottom: 300px;
 }
 
 .form-body {
@@ -371,27 +425,6 @@ export default {
   line-height: 20px;
 }
 
-.flex-col >>> .vue-input-tag-wrapper {
-  border: 1px solid #dcdfe6;
-  border-radius: 2px;
-  /* height: 30px; */
-}
-
-.wonergoods >>> .vue-input-tag-wrapper {
-  border: 1px solid #e4e7ed;
-  border-radius: 2px;
-  margin-top: 6px;
-}
-
-.wonergoods >>> .vue-input-tag-wrapper > .input-tag {
-  border: 1px solid #fff;
-  color: #fff;
-  background: #4a90e2;
-}
-.wonergoods >>> .vue-input-tag-wrapper > .input-tag > .remove {
-  color: #fff;
-}
-
 .tips {
   font-size: 14px;
   font-family: PingFangSC;
@@ -401,10 +434,75 @@ export default {
   float: right;
 }
 
+.save {
+  margin-top: 51px;
+  margin-left: 365px;
+}
+
 .upload-box {
   display: flex;
   flex: 1;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   flex-wrap: wrap;
+  margin-left: 61px;
+}
+
+.update {
+  overflow: hidden;
+  margin-left: 80px;
+  /* margin-bottom: 10px; */
+}
+
+.avatar-uploader .el-upload {
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 160px;
+  height: 140px;
+  line-height: 140px;
+  text-align: center;
+}
+.avatar {
+  width: 100%;
+  height: 140px;
+  display: block;
+}
+
+.img-box {
+  width: 160px;
+  height: 140px;
+  border: 1px dashed #e2e9f0;
+  position: relative;
+  float: left;
+  margin-right: 29px;
+  margin-bottom: 10px;
+}
+
+.image-tips {
+  width: 100%;
+  height: 20px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  font: 12px/20px "";
+  text-align: center;
+}
+
+.tag-tips {
+  float: right;
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(184, 184, 184, 1);
+  line-height: 20px;
 }
 </style>
