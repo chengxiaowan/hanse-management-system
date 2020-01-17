@@ -18,7 +18,23 @@
           <i class="iconfont icon-zhuye" style="margin-right:10px;"></i>
           <span slot="title">主页</span>
         </el-menu-item>
+
+
         <el-submenu index="1" v-if="role=='7'|| role == '8'">
+          <template slot="title">
+            <i class="iconfont icon-shenhe" style="margin-right:10px;"></i>
+            <span>订单</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/order/index">订单查询</el-menu-item>
+            <el-menu-item index="/orders/index">核销查询</el-menu-item>
+            <!-- 暂时隐藏 未完成 -->
+            <!-- <el-menu-item index="/shops">门店审核</el-menu-item> -->
+          </el-menu-item-group>
+        </el-submenu>
+
+
+        <el-submenu index="4" v-if="role=='7'|| role == '8'">
           <template slot="title">
             <i class="iconfont icon-shenhe" style="margin-right:10px;"></i>
             <span>审核</span>
@@ -56,7 +72,7 @@
           <el-input placeholder="请输入内容" class="input-with-select" v-model="keywords">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
-        </div> -->
+        </div>-->
         <div class="user" @mouseenter="show" @mouseleave="noShow">
           <img :src="drool" />
 

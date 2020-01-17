@@ -288,7 +288,7 @@ td {
   font-weight: 400;
   color: #666;
   border-radius: 2px;
-  padding: 0 12px;
+  /*padding: 0 12px;*/
 }
 
 #app .el-textarea__inner {

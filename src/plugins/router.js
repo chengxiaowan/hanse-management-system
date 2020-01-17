@@ -36,6 +36,10 @@ import addgoods from "../pages/offlineshops/addgoods" //门店添加商品
 import addshopsservice from '../pages/offlineshops/addservice' //门店添加服务
 import addroom from '../pages/offlineshops/addroom' //门店添加服务
 
+//订单核销查询
+import order from "../pages/home/order"             //订单查询
+import orders from  "../pages/home/orders"          //核销查询
+
 
 import demo from '../pages/demo/wonergoods'
 
@@ -170,6 +174,18 @@ let routes = [{
                 path: 'demo',
                 name: 'demo',
                 component: demo,
+            },
+
+            //订单路由
+            {
+                path:"order/index",
+                name:"order",
+                component:order,
+            },
+            {
+                path:"orders/index",
+                name:"orders",
+                component:orders,
             }
         ]
     },

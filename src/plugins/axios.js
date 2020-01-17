@@ -15,11 +15,11 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 Vue.prototype.$static = ''
 
 // 配置接口地址 开发
-axios.defaults.baseURL = '/api'
+// axios.defaults.baseURL = '/api'
 //测试
 // axios.defaults.baseURL = 'http://192.168.0.107:8080'
 //线上
-// axios.defaults.baseURL = ''
+axios.defaults.baseURL = ''
 var loadingInstance
 // POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use(

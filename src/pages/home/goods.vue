@@ -39,8 +39,8 @@
       </div>
     </div>
     <div class="tab">
-      <table class="table table-hover table-bordered">
-        <thead>
+          <table class="table table-hover table-bordered">
+            <thead>
           <tr>
             <th width="15%">门店名称</th>
             <th width="15%">商品名称</th>
